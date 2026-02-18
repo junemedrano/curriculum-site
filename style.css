@@ -202,7 +202,7 @@ td.done { color: var(--text-3); text-decoration: line-through; text-decoration-c
    #CURRICULUM — TIMELINE
    ============================================================ */
 
-.timeline { display: flex; border: 1px solid var(--border); overflow-x: auto; margin-bottom: 2.5rem; }
+.timeline { display: flex; border: 1px solid var(--border); overflow-x: auto; margin-bottom: 2.5rem; align-items: center; }
 
 .tl-seg { flex: 1; min-width: 110px; padding: 0.75rem 0.9rem; border-right: 1px solid var(--border); font-size: 0.75rem; }
 .tl-seg:last-child { border-right: none; }
