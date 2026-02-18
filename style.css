@@ -58,22 +58,24 @@ h1, h2, h3 { font-family: var(--font); font-weight: 500; color: var(--hi); line-
 
 .nav {
   position: sticky; top: 0; z-index: 100;
-  height: var(--nav-h);
+  min-height: var(--nav-h);
   background: var(--bg);
   border-bottom: 1px solid var(--border);
   display: flex; align-items: center; justify-content: space-between;
   padding: 0 var(--pad); gap: 1rem;
+  flex-wrap: nowrap;
 }
 
-.nav-brand { font-size: 0.8rem; color: var(--hi); letter-spacing: 0.05em; white-space: nowrap; }
+.nav-brand { font-size: 0.8rem; color: var(--hi); letter-spacing: 0.05em; white-space: nowrap; flex-shrink: 0; }
 .nav-brand:hover { text-decoration: none; }
 
-.nav-links { display: flex; flex-wrap: wrap; }
+.nav-links { display: flex; flex-wrap: nowrap; gap: 0; overflow: hidden; }
 
 .nav-links a {
   font-size: 0.75rem; color: var(--text-3);
   padding: 0.3rem 0.55rem; letter-spacing: 0.03em;
   border-bottom: 1px solid transparent;
+  white-space: nowrap;
   transition: color 0.1s, border-color 0.1s;
 }
 .nav-links a:hover { color: var(--text); text-decoration: none; }
@@ -95,9 +97,13 @@ h1, h2, h3 { font-family: var(--font); font-weight: 500; color: var(--hi); line-
 
 .kicker { font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-3); margin-bottom: 0.75rem; }
 
-.page-title { font-size: clamp(1.6rem, 4vw, 2.4rem); color: var(--hi); margin-bottom: 1rem; letter-spacing: -0.01em; }
+/* Single h1 size used across every page — posts override inline but this is the baseline */
+h1 { font-size: clamp(1.7rem, 4vw, 2.6rem); letter-spacing: -0.01em; margin-bottom: 1rem; }
 
-.lead { font-size: 0.9rem; color: var(--text-2); max-width: 540px; line-height: 1.75; margin-bottom: 0.5rem; }
+.page-title { font-size: clamp(1.7rem, 4vw, 2.6rem); color: var(--hi); margin-bottom: 1rem; letter-spacing: -0.01em; }
+
+/* lead: no artificial max-width — let the page container handle it */
+.lead { font-size: 0.9rem; color: var(--text-2); line-height: 1.75; margin-bottom: 0.5rem; }
 
 .meta { font-size: 0.7rem; color: var(--text-3); letter-spacing: 0.04em; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
 .meta .dot { color: var(--border-2); }
@@ -113,6 +119,9 @@ li { font-size: 0.9rem; color: var(--text); margin-bottom: 0.35rem; line-height:
   margin-bottom: 1.25rem; padding-bottom: 0.4rem;
   border-bottom: 1px solid var(--border); letter-spacing: 0.02em;
 }
+
+/* Consistent section spacing — wrap any major block in this */
+.section-block { margin-top: 3rem; padding-top: 2.5rem; border-top: 1px solid var(--border); }
 
 .section-spacer { margin-top: 4rem; }
 
@@ -171,14 +180,30 @@ th {
 }
 
 td {
-  padding: 0.6rem 0.75rem; border-bottom: 1px solid var(--border);
+  padding: 0.6rem 0.75rem; border-bottom: 1px solid var(--border-2);
   color: var(--text); vertical-align: top; line-height: 1.55;
 }
 
 tr:last-child td { border-bottom: none; }
-tr:nth-child(even) td { background: var(--surface); }
+tr:nth-child(even) td { background: var(--gray-6); }
+
+/* Explicit outer border on data tables so it reads against black bg */
+.data-table {
+  border: 1px solid var(--border-2);
+  border-collapse: collapse;
+}
+.data-table th { border-bottom: 1px solid var(--border-2); }
+.data-table td { border-bottom: 1px solid var(--border); }
+.data-table tr:last-child td { border-bottom: none; }
 
 td.done { color: var(--text-3); text-decoration: line-through; text-decoration-color: var(--gray-4); }
+td.strike { color: var(--text-3); text-decoration: line-through; text-decoration-color: var(--gray-4); }
+
+.section-heading {
+  font-size: 0.85rem; font-weight: 500; color: var(--hi);
+  margin-bottom: 1rem; padding-bottom: 0.35rem;
+  border-bottom: 1px solid var(--border); letter-spacing: 0.02em;
+}
 
 
 /* ============================================================
@@ -202,7 +227,7 @@ td.done { color: var(--text-3); text-decoration: line-through; text-decoration-c
    #CURRICULUM — TIMELINE
    ============================================================ */
 
-.timeline { display: flex; border: 1px solid var(--border); overflow-x: auto; margin-bottom: 2.5rem; align-items: center; }
+.timeline { display: flex; border: 1px solid var(--border); overflow-x: auto; margin-bottom: 2.5rem; }
 
 .tl-seg { flex: 1; min-width: 110px; padding: 0.75rem 0.9rem; border-right: 1px solid var(--border); font-size: 0.75rem; }
 .tl-seg:last-child { border-right: none; }
@@ -454,19 +479,48 @@ td.done { color: var(--text-3); text-decoration: line-through; text-decoration-c
 
 @media (max-width: 600px) {
   :root { --pad: 1rem; }
-  .nav-links a { font-size: 0.68rem; padding: 0.25rem 0.35rem; }
+
+  /* Nav — shrink link size so all 6 items stay on one row */
+  .nav-links a { font-size: 0.62rem; padding: 0.25rem 0.28rem; letter-spacing: 0.01em; }
+
+  /* Page padding */
   .page, .page-wide { padding-top: 2rem; padding-bottom: 4rem; }
+
+  /* Tables: all tables get horizontal scroll on small screens */
+  table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
   td, th { padding: 0.45rem 0.5rem; }
+
+  /* Index foundation/transfer tables: hide middle column on very small screens */
+  .foundation-section td:nth-child(2),
+  .foundation-section th:nth-child(2),
+  .transfer-section td:nth-child(2),
+  .transfer-section th:nth-child(2) { display: none; }
+
+  /* Contact: allow long values to wrap */
+  .contact-links { max-width: 100%; }
+  .contact-row { flex-wrap: wrap; }
+  .contact-val { font-size: 0.78rem; overflow-wrap: break-word; word-break: break-all; }
+  .contact-type { width: 56px; }
+
+  /* Posts */
   .post-row { grid-template-columns: 65px 1fr; }
   .post-series { display: none; }
+
+  /* Timeline */
   .timeline { flex-direction: column; }
   .tl-seg { border-right: none; border-bottom: 1px solid var(--border); }
+
+  /* Course cards: label column narrows */
+  .course-rows td:first-child { width: 60px; }
+
+  /* Footer */
   .footer-inner { flex-direction: column; align-items: flex-start; }
-  .contact-links { max-width: 100%; }
+
+  /* Activity grid */
   .activity-day { width: 9px; height: 9px; }
 }
 
 @media (max-width: 380px) {
-  .nav-brand { font-size: 0.7rem; }
-  .nav-links a { font-size: 0.6rem; padding: 0.2rem 0.28rem; }
+  .nav-brand { font-size: 0.68rem; }
+  .nav-links a { font-size: 0.55rem; padding: 0.2rem 0.22rem; }
 }

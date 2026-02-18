@@ -13,12 +13,11 @@
 
 <nav class="nav">
   <a href="index.html" class="nav-brand">ops → systems</a>
-   <div class="nav-links">
+  <div class="nav-links">
     <a href="index.html" class="active">About</a>
     <a href="curriculum.html">Curriculum</a>
-    <a href="calendar.html">Calendar</a>
-    <a href="projects.html">Projects</a>
     <a href="books.html">Books</a>
+    <a href="projects.html">Projects</a>
     <a href="posts.html">Writing</a>
     <a href="contact.html">Contact</a>
   </div>
@@ -44,58 +43,42 @@
   <article>
 
     <section class="essay-section">
-      <h2>My Path Into Computing</h2>
-      <p>My entry into technology began in operations. As a field sales and training specialist for Lelit across the New York metro area, I spent years inside the systems that software engineers build — POS environments, inventory workflows, vendor coordination, and the recurring experience of watching software either solve or fail real business problems at the operational level. I trained staff on new tools across locations. I understood, from the user side, where the abstractions leaked.</p>
-      <p>That exposure made backend systems, operating systems, and runtime behavior more interesting to me than frontend polish. It also gave me a reference point for abstraction that most curriculum paths skip entirely.</p>
-      <p>Those roles had clear ceilings, so I pursued CompTIA A+, taught myself multimeter diagnostics and motherboard trace fault-finding, and worked through OSI layers, DHCP/DNS, and networking fundamentals. From there the tooling philosophy followed naturally: production servers run Linux, so the development environment should too. WSL2 with Ubuntu, local Ollama for private AI workflows, Neovim inside VSCode for modal editing without leaving an industry-standard ecosystem. Remote development as a default, not an afterthought.</p>
-      <p>Vintage Computing Federation communities reinforced a hardware-longevity mindset that pushed me to trace how abstractions actually connect across layers — through web stacks, relational databases, typed languages, and cross-platform runtimes. What began as hands-on repair became systems intuition: electrons to bits to services to distributed coordination.</p>
-      <p>Early frameworks like PAC/IPO/GOM/GWM connected hardware realities to software design. Working through those frameworks with students — mapping I/O flow, memory behavior, and control structures alongside APIs, SDLC, and data modeling — produced a consistent mental model for how vague requirements become concrete architecture and running systems.</p>
+      <h2>Background</h2>
+      <p>My entry into technology came through operations and hardware. Years of field work across retail and service environments — POS systems, inventory workflows, vendor coordination — meant regular contact with the software that runs physical commerce: where it worked, where it failed, and why the failure modes were usually invisible to the engineers who built it. That operational context became a reference point for abstraction that most CS curriculum paths don't provide.</p>
+      <p>The hardware side followed from device repair work: multimeter diagnostics, board-level fault tracing, OSI layer troubleshooting, DHCP and DNS at the configuration level. Once networking and operating systems made sense mechanically, the jump to production infrastructure — load balancing, virtualization, containerization — was extension rather than introduction. The development environment followed the same logic: production runs Linux, so the dev environment should too. WSL2, local LLM inference for private AI workflows, modal editing, remote development as a default.</p>
+      <p>The tooling philosophy is deliberate. Understanding why a tool is built the way it is — what problem it solves at the system level — is more durable than knowing how to use it. That's the frame this curriculum tries to maintain throughout.</p>
     </section>
 
     <section class="essay-section">
-      <h2>Why Context Matters for Abstraction</h2>
-      <p>A pattern shows up consistently: students struggle with abstract thinking not because they are incapable, but because they lack concrete experience for abstractions to attach to. Distributed systems, concurrency, scalability — these remain theoretical without seeing how a single request moves through a real stack.</p>
-      <p>The approach that works moves deliberately from concrete to abstract: single machine to service, service to API surface, APIs to distributed systems. We start with hardware behavior, then layer processes, protocols, and patterns. Higher-level concepts become compressed summaries of familiar realities, not floating theory.</p>
-      <p>The 2026 Shopify app serves as a live case study in this direction. Business requirements become schemas, endpoints, background jobs, and front-end integrations — something traceable end-to-end rather than hypothetical.</p>
+      <h2>Why Abstraction Requires Concrete Grounding</h2>
+      <p>A consistent pattern across students: difficulty with abstract concepts is rarely a capability problem. It's a grounding problem. Distributed systems, concurrency, memory management — these remain theoretical without a concrete reference to attach to. A student who has never seen a process scheduler has no frame for why lock contention matters. A student who has never traced a network packet has no frame for why latency is a distribution, not a number.</p>
+      <p>The approach that works moves deliberately from concrete to abstract. Single machine before network. Process before thread. Synchronous I/O before async. Each abstraction layer is introduced as a compressed description of something already understood at the layer below — not as a new vocabulary item to memorize.</p>
+      <p>The 2026 Shopify app is the live case study for this curriculum. A real merchant requirement becomes a schema decision, which becomes an API endpoint, which becomes a webhook handler with failure modes, which becomes a deployment concern. The full chain is traceable in the build logs. Abstractions have addresses in the codebase.</p>
     </section>
 
     <section class="essay-section">
-      <h2>Learning from Students — What I Don't Know</h2>
-      <p>This section starts with a thank you. The students who worked through early versions of this material asked better questions than the material deserved. They pushed past generality and demanded CS/SWE-specific precision — graph theory for distributed routing, recurrence relations for runtime analysis, proofs calibrated for test coverage rather than generic theory. That pressure forced clarity: what tools actually map to production realities, what mathematical depth is genuinely load-bearing, and where recreational curiosity in the history of mathematics needed to be refocused toward computational applicability.</p>
-      <p>That refocusing also made space for work that was genuinely enjoyable. Rebuilding a broken Java applet from the Szeged Informatics Museum website in Unity and C# — while other students completed parallel implementations in C and C++ — is the kind of project that makes theory feel like leverage rather than overhead. Finding real-world broken things, tracing why they broke, and rebuilding them in a modern stack is a better learning frame than any exercise. Museums, galleries, and historical technical artifacts are a recurring reference point in this curriculum for exactly that reason.</p>
-      <p><strong>Mutual growth potential.</strong> This curriculum is not one-way. The operations-to-systems path here can offer CS students practical depth — APIs, deployment, stakeholder trade-offs, and the perspective that comes from having been on the user side of the software you are now building. In return, students who go deep into machine learning, advanced theory, or research-adjacent work are better positioned than I am to teach those areas. That is a feature, not a gap. The goal is that students who move through this material eventually surpass it — and come back to teach the parts that are not here yet.</p>
-      <p>Topics currently covered: CS and programming fundamentals, computational mathematics, data structures and algorithms, design patterns, Linux-first development environments, Python automation, TypeScript, remote project workflows, and responsible local AI use with privacy-first tooling.</p>
+      <h2>What Teaching Adds</h2>
+      <p>Working through this material with students added constraints that solo study doesn't. Students pushed past generality and demanded specificity: not "here is how recursion works" but "what is the base case for this recurrence relation and how does it affect the asymptotic bound." That pressure clarified which parts of the curriculum were genuinely load-bearing versus decorative — which mathematical depth mattered for the work and which was pattern-matching dressed as rigor.</p>
+      <p>It also produced better projects. Rebuilding a broken Java applet from a museum archive in a modern stack — with parallel student implementations in C and C++ running concurrently — is a better learning frame than any synthetic exercise. The requirement to explain why the original broke, what the modern equivalent does differently, and what trade-offs the new stack introduces forces a level of analysis that assigned problems don't.</p>
+      <p>This curriculum is not one-directional. Students who go deep into ML, formal methods, or research-adjacent theory know things this curriculum doesn't cover. The goal is that students who work through this material eventually surpass it — and the gaps they identify when they do are the next version of the curriculum.</p>
+      <p>Topics currently covered in tutoring: CS and programming fundamentals, computational mathematics, data structures and algorithms, design patterns, Linux-first development environments, Python automation, TypeScript, remote project workflows, and privacy-first local AI tooling.</p>
     </section>
 
     <section class="essay-section">
       <h2>The Systems Advantage</h2>
-      <p>Students from CS, cybersecurity, and math backgrounds who understood computation models, memory, and architecture advanced quickly in applied contexts — even when they had written less code initially. That observation reshaped my own approach: start from the machine, not the framework.</p>
-      <p>CompTIA A+ and Google IT Support formalized that intuition. Once hardware, networking, and operating systems made sense at a mechanical level, cloud concepts like load balancing, virtualization, and distributed systems became natural extensions rather than abstract vocabulary.</p>
-      <p>The communities that reinforced this path are worth naming: Professor Messer's exam and networking content for its clarity and depth; Louis Rossman and the Salem Techsperts for demonstrating that understanding hardware at the schematic level changes how you think about every layer above it; the Vintage Computing Federation for keeping alive the principle that old systems are not obsolete — they are transparent, and transparency is how intuition gets built.</p>
+      <p>Students from CS, cybersecurity, and math backgrounds who understood computation models, memory, and architecture at a mechanical level advanced quickly in applied contexts — even when they had written less application code initially. The pattern held consistently enough to reshape this curriculum's sequencing: start from the machine, not the framework. Understand what the runtime is doing before optimizing for developer experience.</p>
+      <p>The same principle applies to the WGU degree structure. The competency-based model moves fast when the underlying material is already present. Prior background in hardware, networking, operating systems, and full-stack development means Phases 1 and 2 should compress significantly. The time recovered goes into the BSCS depth supplements and the Shopify production app — the parts of the curriculum where the degree alone leaves gaps.</p>
     </section>
 
     <section class="essay-section">
-      <h2>Bridging Practice and Theory</h2>
-      <p>Bootcamp experience provided collaboration habits, version control discipline, and release-cycle thinking. Interacting with CS graduates added a second lesson: rigor is non-negotiable. Discrete math, algorithms, and probability are not academic detours — they are compression tools for understanding complex, distributed systems through a small number of concepts.</p>
-      <p>The curriculum here reflects that balance. Theory and practice are not separate tracks. Proofs explain real system behavior; real systems give theory solid grounding. The Shopify app and student code jams make that concrete: Git flow, pull requests, PAC/IPO process, and mini webhook handlers in a shared repository.</p>
-    </section>
-
-    <section class="essay-section">
-      <h2>2026 Priorities</h2>
-      <p>This site documents self-directed learning and packages it for reuse. Each post contributes to a structured curriculum pairing hands-on systems knowledge with CS depth. Courses and books are sequenced to build understanding, not accumulate credits.</p>
-      <ul>
-        <li>Shopify developer certification + first production app</li>
-        <li>4x Student Code Jams — remote project management, Git flow, real deliverables</li>
-        <li>Live documentation of architecture decisions from requirements through deployment</li>
-      </ul>
-      <p>The path here differs from a traditional internship track. The patterns of translating requirements into working, maintainable systems are the same.</p>
-      <div class="callout callout-inline">
-        To anyone working through this material: the goal is not passive consumption. Move through it efficiently, challenge it, refine it, and ultimately surpass it.
-      </div>
+      <h2>Theory and Practice as One Track</h2>
+      <p>The books on this curriculum are not background reading. Discrete math and algorithms are compression tools: a small number of concepts (recurrence relations, asymptotic analysis, graph invariants) that explain the behavior of systems too large to reason about directly. Probability is the language of distributed systems. Linear algebra is the substrate of everything in ML. These are not adjacent to the engineering work — they are the engineering work at a different resolution.</p>
+      <p>The practical side runs in parallel, not in sequence. The Shopify app, the student code jams, the build logs — these make the theory concrete in the same way that hardware work made networking concrete. A proof about worst-case complexity is more legible when you've watched a poorly indexed query degrade under load. A formal definition of consistency is more legible when you've had to reason about webhook delivery guarantees in a production system.</p>
+      <p>Read the curriculum as a student if you are working through this material. Read it as a proof of work if you are evaluating someone who took an unconventional path into systems engineering.</p>
     </section>
 
     <section class="essay-section bridge">
-      <p>What follows is the plan that came out of all of that — a 30-month sequence that treats the WGU degree as scaffolding rather than ceiling. The courses are real. The books are the ones that actually matter for the work. The projects are built around things that broke in the real world and needed fixing. Read it as a curriculum if you are a student. Read it as a proof of work if you are evaluating someone who took an unconventional path into systems engineering.</p>
+      <p>What follows is the 30-month plan. The courses are real WGU courses. The books are the ones that actually matter for the work. The projects are built around things that broke in the real world and needed fixing.</p>
     </section>
 
     <div class="">
@@ -107,8 +90,9 @@
 
   </article>
 
-  <section class="foundation-section">
+  <section class="foundation-section section-block">
     <h2 class="section-heading">My Foundation at a Glance</h2>
+    <div class="table-wrap">
     <table class="data-table">
       <thead>
         <tr><th>Credential / Course</th><th>What It Covered</th><th>Carried Forward</th></tr>
@@ -127,10 +111,12 @@
         <tr><td>Grokking Algorithms</td><td>Visual intro: recursion, DP, graphs, Big-O</td><td>Accessible entry point before CLRS; algorithm intuition</td></tr>
       </tbody>
     </table>
+    </div>
   </section>
 
-  <section class="transfer-section">
+  <section class="transfer-section section-block">
     <h2 class="section-heading">WGU Transfer Credits — 79 / 120 CU Satisfied</h2>
+    <div class="table-wrap">
     <table class="data-table">
       <thead>
         <tr><th>Course</th><th>Satisfied By</th><th>CU</th></tr>
@@ -140,20 +126,35 @@
         <tr><td class="strike">Technical Communication (D339)</td><td>A.S. degree</td><td>3</td></tr>
         <tr><td class="strike">Ethics in Technology (D333)</td><td>A.S. degree</td><td>3</td></tr>
         <tr><td class="strike">Intro to Systems Thinking (D372)</td><td>A.S. degree</td><td>3</td></tr>
-        <tr><td class="strike">American Politics & US Constitution (C963)</td><td>A.S. degree</td><td>3</td></tr>
-        <tr><td class="strike">Intro to Physical & Human Geography (D199)</td><td>A.S. degree</td><td>3</td></tr>
+        <tr><td class="strike">American Politics &amp; US Constitution (C963)</td><td>A.S. degree</td><td>3</td></tr>
+        <tr><td class="strike">Intro to Physical &amp; Human Geography (D199)</td><td>A.S. degree</td><td>3</td></tr>
         <tr><td class="strike">Applied Algebra (C957)</td><td>A.S. degree</td><td>3</td></tr>
-        <tr><td class="strike">Applied Probability & Statistics (C955)</td><td>A.S. degree</td><td>3</td></tr>
-        <tr><td class="strike">Health, Fitness & Wellness (C458)</td><td>A.S. degree</td><td>4</td></tr>
+        <tr><td class="strike">Applied Probability &amp; Statistics (C955)</td><td>A.S. degree</td><td>3</td></tr>
+        <tr><td class="strike">Health, Fitness &amp; Wellness (C458)</td><td>A.S. degree</td><td>4</td></tr>
         <tr><td class="strike">Natural Science Lab (C683)</td><td>A.S. degree</td><td>2</td></tr>
-        <tr><td class="strike">Hardware & OS Essentials (D386)</td><td>CompTIA A+</td><td>3</td></tr>
+        <tr><td class="strike">Hardware &amp; OS Essentials (D386)</td><td>CompTIA A+</td><td>3</td></tr>
         <tr><td class="strike">Introduction to IT (D322)</td><td>Google IT Support</td><td>4</td></tr>
         <tr><td class="strike">Software Engineering (D284)</td><td>Per Scholas Bootcamp</td><td>4</td></tr>
       </tbody>
     </table>
+    </div>
   </section>
 
 </main>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <span>Full curriculum and project portfolio at this site.</span>
+    <nav class="footer-nav">
+      <a href="curriculum.html">Curriculum</a>
+      <a href="calendar.html">Calendar</a>
+      <a href="projects.html">Projects</a>
+      <a href="books.html">Books</a>
+      <a href="posts.html">Writing</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </div>
+</footer>
 
 </body>
 </html>
