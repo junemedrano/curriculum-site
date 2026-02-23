@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>12-Week Program — ops → systems</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+  /* ── page-local: book-section mirrors books.html ── */
+  .book-section { margin-bottom: 2.5rem; }
+  .book-section h3 {
+    font-size: 0.85rem; font-weight: 500; color: var(--hi);
+    margin-bottom: 0.75rem; padding-bottom: 0.3rem;
+    border-bottom: 1px solid var(--border); letter-spacing: 0.02em;
+  }
+  .section-note {
+    font-size: 0.8rem; color: var(--text-3);
+    margin-bottom: 0.9rem; font-style: italic; line-height: 1.6;
+  }
+
+  /* track badge — compact tag inside course-hd */
+  .track-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border-top: 1px solid var(--border);
+  }
+  .track-col {
+    padding: 0.65rem 0.9rem;
+    border-right: 1px solid var(--border);
+    font-size: 0.82rem;
+    color: var(--text-2);
+    line-height: 1.55;
+  }
+  .track-col:last-child { border-right: none; }
+  .track-label {
+    font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--text-3); margin-bottom: 0.3rem;
+  }
+
+  /* math callout strip inside a course card */
+  .math-strip {
+    border-top: 1px solid var(--border);
+    background: var(--surface);
+    padding: 0.6rem 0.9rem;
+    font-size: 0.78rem;
+    color: var(--text-3);
+    line-height: 1.55;
+  }
+  .math-strip strong { color: var(--text-2); font-weight: 500; }
+
+  @media (max-width: 600px) {
+    .track-grid { grid-template-columns: 1fr; }
+    .track-col { border-right: none; border-bottom: 1px solid var(--border); }
+    .track-col:last-child { border-bottom: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="index.html" class="nav-brand">ops → systems</a>
+  <div class="nav-links">
+    <a href="index.html">About</a>
+    <a href="curriculum.html">Curriculum</a>
+    <a href="calendar.html">Calendar</a>
+    <a href="projects.html">Projects</a>
+    <a href="books.html">Books</a>
+    <a href="log.html">Log</a>
+    <a href="it-resources.html">IT/IS</a>
+    <a href="syllabus.html" class="active">Teaching</a>
+  </div>
+</nav>
+
+<main class="page">
+
+  <header>
+    <p class="kicker">Tutoring curriculum</p>
+    <h1 class="page-title">12-Week Programmer Syllabus</h1>
+    <p class="lead">A practical 12-week program for aspiring software engineers, CS students, and game developers. Each week covers real skills, project work, and professional tools — differentiated by track so students are never doing generic exercises.</p>
+    <div class="meta">
+      <span>Updated 2025</span>
+      <span class="dot">·</span>
+      <span>SWE · CS · Game Dev</span>
+    </div>
+  </header>
+
+  <div class="callout" style="margin-top:1.5rem;">
+    Three tracks run in parallel through the same weekly topics. <strong style="color:var(--text);">SWE</strong> emphasizes production habits and team workflow. <strong style="color:var(--text);">CS</strong> emphasizes theory, proofs, and algorithmic rigor. <strong style="color:var(--text);">Game Dev</strong> emphasizes Unity, C#, and shipping interactive projects. Math focus and reading recommendations are track-specific throughout.
+  </div>
+
+  <article>
+    <section class="essay-section">
+      <h2>How This Program Works</h2>
+      <p>The 12-week structure moves from foundations to deployment — Git and environment setup, through data structures, testing, web and API basics, databases, and into a final project you can actually show. Each week has one shared topic block and three differentiated columns showing how that topic looks in your track.</p>
+      <p>Math is not treated as background material. Each week identifies the specific mathematical concepts that underpin what you're building — not to prepare for an exam, but because understanding the underlying structure is what separates a programmer who can follow a tutorial from one who can debug an unfamiliar system. The difficulty and emphasis scales by track: CS students encounter proofs and formal definitions; SWE students encounter applied reasoning and complexity; Game Dev students encounter the geometry and linear algebra that shows up directly in their engines.</p>
+      <p>Recommended reading from the <a href="books.html">main bibliography</a> is listed at the end of each section. These are not assigned — they're the books that answer the question "where do I go deeper on this" if a week's topic opens a door you want to walk through.</p>
+    </section>
+  </article>
+
+
+  <!-- ══════════════════════════════════════════════════
+       WEEK 1
+  ═══════════════════════════════════════════════════ -->
+  <div class="section-block">
+    <h2 class="section-h">Week 1 — Foundations &amp; Git</h2>
+    <p class="lead">Environment setup, version control, and the professional workflow that everything else depends on.</p>
+
+    <div class="course">
+      <div class="course-hd">
+        <span class="course-code">W1</span>
+        <span class="course-title">Setup, Git &amp; IDE Basics</span>
+        <span class="tag tag-opt">topics: Git clone · commit · push · branching · IDE · project structure</span>
+      </div>
+      <div class="track-grid">
+        <div class="track-col">
+          <div class="track-label">SWE</div>
+          Collaborative Git workflow, branching strategies (Gitflow vs. trunk-based), pull request culture. Set up a real project structure from day one — no single-file scripts.
+        </div>
+        <div class="track-col">
+          <div class="track-label">CS</div>
+          Version control as a formal system: commit graphs as DAGs, branching as tree operations. Introduction to reproducibility and documentation discipline in academic work.
+        </div>
+        <div class="track-col">
+          <div class="track-label">Game Dev</div>
+          Unity project setup with Git LFS for large binary assets. Scene management, .gitignore for Unity, avoiding merge conflicts on .unity files.
+        </div>
+      </div>
+      <div class="math-strip">
+        <strong>Math focus — SWE:</strong> Sets and functions (inputs, outputs, side effects). Thinking about state as a mapping.
+        <strong> · CS:</strong> Directed acyclic graphs — commit history is a DAG. Introduction to graph vocabulary: nodes, edges, reachability.
+        <strong> · Game Dev:</strong> File system as a tree. Basic graph intuition for scene hierarchies.
+      </div>
+    </div>
+
+    <div class="book-section">
+      <h3>Reading from the Bibliography</h3>
+      <table class="data-table">
+        <thead><tr><th>Track</th><th>Title</th><th>Relevance to Week 1</th></tr></thead>
+        <tbody>
+          <tr><td>All</td><td><em>The Pragmatic Programmer</em> (Hunt &amp; Thomas)</td><td>Source control as a non-negotiable professional habit. Chapter on version control and automation.</td></tr>
+          <tr><td>CS</td><td><em>Mathematics for Computer Science</em> (Lehman, Leighton, Meyer)</td><td>Graph definitions and DAG proofs — formal grounding for what Git is doing structurally.</td></tr>
+          <tr><td>SWE</td><td><em>Clean Code</em> (Martin)</td><td>Project structure discipline and naming conventions from the first commit.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════
+       WEEK 2
+  ═══════════════════════════════════════════════════ -->
+  <div class="section-block">
+    <h2 class="section-h">Week 2 — Core Programming Concepts</h2>
+    <p class="lead">Variables, functions, and control flow — plus the mathematical structures that make these concepts precise.</p>
+
+    <div class="course">
+      <div class="course-hd">
+        <span class="course-code">W2</span>
+        <span class="course-title">Variables, Functions &amp; Control Flow</span>
+        <span class="tag tag-opt">topics: data types · loops · conditionals · functions · debugging</span>
+      </div>
+      <div class="track-grid">
+        <div class="track-col">
+          <div class="track-label">SWE</div>
+          Emphasis on modular, testable code from the start. Functions as units of behavior. Introduction to pure vs. impure functions and why that matters for testing.
+        </div>
+        <div class="track-col">
+          <div class="track-label">CS</div>
+          Functions as mathematical objects. Domain, codomain, and range. Introduction to Boolean algebra: conditionals as logical expressions. Loop invariants as informal proofs.
+        </div>
+        <div class="track-col">
+          <div class="track-label">Game Dev</div>
+          C# scripting in Unity: MonoBehaviour lifecycle (Start, Update, FixedUpdate). Conditionals for game state. Debugging in the Unity editor.
+        </div>
+      </div>
+      <div class="math-strip">
+        <strong>Math focus — SWE:</strong> Functions as input-output contracts. Preconditions and postconditions.
+        <strong> · CS:</strong> Propositional logic (AND, OR, NOT, implication) as the foundation of conditionals. Truth tables. Loop invariants.
+        <strong> · Game Dev:</strong> Frame-rate math: Update runs at variable dt; FixedUpdate at fixed intervals. Basic time arithmetic.
+      </div>
+    </div>
+
+    <div class="book-section">
+      <h3>Reading from the Bibliography</h3>
+      <table class="data-table">
+        <thead><tr><th>Track</th><th>Title</th><th>Relevance to Week 2</th></tr></thead>
+        <tbody>
+          <tr><td>CS</td><td><em>Mathematics for Computer Science</em> (Lehman et al.)</td><td>Propositions, logical equivalences, and proof by cases — formal grounding for conditionals and Boolean logic.</td></tr>
+          <tr><td>CS</td><td><em>How to Prove It</em> (Velleman)</td><td>Introduction to proof writing; loop invariants as informal inductive arguments.</td></tr>
+          <tr><td>SWE</td><td><em>Clean Code</em> (Martin)</td><td>Functions chapter: small, single-purpose, named for what they do.</td></tr>
+          <tr><td>Game Dev</td><td><em>Code: The Hidden Language</em> (Petzold)</td><td>Binary, logic gates, and Boolean arithmetic — the hardware level beneath the conditionals.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════
+       WEEK 3
+  ═══════════════════════════════════════════════════ -->
+  <div class="section-block">
+    <h2 class="section-h">Week 3 — Data Structures &amp; OOP</h2>
+    <p class="lead">Collections, objects, and the abstract structures that underpin both.</p>
+
+    <div class="course">
+      <div class="course-hd">
+        <span class="course-code">W3</span>
+        <span class="course-title">OOP, Arrays, Lists, Dictionaries</span>
+        <span class="tag tag-opt">topics: classes · objects · methods · arrays · lists · hash maps</span>
+      </div>
+      <div class="track-grid">
+        <div class="track-col">
+          <div class="track-label">SWE</div>
+          OOP design patterns for small applications. Unit tests for objects. Introduction to encapsulation and why it reduces surface area for bugs.
+        </div>
+        <div class="track-col">
+          <div class="track-label">CS</div>
+          Data structure complexity: array access O(1), list insertion O(n), hash map average O(1). Memory layout. Introduction to abstract data types vs. concrete implementations.
+        </div>
+        <div class="track-col">
+          <div class="track-label">Game Dev</div>
+          Unity components as OOP in practice. ScriptableObjects for data. Managing collections of game objects (lists of enemies, inventory items).
+        </div>
+      </div>
+      <div class="math-strip">
+        <strong>Math focus — SWE:</strong> Invariants — what properties does a class guarantee about its state at all times?
+        <strong> · CS:</strong> Big-O notation. Recurrence relations for recursive structures. Hash functions as mathematical mappings.
+        <strong> · Game Dev:</strong> Spatial partitioning intuition: why a list of 500 enemies and a quadtree behave differently under load.
+      </div>
+    </div>
+
+    <div class="book-section">
+      <h3>Reading from the Bibliography</h3>
+      <table class="data-table">
+        <thead><tr><th>Track</th><th>Title</th><th>Relevance to Week 3</th></tr></thead>
+        <tbody>
+          <tr><td>CS</td><td><em>Introduction to Algorithms</em> (CLRS)</td><td>Chapters on arrays, hash tables, and introductory complexity analysis. The formal definition of Big-O lives here.</td></tr>
+          <tr><td>CS</td><td><em>Concrete Mathematics</em> (Knuth et al.)</td><td>Sums and recurrences — the math behind analyzing data structure operations.</td></tr>
+          <tr><td>SWE</td><td><em>Design Patterns</em> (GoF)</td><td>Introduction to structural patterns. Even before Week 9 covers them formally, skimming the vocabulary now pays dividends.</td></tr>
+          <tr><td>SWE</td><td><em>Head First Design Patterns</em></td><td>More accessible entry into OOP patterns before the GoF text.</td></tr>
+          <tr><td>Game Dev</td><td><em>The Elements of Computing Systems</em> (Nand to Tetris)</td><td>How memory is organized at the hardware level — why array indexing is O(1) is not an assumption, it's a hardware fact.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════
+       WEEK 4
+  ═══════════════════════════════════════════════════ -->
+  <div class="section-block">
+    <h2 class="section-h">Week 4 — Git Advanced &amp; Collaboration</h2>
+    <p class="lead">Feature branches, pull requests, conflict resolution, and team workflow patterns.</p>
+
+    <div class="course">
+      <div class="course-hd">
+        <span class="course-code">W4</span>
+        <span class="course-title">Branches, Pull Requests &amp; Conflict Resolution</span>
+        <span class="tag tag-opt">topics: feature branches · PRs · merging · rebasing · Git workflows</span>
+      </div>
+      <div class="track-grid">
+        <div class="track-col">
+          <div class="track-label">SWE</div>
+          Team project with proper code review workflow. Branch naming conventions, PR templates, reviewer comments. Introduction to CI as a quality gate on PRs.
+        </div>
+        <div class="track-col">
+          <div class="track-label">CS</div>
+          Collaborative coding and maintaining reproducibility. Merge as a graph operation: three-way merge as finding the lowest common ancestor in the commit DAG.
+        </div>
+        <div class="track-col">
+          <div class="track-label">Game Dev</div>
+          Binary asset versioning with Git LFS. Avoiding scene file conflicts through prefab-first design. Branching for feature isolation in game projects.
+        </div>
+      </div>
+      <div class="math-strip">
+        <strong>Math focus — SWE / CS:</strong> Merge algorithms as graph problems — lowest common ancestor, three-way merge. Conflict as divergent state; resolution as a reconciliation function.
+        <strong> · Game Dev:</strong> State divergence — two branches are two versions of the same game state. Conflict is state overlap that requires human resolution.
+      </div>
+    </div>
+
+    <div class="book-section">
+      <h3>Reading from the Bibliography</h3>
+      <table class="data-table">
+        <thead><tr><th>Track</th><th>Title</th><th>Relevance to Week 4</th></tr></thead>
+        <tbody>
+          <tr><td>All</td><td><em>The Pragmatic Programmer</em></td><td>Chapter on source control and automation. The "broken windows" argument for keeping the main branch clean.</td></tr>
+          <tr><td>CS</td><td><em>Mathematics for Computer Science</em> (Lehman et al.)</td><td>Graph algorithms: reachability, lowest common ancestor. Gives formal grounding to merge operations.</td></tr>
+          <tr><td>SWE</td><td><em>Accelerate</em> (Forsgren et al.)</td><td>Data on trunk-based development vs. long-lived branches and their relationship to delivery performance.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════
+       WEEK 5
+  ═══════════════════════════════════════════════════ -->
+  <div class="section-block">
+    <h2 class="section-h">Week 5 — Error Handling &amp; Testing</h2>
+    <p class="lead">Exceptions, assertions, unit tests, and the discipline of knowing whether your code is correct.</p>
+
+    <div class="course">
+      <div class="course-hd">
+        <span class="course-code">W5</span>
+        <span class="course-title">Error Handling &amp; Unit Testing</span>
+        <span class="tag tag-opt">topics: exceptions · assertions · test-driven development · debugging tools</span>
+      </div>
+      <div class="track-grid">
+        <div class="track-col">
+          <div class="track-label">SWE</div>
+          Test-driven development workflow: red-green-refactor. CI basics — tests that run on every commit. Difference between unit, integration, and end-to-end tests.
+        </div>
+        <div class="track-col">
+          <div class="track-label">CS</div>
+          Formal correctness: preconditions, postconditions, and invariants. Assertions as executable specifications. Introduction to the relationship between testing and proof.
+        </div>
+        <div class="track-col">
+          <div class="track-label">Game Dev</div>
+          Unity Test Framework for scripts and scenes. Testing game logic in isolation from the Unity engine. Debugging with breakpoints and the Unity profiler.
+        </div>
+      </div>
+      <div class="math-strip">
+        <strong>Math focus — SWE:</strong> Coverage as a set problem: test cases as a subset of the input space. What fraction of inputs are you actually testing?
+        <strong> · CS:</strong> Hoare triples ({P} C {Q}) — precondition, command, postcondition as a formal model of what a test asserts.
+        <strong> · Game Dev:</strong> Edge cases as boundary conditions — testing the endpoints of numeric ranges (health = 0, health = max).
+      </div>
+    </div>
+
+    <div class="book-section">
+      <h3>Reading from the Bibliography</h3>
+      <table class="data-table">
+        <thead><tr><th>Track</th><th>Title</th><th>Relevance to Week 5</th></tr></thead>
+        <tbody>
+          <tr><td>SWE</td><td><em>Clean Code</em> (Martin)</td><td>Testing chapter: tests as first-class citizens. F.I.R.S.T. principles for unit tests.</td></tr>
+          <tr><td>SWE</td><td><em>Refactoring</em> (Fowler)</td><td>Refactoring safely requires a test suite. The relationship between tests and the confidence to change code.</td></tr>
+          <tr><td>CS</td><td><em>How to Prove It</em> (Velleman)</td><td>Formal reasoning about what code should do — the mathematical underpinning of preconditions and postconditions.</td></tr>
+          <tr><td>CS</td><td><em>Programming Pearls</em> (Bentley)</td><td>Essays on testing, correctness, and the relationship between understanding a problem and testing a solution.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════
+       WEEK 6
+  ═══════════════════════════════════════════════════ -->
+  <div class="section-block">
+    <h2 class="section-h">Week 6 — Web &amp; API Basics</h2>
+    <p class="lead">HTTP, the DOM, and how clients and servers talk to each other.</p>
+
+    <div class="course">
+      <div class="course-hd">
+        <span class="course-code">W6</span>
+        <span class="course-title">HTML, CSS, JS &amp; Fetch APIs</span>
+        <span class="tag tag-opt">topics: DOM manipulation · event handling · HTTP · REST · fetch</span>
+      </div>
+      <div class="track-grid">
+        <div class="track-col">
+          <div class="track-label">SWE</div>
+          Client-server workflow end to end. Modular JavaScript, RESTful API integration, JSON as a data interchange format. Introduction to async/await.
+        </div>
+        <div class="track-col">
+          <div class="track-label">CS</div>
+          Networking fundamentals: the request-response model, HTTP as a stateless protocol, TCP/IP at the conceptual level. Client-server as a distributed systems pattern.
+        </div>
+        <div class="track-col">
+          <div class="track-label">Game Dev</div>
+          Fetching external data for game UI: leaderboards, player stats, live configuration. Unity's UnityWebRequest. JSON deserialization for game data.
+        </div>
+      </div>
+      <div class="math-strip">
+        <strong>Math focus — SWE:</strong> State machines for UI: each user action as a state transition. Async as concurrency — multiple requests in flight.
+        <strong> · CS:</strong> Protocols as formal grammars. HTTP as a request-response automaton. Latency as a probability distribution, not a fixed number.
+        <strong> · Game Dev:</strong> Network latency and frame timing: why a 200ms round-trip feels different at 30fps vs. 60fps.
+      </div>
+    </div>
+
+    <div class="book-section">
+      <h3>Reading from the Bibliography</h3>
+      <table class="data-table">
+        <thead><tr><th>Track</th><th>Title</th><th>Relevance to Week 6</th></tr></thead>
+        <tbody>
+          <tr><td>All</td><td><em>Eloquent JavaScript</em> (Haverbeke)</td><td>Async chapter: callbacks, promises, and async/await explained from first principles.</td></tr>
+          <tr><td>CS</td><td><em>Computer Networks</em> (Tanenbaum &amp; Wetherall)</td><td>HTTP, TCP/IP, and the layered model — the theoretical foundation for what fetch() is doing.</td></tr>
+          <tr><td>SWE</td><td><em>Designing Data-Intensive Applications</em> (Kleppmann)</td><td>Encoding formats (JSON, Protobuf), API evolution, and the distributed systems context that web APIs live in.</td></tr>
+          <tr><td>Game Dev</td><td><em>Networking for Systems Administrators</em> (Lucas)</td><td>Practical network concepts for practitioners — DNS, ports, firewalls — the environment your game's backend runs in.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════
+       WEEK 7
+  ═══════════════════════════════════════════════════ -->
+  <div class="section-block">
+    <h2 class="section-h">Week 7 — Databases</h2>
+    <p class="lead">Persistence, relational models, querying, and when to use SQL vs. not.</p>
+
+    <div class="course">
+      <div class="course-hd">
+        <span class="course-code">W7</span>
+        <span class="course-title">SQL &amp; NoSQL Basics</span>
+        <span class="tag tag-opt">topics: relational DBs · PostgreSQL · MongoDB · schema design · CRUD</span>
+      </div>
+      <div class="track-grid">
+        <div class="track-col">
+          <div class="track-label">SWE</div>
+          Schema design, normalization to 3NF, writing real queries, and connecting to backend services. Introduction to ORMs and when they hide things you need to see.
+        </div>
+        <div class="track-col">
+          <div class="track-label">CS</div>
+          Relational algebra as the mathematical foundation of SQL. Set operations: SELECT as projection, WHERE as selection, JOIN as product. Normal forms as mathematical constraints on relations.
+        </div>
+        <div class="track-col">
+          <div class="track-label">Game Dev</div>
+          Persisting player progress, stats, and inventory. SQLite for local storage; cloud-backed NoSQL (Firebase/Firestore) for live data. Serialization patterns for save systems.
+        </div>
+      </div>
+      <div class="math-strip">
+        <strong>Math focus — SWE:</strong> ACID properties as mathematical guarantees: atomicity (all or nothing), consistency (invariants hold), isolation (serializability), durability (persistence).
+        <strong> · CS:</strong> Relational algebra: sets, tuples, projection, selection, Cartesian product, join. SQL as a notation for relational algebra expressions.
+        <strong> · Game Dev:</strong> Entity-component data modeling — how a game's data model maps to relational or document structures.
+      </div>
+    </div>
+
+    <div class="book-section">
+      <h3>Reading from the Bibliography</h3>
+      <table class="data-table">
+        <thead><tr><th>Track</th><th>Title</th><th>Relevance to Week 7</th></tr></thead>
+        <tbody>
+          <tr><td>SWE / CS</td><td><em>Database System Concepts</em> (Silberschatz)</td><td>Relational algebra, SQL, normalization, and transaction design — the authoritative reference for everything in Week 7.</td></tr>
+          <tr><td>SWE</td><td><em>Practical SQL</em> (DeBarros)</td><td>Applied SQL for people building real systems — queries, aggregations, and working with production data.</td></tr>
+          <tr><td>SWE</td><td><em>Designing Data-Intensive Applications</em> (Kleppmann)</td><td>When to use which storage model, and what the trade-offs actually are. Chapter on encoding and replication.</td></tr>
+          <tr><td>CS</td><td><em>Discrete Mathematics &amp; Its Applications</em> (Rosen)</td><td>Set theory — the mathematical foundation that relational algebra is built on.</td></tr>
+          <tr><td>Game Dev</td><td><em>MongoDB: The Definitive Guide</em></td><td>Document model and flexible schema — closer to how game save data is structured than normalized SQL.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════
+       WEEK 8
+  ═══════════════════════════════════════════════════ -->
+  <div class="section-block">
+    <h2 class="section-h">Week 8 — Advanced JS &amp; Type Safety</h2>
+    <p class="lead">ES6+ features, TypeScript fundamentals, and why types are a tool for reasoning rather than just a compiler requirement.</p>
+
+    <div class="course">
+      <div class="course-hd">
+        <span class="course-code">W8</span>
+        <span class="course-title">ES6+ Features &amp; TypeScript Introduction</span>
+        <span class="tag tag-opt">topics: ES6 modules · closures · destructuring · TS types · generics</span>
+      </div>
+      <div class="track-grid">
+        <div class="track-col">
+          <div class="track-label">SWE</div>
+          TypeScript for production-grade JS: type inference, interfaces, generics, and structural typing. Type safety as a design constraint that catches bugs before runtime.
+        </div>
+        <div class="track-col">
+          <div class="track-label">CS</div>
+          Type theory: types as sets of values, functions as typed transformations. Static vs. dynamic typing as a formal distinction. Introduction to the Hindley-Milner type system concept.
+        </div>
+        <div class="track-col">
+          <div class="track-label">Game Dev</div>
+          TypeScript for game tooling and editor extensions. C# as a statically typed language by default — contrast with JavaScript's runtime errors for Unity devs picking up web skills.
+        </div>
+      </div>
+      <div class="math-strip">
+        <strong>Math focus — SWE:</strong> Types as contracts — a typed function signature is a specification. Generics as parametric polymorphism: functions over types.
+        <strong> · CS:</strong> Curry-Howard correspondence: types are propositions, programs are proofs. A type-correct program is a proof that it won't produce certain classes of error.
+        <strong> · Game Dev:</strong> Type safety in component systems: why Unity's GetComponent&lt;T&gt;() is generics in practice.
+      </div>
+    </div>
+
+    <div class="book-section">
+      <h3>Reading from the Bibliography</h3>
+      <table class="data-table">
+        <thead><tr><th>Track</th><th>Title</th><th>Relevance to Week 8</th></tr></thead>
+        <tbody>
+          <tr><td>SWE / Game Dev</td><td><em>Effective TypeScript</em> (O'Reilly)</td><td>Type system, structural typing, generics, and the mental model for using TypeScript as a tool rather than fighting it.</td></tr>
+          <tr><td>SWE</td><td><em>Eloquent JavaScript</em> (Haverbeke)</td><td>Closures, prototypes, and the JavaScript object model — understanding what TypeScript is compiling to.</td></tr>
+          <tr><td>CS</td><td><em>Structure and Interpretation of Computer Programs</em> (SICP)</td><td>Types, evaluation models, and the relationship between language design and the programs you can write in it.</td></tr>
+          <tr><td>CS</td><td><em>Logic for Computer Scientists</em> (Schöning)</td><td>The logical foundations that underpin type theory — propositions, proofs, and formal systems.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════
+       WEEK 9
+  ═══════════════════════════════════════════════════ -->
+  <div class="section-block">
+    <h2 class="section-h">Week 9 — OO Design &amp; Patterns</h2>
+    <p class="lead">Design principles for code that can grow without collapsing under its own weight.</p>
+
+    <div class="course">
+      <div class="course-hd">
+        <span class="course-code">W9</span>
+        <span class="course-title">Design Patterns &amp; SOLID Principles</span>
+        <span class="tag tag-opt">topics: GoF patterns · SOLID · refactoring · dependency inversion</span>
+      </div>
+      <div class="track-grid">
+        <div class="track-col">
+          <div class="track-label">SWE</div>
+          Project structuring for maintainability: layered architecture, separation of concerns, dependency injection. When patterns help and when they're over-engineering.
+        </div>
+        <div class="track-col">
+          <div class="track-label">CS</div>
+          Design patterns as reusable solutions to recurring graph problems in object graphs. Behavioral patterns (Observer, Strategy) as higher-order functions formalized.
+        </div>
+        <div class="track-col">
+          <div class="track-label">Game Dev</div>
+          ScriptableObject patterns for data-driven design. Observer pattern for game events (health changes, score updates). State machine pattern for character AI.
+        </div>
+      </div>
+      <div class="math-strip">
+        <strong>Math focus — SWE:</strong> Dependency graphs — circular dependencies as cycles; why acyclic dependency graphs are desirable. Partial ordering of modules.
+        <strong> · CS:</strong> Higher-order functions as the functional equivalent of behavioral patterns. Strategy pattern = passing a function. Observer = functional reactive programming.
+        <strong> · Game Dev:</strong> Finite state machines — states as nodes, transitions as edges. FSM for character AI is applied graph theory.
+      </div>
+    </div>
+
+    <div class="book-section">
+      <h3>Reading from the Bibliography</h3>
+      <table class="data-table">
+        <thead><tr><th>Track</th><th>Title</th><th>Relevance to Week 9</th></tr></thead>
+        <tbody>
+          <tr><td>All</td><td><em>Design Patterns</em> (GoF)</td><td>The canonical reference. Read the intent and motivation sections more than the implementation code — the pattern is the idea.</td></tr>
+          <tr><td>SWE</td><td><em>Clean Architecture</em> (Martin)</td><td>Dependency rule, layered architecture, and why the direction of dependencies matters as much as their existence.</td></tr>
+          <tr><td>SWE</td><td><em>Refactoring</em> (Fowler)</td><td>How to move toward better design incrementally rather than rewriting. Design patterns as refactoring targets.</td></tr>
+          <tr><td>CS</td><td><em>Structure and Interpretation of Computer Programs</em> (SICP)</td><td>Higher-order functions as the functional equivalent of behavioral design patterns — the deeper abstraction beneath the OO syntax.</td></tr>
+          <tr><td>CS / Game Dev</td><td><em>Introduction to Algorithms</em> (CLRS)</td><td>Graph algorithms — the mathematical structures that dependency graphs, state machines, and scene graphs instantiate.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════
+       WEEK 10
+  ═══════════════════════════════════════════════════ -->
+  <div class="section-block">
+    <h2 class="section-h">Week 10 — APIs &amp; Full-Stack Basics</h2>
+    <p class="lead">Connecting front-end and back-end. Express, routes, HTTP methods, and the full request lifecycle.</p>
+
+    <div class="course">
+      <div class="course-hd">
+        <span class="course-code">W10</span>
+        <span class="course-title">REST API Design &amp; Node.js Basics</span>
+        <span class="tag tag-opt">topics: Express.js · routes · HTTP methods · middleware · full-stack flow</span>
+      </div>
+      <div class="track-grid">
+        <div class="track-col">
+          <div class="track-label">SWE</div>
+          Full-stack application with proper API design: versioned endpoints, appropriate HTTP verbs, error response schemas. Introduction to middleware as a pipeline.
+        </div>
+        <div class="track-col">
+          <div class="track-label">CS</div>
+          Request lifecycle as a formal pipeline: middleware composition as function composition. REST constraints as architectural invariants. Introduction to idempotency and safety as formal properties of HTTP methods.
+        </div>
+        <div class="track-col">
+          <div class="track-label">Game Dev</div>
+          Backend for game stats, leaderboards, or multiplayer features. Server-side validation of game actions. Authentication basics for player accounts.
+        </div>
+      </div>
+      <div class="math-strip">
+        <strong>Math focus — SWE:</strong> Middleware as function composition: f ∘ g ∘ h where each function transforms the request-response pair.
+        <strong> · CS:</strong> Idempotency: f(f(x)) = f(x). Safety: no side effects. These are formal mathematical properties that HTTP verbs either do or don't have.
+        <strong> · Game Dev:</strong> Eventual consistency in leaderboard design — why player A's rank might lag behind their actual score by seconds.
+      </div>
+    </div>
+
+    <div class="book-section">
+      <h3>Reading from the Bibliography</h3>
+      <table class="data-table">
+        <thead><tr><th>Track</th><th>Title</th><th>Relevance to Week 10</th></tr></thead>
+        <tbody>
+          <tr><td>SWE / CS</td><td><em>Designing Data-Intensive Applications</em> (Kleppmann)</td><td>API design at scale, encoding, and what "RESTful" actually means in a distributed system.</td></tr>
+          <tr><td>CS</td><td><em>Computer Networks</em> (Tanenbaum)</td><td>HTTP at the protocol level — what the browser and server are actually exchanging when you call fetch().</td></tr>
+          <tr><td>SWE</td><td><em>Site Reliability Engineering</em> (Google)</td><td>SLOs, error budgets, and why your API's reliability characteristics are as important as its functionality.</td></tr>
+          <tr><td>CS</td><td><em>Structure and Interpretation of Computer Programs</em> (SICP)</td><td>Function composition and higher-order functions — the mathematical model underneath middleware pipelines.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════
+       WEEK 11
+  ═══════════════════════════════════════════════════ -->
+  <div class="section-block">
+    <h2 class="section-h">Week 11 — Project Work &amp; Deployment</h2>
+    <p class="lead">Building and shipping something real. CI/CD, hosting, and the gap between code that works locally and code that works in production.</p>
+
+    <div class="course">
+      <div class="course-hd">
+        <span class="course-code">W11</span>
+        <span class="course-title">Project Development &amp; Hosting</span>
+        <span class="tag tag-opt">topics: mini-project · Vercel / Netlify · GitHub Actions · CI/CD · presentation</span>
+      </div>
+      <div class="track-grid">
+        <div class="track-col">
+          <div class="track-label">SWE</div>
+          CI/CD pipeline: automated tests on push, build on merge, deploy on pass. Code review and peer feedback as professional practice. Presentation of work to a non-technical audience.
+        </div>
+        <div class="track-col">
+          <div class="track-label">CS</div>
+          Reproducibility: a deployment is a specification of an environment. Introduction to containerization as a formal environment definition. Documentation as a contract.
+        </div>
+        <div class="track-col">
+          <div class="track-label">Game Dev</div>
+          Unity WebGL build, deploy to itch.io or GitHub Pages. Build pipeline configuration. Performance profiling before release — frame budget and draw call analysis.
+        </div>
+      </div>
+      <div class="math-strip">
+        <strong>Math focus — SWE:</strong> Deployment pipelines as state machines: pending → running → passed → deployed. Failure modes as transition guards.
+        <strong> · CS:</strong> Environment reproducibility as a formal specification problem — a Dockerfile is a constructive proof that a given environment exists.
+        <strong> · Game Dev:</strong> Frame budget arithmetic: 16.67ms at 60fps. Draw calls, batching, and the math of GPU performance budgeting.
+      </div>
+    </div>
+
+    <div class="book-section">
+      <h3>Reading from the Bibliography</h3>
+      <table class="data-table">
+        <thead><tr><th>Track</th><th>Title</th><th>Relevance to Week 11</th></tr></thead>
+        <tbody>
+          <tr><td>SWE</td><td><em>Accelerate</em> (Forsgren et al.)</td><td>The four DORA metrics. Deployment frequency, lead time, MTTR, and change failure rate — the measures that actually matter for what you just shipped.</td></tr>
+          <tr><td>SWE</td><td><em>Site Reliability Engineering</em> (Google)</td><td>Production readiness, deployment safety, and postmortem culture. What shipping means at scale.</td></tr>
+          <tr><td>All</td><td><em>The Phoenix Project</em> (Kim et al.)</td><td>Why deployment pipelines and change management exist — the narrative that makes CI/CD practices make emotional sense.</td></tr>
+          <tr><td>CS</td><td><em>Computer Systems: A Programmer's Perspective</em> (CS:APP)</td><td>The execution environment — what the OS and hardware are doing when your deployed program runs.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════
+       WEEK 12
+  ═══════════════════════════════════════════════════ -->
+  <div class="section-block">
+    <h2 class="section-h">Week 12 — Review, Advanced Git &amp; Next Steps</h2>
+    <p class="lead">Pro Git, portfolio strategy, and a clear picture of where to go after 12 weeks.</p>
+
+    <div class="course">
+      <div class="course-hd">
+        <span class="course-code">W12</span>
+        <span class="course-title">Pro Git &amp; Career Preparation</span>
+        <span class="tag tag-opt">topics: rebase · stash · bisect · interactive staging · portfolio · next curriculum</span>
+      </div>
+      <div class="track-grid">
+        <div class="track-col">
+          <div class="track-label">SWE</div>
+          Advanced Git for team collaboration: interactive rebase for clean history, bisect for regression hunting, stash for context switching. Open-source contribution workflow.
+        </div>
+        <div class="track-col">
+          <div class="track-label">CS</div>
+          Git internals as a content-addressable object store: objects, trees, blobs, commits. SHA-1 as a hash function. Understanding what git internals reveal about data structure design.
+        </div>
+        <div class="track-col">
+          <div class="track-label">Game Dev</div>
+          Git LFS advanced usage, binary asset branching, tagging releases. Portfolio: itch.io page, WebGL builds, gameplay video. Next steps toward publishing.
+        </div>
+      </div>
+      <div class="math-strip">
+        <strong>Math focus — CS:</strong> Content-addressable storage as a hash map. SHA-1 as a near-injective function on byte sequences. Merkle trees — how Git detects changes without comparing every file.
+        <strong> · SWE:</strong> Bisect as binary search on the commit history: O(log n) commits to isolate a regression. Binary search as a recurring algorithmic idea.
+        <strong> · Game Dev:</strong> Version numbers as tuples with ordering: semantic versioning as a partial order on (major, minor, patch).
+      </div>
+    </div>
+
+    <div class="book-section">
+      <h3>Reading from the Bibliography</h3>
+      <table class="data-table">
+        <thead><tr><th>Track</th><th>Title</th><th>Relevance to Week 12</th></tr></thead>
+        <tbody>
+          <tr><td>All</td><td><em>The Pragmatic Programmer</em></td><td>Career development chapter. The "broken window" mindset applied to your portfolio and professional habits long-term.</td></tr>
+          <tr><td>CS</td><td><em>Introduction to Algorithms</em> (CLRS)</td><td>Binary search — what git bisect is doing algorithmically. A familiar algorithm appearing in an unexpected place.</td></tr>
+          <tr><td>CS</td><td><em>Concrete Mathematics</em> (Knuth et al.)</td><td>Hash functions, combinatorics, and the mathematics of collision resistance. Git's object model in formal terms.</td></tr>
+          <tr><td>SWE</td><td><em>Staff Engineer</em> (Larson)</td><td>What the trajectory from junior to senior to staff looks like. A 12-week program is a starting point — this book describes the longer arc.</td></tr>
+          <tr><td>Game Dev</td><td><em>The Elements of Computing Systems</em> (Nand to Tetris)</td><td>The full stack from logic gates to a working computer — a fitting endpoint that shows how deep the rabbit hole goes.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+  <!-- NEXT STEPS -->
+  <div class="section-block">
+    <div class="essay-section">
+      <h2>After 12 Weeks</h2>
+      <p>The program covers the practical foundation. What it doesn't cover is everything that comes next — and the honest answer is that what comes next depends entirely on your track.</p>
+      <p>For SWE students: systems design, distributed systems, and the infrastructure layer. <em>CS:APP</em>, <em>Designing Data-Intensive Applications</em>, and the databases section of the main curriculum are the natural continuation. Start building something that has real users, even if the number is small.</p>
+      <p>For CS students: algorithms at depth (CLRS cover to cover), discrete math (Lehman/Leighton/Meyer), and a rigorous probability text (Blitzstein &amp; Hwang). The gap between a programmer and a computer scientist is mostly mathematical maturity — that maturity is acquired through doing problems, not reading solutions.</p>
+      <p>For Game Dev students: the Unity-specific skill curve continues, but the limiting factor past a certain point is usually not Unity knowledge — it's the underlying CS and math. Linear algebra (Strang) and the physics simulation basics that require it become relevant fast. So does architecture: games that grow past a prototype need the same structural discipline as any other software system.</p>
+    </div>
+
+    <a href="curriculum.html" class="forward">
+      <span class="forward-label">See also</span>
+      <span class="forward-title">The Full 30-Month Curriculum →</span>
+    </a>
+  </div>
+
+</main>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <span>Full curriculum and project portfolio at this site.</span>
+    <nav class="footer-nav">
+      <a href="index.html">About</a>
+      <a href="curriculum.html">Curriculum</a>
+      <a href="calendar.html">Calendar</a>
+      <a href="projects.html">Projects</a>
+      <a href="books.html">Books</a>
+      <a href="log.html">Log</a>
+      <a href="it-resources.html">IT/IS</a>
+      <a href="syllabus.html">Teaching</a>
+      <a href="the-vault.html">Vault</a>
+    </nav>
+  </div>
+</footer>
+
+</body>
+</html>
