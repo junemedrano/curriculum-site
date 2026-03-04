@@ -3,150 +3,196 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Building This Site — From Operations to Systems</title>
+<title>Building This Site — ops → systems</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../style.css">
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
+
 <nav class="nav">
-  <a href="../index.html" class="nav-brand">ops → systems</a>
+  <a href="index.html" class="nav-brand">ops → systems</a>
+  <button class="nav-toggle" onclick="document.getElementById('drawer').classList.toggle('open')">menu</button>
   <div class="nav-links">
-    <a href="../index.html">About</a>
-    <a href="../curriculum.html">Curriculum</a>
-    <a href="../calendar.html">Calendar</a>
-    <a href="../projects.html">Projects</a>
-    <a href="../books.html">Books</a>
-    <a href="../log.html" class="active">Log</a>
-    <a href="../it-resources.html">IT/IS</a>
-    <a href="../syllabus.html">Teaching</a>
+    <a href="index.html">About</a>
+    <a href="curriculum.html">Curriculum</a>
+    <a href="calendar.html">Calendar</a>
+    <a href="projects.html">Projects</a>
+    <a href="books.html">Books</a>
+    <a href="log.html" class="active">Log</a>
+    <a href="it-resources.html">IT/IS</a>
+    <a href="syllabus.html">Teaching</a>
   </div>
 </nav>
-<main class="page">
-  <div style="margin-bottom:1.5rem;">
-    <a href="../log.html" style="font-size:0.72rem;color:var(--text-3);letter-spacing:0.06em;">← All posts</a>
+<div class="nav-drawer" id="drawer">
+  <a href="index.html">About</a>
+  <a href="curriculum.html">Curriculum</a>
+  <a href="calendar.html">Calendar</a>
+  <a href="projects.html">Projects</a>
+  <a href="books.html">Books</a>
+  <a href="log.html" class="active">Log</a>
+  <a href="it-resources.html">IT/IS</a>
+  <a href="syllabus.html">Teaching</a>
+</div>
+
+<main>
+<div class="page">
+
+  <div class="mb-2">
+    <a href="log.html" class="back-link">← Log</a>
   </div>
-  <p class="kicker">About · Feb 17, 2026</p>
-  <h1 style="font-size:clamp(1.8rem,4vw,2.8rem);font-weight:500;color:var(--hi);margin-bottom:1.5rem;line-height:1.2;">Building This Site — Design Decisions in Plain HTML and CSS</h1>
 
-  <div class="essay">
+  <p class="kicker">Build log · site-2</p>
+  <h1 class="page-title">Building This Site</h1>
+  <p class="lead">This is the second version of this portfolio site — static HTML, a hand-rolled CSS system, and a deliberate decision to keep it that way until the right reason to migrate appeared. That reason is now here. This post documents what was built, why it was built that way, and what the migration to Next.js / React / TypeScript involves.</p>
+  <div class="meta mb-3">
+    <span>February 2026</span><span class="dot">·</span>
+    <span>site-2 → site-3</span><span class="dot">·</span>
+    <span>static HTML · CSS · Next.js · React · TypeScript</span>
+  </div>
 
-    <p style="font-size:1rem;color:var(--text-2);margin-bottom:2rem;line-height:1.7;">This post documents how and why this site is built the way it is. No framework, no build step, no JavaScript beyond a small activity grid script. The constraint was deliberate.</p>
 
-    <p style="font-size:1rem;color:var(--text);line-height:1.75;margin-bottom:1rem;">The site needed to go live fast and stay maintainable without tooling overhead. A curriculum site that requires a Node environment to edit is a site you stop editing. Plain HTML files mean any text editor, any machine, any connection, immediate preview. The complexity budget went into the CSS, not the stack.</p>
+  <!-- PART 1: THE STATIC SITE -->
+  <div class="essay-section">
+    <h2>Part 1 — The Static Site</h2>
+    <p>The first version of this site was a single HTML file. The second version — this one — expanded to nine files sharing one stylesheet. The CSS system was built around IBM Plex Mono, a token-based variable system, and a set of semantic aliases that made the dark/light toggle a one-line swap.</p>
+    <p>The design decisions were intentional. IBM Plex Mono is legible at small sizes, signals that this is a technical portfolio without requiring any decorative work, and renders consistently across operating systems without webfont loading issues at the sizes used. The token system — <code>--bg</code>, <code>--surface</code>, <code>--border</code>, <code>--text</code>, <code>--text-dim</code>, <code>--hi</code> — means the entire theme is six variables. Light mode is a six-line override block.</p>
 
-    <h2 style="font-size:1rem;font-weight:500;color:var(--hi);margin:2rem 0 0.75rem;padding-bottom:0.35rem;border-bottom:1px solid var(--border);">The palette: one constraint, carried everywhere</h2>
+    <h3>The GitHub contribution chart</h3>
+    <p>The contribution chart on the about page is an SVG fetched directly from GitHub's API. GitHub returns a dark SVG. To make it render correctly in both light and dark mode without maintaining two versions, a CSS filter chain handles the inversion:</p>
+    <pre>/* dark mode: SVG is already dark — enhance contrast */
+filter: grayscale(1) contrast(1.2);
 
-    <p style="font-size:1rem;color:var(--text);line-height:1.75;margin-bottom:1rem;">Black background, white type, IBM Plex Mono throughout. No color. The constraint came from wanting the activity grid on the Writing page to do the visual work — a GitHub-style contribution calendar that grades from black to white as commit density increases. Color anywhere else would compete with it. Monochrome everywhere makes the grid legible.</p>
+/* light mode: invert first, then enhance */
+filter: grayscale(1) invert(1) contrast(1.2);</pre>
+    <p>The <code>grayscale(1)</code> strips any residual color before the invert, which prevents hue shifts on colored contribution cells. The order matters — invert before grayscale produces different results than grayscale before invert.</p>
 
-    <p style="font-size:1rem;color:var(--text);line-height:1.75;margin-bottom:1rem;">The full palette lives in CSS custom properties at the top of <code style="font-size:0.85rem;color:var(--hi);">style.css</code>:</p>
+    <h3>Why the static approach held up</h3>
+    <p>Static HTML with a shared stylesheet is fast, deployable anywhere, requires no build step, and has zero runtime dependencies. For a portfolio site with no authentication, no user state, and no dynamic data, it is the correct tool. The CSS system transferred directly to the migration — no rewrite required, just a different delivery mechanism.</p>
+  </div>
 
-    <div class="callout" style="margin-bottom:1.5rem;font-size:0.8rem;line-height:1.8;">
-<pre style="margin:0;color:var(--text-2);overflow-x:auto;">:root {
-  --black:  #000000;
-  --white:  #ffffff;
-  --gray-0: #f8f8f8;
-  --gray-1: #e8e8e8;  /* --text: body copy */
-  --gray-2: #c0c0c0;  /* --text-2: secondary */
-  --gray-3: #888888;  /* --text-3: labels, meta */
-  --gray-4: #444444;  /* --border-2: active borders */
-  --gray-5: #222222;  /* --surface-2, --border */
-  --gray-6: #111111;  /* --surface: card backgrounds */
 
-  --bg:     var(--black);
-  --hi:     var(--white);  /* headings, links, emphasis */
-}</pre>
-    </div>
+  <!-- PART 2: WHY MIGRATE -->
+  <div class="essay-section">
+    <h2>Part 2 — Why Migrate</h2>
+    <p>Four concrete problems drove the decision to migrate, not a preference for complexity:</p>
+    <p><strong>Copy-paste navigation.</strong> Nine HTML files each contain the same nav block. Every link addition or active-state change requires editing nine files. This is the clearest possible signal that a component abstraction is needed.</p>
+    <p><strong>The Vault.</strong> One section of this site should be password-gated. Static HTML has no mechanism for server-side authentication. Any client-side approach — hiding content with JavaScript, obscuring URLs — is not access control, it is theater. A Next.js API route can validate a password against an environment variable and return a token. That is real gating.</p>
+    <p><strong>Mobile responsiveness.</strong> Several tables require horizontal scrolling on small screens. This is manageable with CSS, but a component-based approach makes it easier to swap in a different layout for mobile without duplicating markup.</p>
+    <p><strong>Unity WebGL.</strong> The Chiaroscuro math visualization project will eventually embed a Unity WebGL build. Unity WebGL has a specific lifecycle — it requires a container element, calls into a JavaScript loader, and needs cleanup on unmount. A React component handles this cleanly. A static HTML page with an inline script is harder to maintain and test.</p>
+  </div>
 
-    <p style="font-size:1rem;color:var(--text);line-height:1.75;margin-bottom:1rem;">Naming the semantic aliases (<code style="font-size:0.85rem;color:var(--hi);">--text</code>, <code style="font-size:0.85rem;color:var(--hi);">--border</code>, <code style="font-size:0.85rem;color:var(--hi);">--surface</code>) separately from the raw grays means a future light-mode toggle swaps eight values in one place and nothing else changes.</p>
 
-    <h2 style="font-size:1rem;font-weight:500;color:var(--hi);margin:2rem 0 0.75rem;padding-bottom:0.35rem;border-bottom:1px solid var(--border);">Typography: one font, three weights</h2>
+  <!-- PART 3: THE STACK -->
+  <div class="essay-section">
+    <h2>Part 3 — The Stack</h2>
+    <p>The migration target is Next.js / React / TypeScript, built with Vite for local development. These are four separate things that are often conflated. They solve different problems at different layers.</p>
 
-    <p style="font-size:1rem;color:var(--text);line-height:1.75;margin-bottom:1rem;">IBM Plex Mono in regular (400), medium (500), and italic. The monospace constraint reinforces the technical register without reading as a code dump — Plex Mono has enough optical spacing at small sizes to work as body text, which most monospace fonts don't. The base font size is 15px, slightly larger than most developer sites, because the line lengths here are long and the content is dense.</p>
+    <h3>React — what it actually solves</h3>
+    <p>React is a UI library. It does not handle routing, data fetching, server rendering, or deployment. What it does: it lets you define a piece of UI as a function that takes props and returns markup, manages state changes without manually updating the DOM, and re-renders only what changed when state updates. The Nav component is the clearest example — define it once, import it everywhere, change it in one place.</p>
 
-    <h2 style="font-size:1rem;font-weight:500;color:var(--hi);margin:2rem 0 0.75rem;padding-bottom:0.35rem;border-bottom:1px solid var(--border);">Layout: two max-widths, no grid framework</h2>
+    <h3>Next.js — what it adds</h3>
+    <p>Next.js is a framework built on React. It adds file-based routing (a file at <code>pages/books.tsx</code> becomes the <code>/books</code> route), server-side rendering and static generation, API routes (files in <code>pages/api/</code> become serverless functions), and image optimization. The Vault password gate lives in a Next.js API route. The static pages become statically generated at build time — same performance as the HTML files, with the component model on top.</p>
 
-    <p style="font-size:1rem;color:var(--text);line-height:1.75;margin-bottom:1rem;">Two layout classes handle everything. <code style="font-size:0.85rem;color:var(--hi);">.page</code> at 800px for reading-focused pages (About, Writing, posts). <code style="font-size:0.85rem;color:var(--hi);">.page-wide</code> at 1020px for the Curriculum page which needs room for the course card tables. Both center with <code style="font-size:0.85rem;color:var(--hi);">margin: 0 auto</code> and use a single <code style="font-size:0.85rem;color:var(--hi);">--pad</code> variable (1.5rem desktop, 1rem mobile) for all horizontal padding.</p>
-
-    <div class="callout" style="margin-bottom:1.5rem;font-size:0.8rem;line-height:1.8;">
-<pre style="margin:0;color:var(--text-2);overflow-x:auto;">.page      { max-width: 800px;  margin: 0 auto; padding: 3.5rem var(--pad) 6rem; }
-.page-wide { max-width: 1020px; margin: 0 auto; padding: 3.5rem var(--pad) 6rem; }</pre>
-    </div>
-
-    <h2 style="font-size:1rem;font-weight:500;color:var(--hi);margin:2rem 0 0.75rem;padding-bottom:0.35rem;border-bottom:1px solid var(--border);">Course cards: a table inside a bordered div</h2>
-
-    <p style="font-size:1rem;color:var(--text);line-height:1.75;margin-bottom:1rem;">Each course on the Curriculum page is a <code style="font-size:0.85rem;color:var(--hi);">.course</code> div containing a header row and a <code style="font-size:0.85rem;color:var(--hi);">.course-rows</code> table. The header carries the course code, title, and tag badges. The table rows hold the structured metadata (Covers, Books, Note, Pair with). Using an actual table for the rows — rather than flexbox or grid — means the label column is a fixed 80px and the content column fills the remainder, without any JavaScript measurement.</p>
-
-    <div class="callout" style="margin-bottom:1.5rem;font-size:0.8rem;line-height:1.8;">
-<pre style="margin:0;color:var(--text-2);overflow-x:auto;">.course-rows td:first-child {
-  font-size: 0.65rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--text-3);
-  width: 80px;
-  white-space: nowrap;
-}</pre>
-    </div>
-
-    <h2 style="font-size:1rem;font-weight:500;color:var(--hi);margin:2rem 0 0.75rem;padding-bottom:0.35rem;border-bottom:1px solid var(--border);">The framework explainer: CSS Grid with auto-fit</h2>
-
-    <p style="font-size:1rem;color:var(--text);line-height:1.75;margin-bottom:1rem;">The PAC/IPO/GOM/GWM reference block on the Curriculum page uses <code style="font-size:0.85rem;color:var(--hi);">grid-template-columns: repeat(auto-fit, minmax(220px, 1fr))</code>. This gives two columns on desktop and collapses to one on narrow viewports with no media query — the grid figures it out from the available space. Each cell has a right border and bottom border; the last cell in the last row has neither. Getting border removal right on the last items without JavaScript requires the <code style="font-size:0.85rem;color:var(--hi);">nth-last-child</code> selector:</p>
-
-    <div class="callout" style="margin-bottom:1.5rem;font-size:0.8rem;line-height:1.8;">
-<pre style="margin:0;color:var(--text-2);overflow-x:auto;">.framework-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    <h3>TypeScript — the compiler as a collaborator</h3>
+    <p>TypeScript adds optional static types to JavaScript. The compiler catches a class of bugs before the code runs — wrong prop types, missing properties on an object, a function called with the wrong number of arguments. The cost is annotation overhead. The benefit is that refactoring is safer and the editor can provide accurate autocomplete.</p>
+    <p>The before/after is clearest with a component interface:</p>
+    <pre>// Without TypeScript — silent failure
+function BookRow(props) {
+  return &lt;tr&gt;&lt;td&gt;{props.titel}&lt;/td&gt;&lt;/tr&gt;; // typo: titel
 }
 
-/* remove bottom border from last row (2 items) */
-.framework-grid .framework-item:nth-last-child(-n+2) {
-  border-bottom: none;
+// With TypeScript — compiler error at the typo
+interface BookRowProps {
+  title: string;
+  author: string;
+  priority: 'high' | 'med' | 'low';
 }
 
-/* single-column fallback: remove all right borders */
-@media (max-width: 500px) {
-  .framework-grid { grid-template-columns: 1fr; }
-  .framework-item { border-right: none; }
+function BookRow({ title, author, priority }: BookRowProps) {
+  return &lt;tr&gt;&lt;td&gt;{title}&lt;/td&gt;&lt;td&gt;{author}&lt;/td&gt;&lt;/tr&gt;;
 }</pre>
-    </div>
+    <p>The interface is a contract. The compiler enforces it. Every call site that passes a misspelled prop or the wrong type is flagged before the browser ever sees the code.</p>
 
-    <h2 style="font-size:1rem;font-weight:500;color:var(--hi);margin:2rem 0 0.75rem;padding-bottom:0.35rem;border-bottom:1px solid var(--border);">The activity calendar: GitHub SVG, CSS filter</h2>
+    <h3>Vite — the build tool</h3>
+    <p>Vite handles the local development server and the production build. It provides hot module replacement — changing a component file updates the browser instantly without a full reload. It is largely invisible during development, which is the goal of a build tool. It is faster than webpack for local dev because it uses native ES modules during development and only bundles for production.</p>
 
-    <p style="font-size:1rem;color:var(--text);line-height:1.75;margin-bottom:1rem;">The Writing page originally used a JavaScript-generated grid of div squares with hardcoded activity levels. That was replaced with a live GitHub contribution chart from <a href="https://ghchart.rshah.org" target="_blank" rel="noopener">ghchart.rshah.org</a>, which serves your contribution graph as an SVG image. The image is green by default. Three CSS filter operations convert it to the site palette:</p>
-
-    <div class="callout" style="margin-bottom:1.5rem;font-size:0.8rem;line-height:1.8;">
-<pre style="margin:0;color:var(--text-2);overflow-x:auto;">.gh-calendar-img {
-  filter: grayscale(1) invert(1) contrast(1.2);
-  /* grayscale(1)  — strips green entirely         */
-  /* invert(1)     — flips to white-on-black        */
-  /* contrast(1.2) — sharpens cell boundaries       */
-}</pre>
-    </div>
-
-    <p style="font-size:1rem;color:var(--text);line-height:1.75;margin-bottom:1rem;">The result is a live calendar that updates automatically with every commit, rendered entirely in CSS, with no JavaScript and no backend.</p>
-
-    <h2 style="font-size:1rem;font-weight:500;color:var(--hi);margin:2rem 0 0.75rem;padding-bottom:0.35rem;border-bottom:1px solid var(--border);">What comes next</h2>
-
-    <p style="font-size:1rem;color:var(--text);line-height:1.75;margin-bottom:1rem;">The site is static by choice for now, not by limitation. When the Shopify app reaches production it will make sense to revisit — a Vite build step would enable component reuse across the post template, and a small API call could replace the placeholder post dates with real commit timestamps. Neither is worth adding before there is real content to maintain.</p>
-
-    <p style="font-size:1rem;color:var(--text);line-height:1.75;">The constraint that actually mattered: every page loads instantly, works without JavaScript enabled, and can be edited in any environment including a WSL2 terminal with no GUI. For a site about systems thinking, that seemed like the right starting point.</p>
-
+    <h3>Why not Tailwind CSS</h3>
+    <p>The existing CSS system — custom properties, semantic aliases, the component classes — transfers directly to the React migration. There is no functional problem that Tailwind solves here that is not already solved. Rewriting every class declaration into utility strings would mean learning a new syntax to produce the same output. The CSS system is the asset, not a liability.</p>
   </div>
+
+
+  <!-- PART 4: ROUTING -->
+  <div class="essay-section">
+    <h2>Part 4 — Routing</h2>
+    <p>In the static site, routing is the filesystem. <code>books.html</code> is served at <code>/books.html</code>. Next.js uses the same mental model with a cleaner URL: a file at <code>pages/books.tsx</code> is served at <code>/books</code>. The difference is that the file is a React component, not raw HTML.</p>
+    <p>The alternative is React Router — a library that handles routing client-side, where the URL changes without a server request and React swaps the component in. Next.js makes the choice for you: file-based routing by default, with the option to add dynamic routes via bracket syntax (<code>pages/log/[slug].tsx</code> matches <code>/log/any-post-title</code>). For this site, Next.js file-based routing is the right fit — the content structure maps directly to the file structure.</p>
+  </div>
+
+
+  <!-- PART 5: TESTING -->
+  <div class="essay-section">
+    <h2>Part 5 — Testing</h2>
+    <p>Three layers of tests cover the migrated site:</p>
+    <p><strong>Vitest</strong> for unit tests on pure utility functions — slug generation, date formatting, any function that takes an input and returns an output with no side effects. Fast, runs in Node, no browser required.</p>
+    <p><strong>Supertest</strong> for integration tests on the Next.js API routes — the Vault password check, any route that reads environment variables or interacts with external services. Tests the HTTP interface directly.</p>
+    <p><strong>Playwright</strong> for end-to-end tests on critical paths — the Vault gate, nav links, mobile layout. Runs a real browser, slower, reserved for flows where the full browser environment matters.</p>
+    <p>A Vitest unit test for a utility function:</p>
+    <pre>import { describe, it, expect } from 'vitest';
+import { slugify } from '../lib/slugify';
+
+describe('slugify', () => {
+  it('lowercases and replaces spaces with hyphens', () => {
+    expect(slugify('Building This Site')).toBe('building-this-site');
+  });
+  it('strips special characters', () => {
+    expect(slugify('Week 13 — AI &amp; Agentic Workflows')).toBe('week-13-ai-agentic-workflows');
+  });
+});</pre>
+  </div>
+
+
+  <!-- PART 6: DEPLOYMENT -->
+  <div class="essay-section">
+    <h2>Part 6 — Deployment</h2>
+    <p>The static site deploys to GitHub Pages — push to main, the files are served. The Next.js migration deploys to Vercel. The workflow is the same: push to GitHub, Vercel detects the push, runs the build, and deploys. The difference is that Vercel understands Next.js natively — API routes become serverless functions, environment variables are managed through the Vercel dashboard, and preview deployments are created automatically for every pull request branch.</p>
+    <p>The Vault password gate requires an environment variable (<code>VAULT_PASSWORD</code>) that is never committed to the repository. On Vercel, environment variables are set in the project settings and injected at build time and runtime. The API route reads <code>process.env.VAULT_PASSWORD</code> — it is never exposed to the client bundle.</p>
+    <p>This is the concrete reason static HTML cannot do what the Next.js migration does: server-side environment variable access requires a server. Vercel's serverless functions are that server.</p>
+  </div>
+
+
+  <!-- PART 7: WHAT'S NEXT -->
+  <div class="essay-section">
+    <h2>Part 7 — What's Next</h2>
+    <p>The migration is in progress as of the calendar Phase 1–2 window. The CSS system is complete and in production. The HTML files are the source of truth until the React components replace them page by page. The order: Nav component first (unblocks everything), then page-by-page migration starting with the simplest pages, then the Vault gate once the API route infrastructure is in place.</p>
+    <p>A site-3 build log will follow after the migration completes — covering what the component extraction revealed about the existing markup, what TypeScript caught during the migration, and how long each phase actually took versus the estimate.</p>
+
+    <a href="log.html" class="forward">
+      <span class="forward-label">Back to</span>
+      <span class="forward-title">← All build logs</span>
+    </a>
+  </div>
+
+</div>
 </main>
+
 <footer class="footer">
   <div class="footer-inner">
-    <span>Full curriculum and project portfolio at this site.</span>
+    <span class="footer-brand">Full curriculum and project portfolio at this site.</span>
     <nav class="footer-nav">
-      <a href="../index.html">About</a>
-      <a href="../curriculum.html">Curriculum</a>
-      <a href="../projects.html">Projects</a>
-      <a href="../log.html">Log</a>
-      <a href="../it-resources.html">IT/IS</a>
-      <a href="../syllabus.html">Teaching</a>
-      <a href="../the-vault.html">Vault</a>
+      <a href="index.html">About</a>
+      <a href="curriculum.html">Curriculum</a>
+      <a href="calendar.html">Calendar</a>
+      <a href="projects.html">Projects</a>
+      <a href="books.html">Books</a>
+      <a href="log.html">Log</a>
+      <a href="it-resources.html">IT/IS</a>
+      <a href="syllabus.html">Teaching</a>
+      <a href="the-vault.html">Vault</a>
     </nav>
   </div>
 </footer>
+
 </body>
 </html>

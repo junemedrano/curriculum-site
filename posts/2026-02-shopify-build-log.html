@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shopify Operations App — Project Outline</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <nav class="nav">
+    <a href="../index.html" class="nav-brand">ops → systems</a>
+    <div class="nav-links">
+      <a href="../index.html">About</a>
+      <a href="../curriculum.html">Curriculum</a>
+      <a href="../calendar.html">Calendar</a>
+      <a href="../projects.html">Projects</a>
+      <a href="../books.html">Books</a>
+      <a href="../log.html" class="active">Log</a>
+      <a href="../it-resources.html">IT/IS</a>
+      <a href="../syllabus.html">Teaching</a>
+    </div>
+  </nav>
+
+  <main class="page">
+    <div style="margin-bottom:1.5rem;">
+      <a href="../log.html" style="font-family:var(--font);font-size:0.72rem;color:var(--text-3);letter-spacing:0.06em;">← All posts</a>
+    </div>
+
+    <p class="kicker">Build Log · Feb 2026</p>
+    <h1 class="page-title">
+      Shopify Operations App — Project Outline
+    </h1>
+
+    <div class="essay">
+      <p class="lead">
+        This is the working spec for the Shopify app being built in parallel with the 30‑month curriculum. It is meant to be a living document, updated as the build progresses, as coursework catches up to what the project requires, and as the understanding of what is actually being built becomes sharper. Writing it down now forces clarity that does not fully exist yet, and that is part of the point.
+      </p>
+
+      <!-- WHAT IT IS -->
+      <div class="essay-section">
+        <h2>What I'm Building</h2>
+
+        <p>
+          The project is a custom Shopify application for a small‑scale, high‑ticket, made‑to‑order store. The business problem comes from things seen repeatedly in real retail environments: the gap between an order being placed, the merchant actually noticing it, fulfillment being coordinated, and the customer knowing what is happening. ShipStation handles fulfillment, Klaviyo handles communication, and this app is the connective tissue between them and Shopify.
+        </p>
+
+        <p>
+          On top of that operational foundation, the app introduces a gated product drop mechanism. SMS subscribers receive a unique access code before a product opens to the public. After a threshold is reached—either time‑based or inventory‑based—the product opens to everyone. The goal is a controlled, exclusive access flow without outsourcing the entire process to social platforms.
+        </p>
+
+        <p>
+          This is not being treated as a tutorial project. It is wired against an actual Shopify development store, using the Admin API, real webhook payloads, and a PostgreSQL database that models operational data the way a production system would. The Liquid theme (and eventually Hydrogen) is the customer‑facing layer; the Node/TypeScript backend is the operational layer. Keeping those layers distinct from the beginning is a deliberate choice to avoid untangling them later.
+        </p>
+
+        <p>
+          Shopify is the platform of choice here because it offers a well‑documented sandbox for learning how production backends behave: authentication flows, webhook delivery, third‑party integrations, and database design, without having to build the entire commerce infrastructure from scratch. The background in POS systems, inventory workflows, and vendor coordination is the reference point for nearly every design decision; this app is an attempt to encode what tends to break in those environments into something more robust.
+        </p>
+      </div>
+
+      <!-- REST / GRAPHQL -->
+      <div class="essay-section">
+        <h2>REST First, GraphQL Later</h2>
+
+        <p>
+          Shopify's Admin API is available through both REST and GraphQL. The plan is to start with REST because it is easier to read in logs, easier to debug with <code>curl</code>, and easier to reason about step‑by‑step before layering on more abstraction. Shopify is steadily steering new development toward GraphQL, especially in Hydrogen and newer API versions, so a GraphQL migration is treated as an eventual step rather than an optional experiment.
+        </p>
+
+        <p>
+          The migration strategy is to build foundational features on REST through Phase 3, then introduce GraphQL once there is a solid mental model of the data and flows. By then, REST will already have shown up in multiple contexts—Node, Next.js, and C#—so GraphQL can attach to an existing understanding of requests, responses, and resources instead of trying to replace it from scratch.
+        </p>
+      </div>
+
+      <!-- WHAT I STILL NEED -->
+      <div class="essay-section">
+        <h2>What I Still Need to Learn</h2>
+
+        <p>
+          The gap between the current skill set and what v0.1 demands is very specific. OAuth, HMAC, and webhook payloads make conceptual sense conceptually; the missing pieces are implementation vocabulary: async JavaScript, TypeScript annotations, Express routing, and enough SQL fluency to write a straightforward <code>INSERT</code> without looking up every keyword. Given stronger theory than hands‑on coding fluency, the realistic preparation timeline is 10-12 weeks before v0.1 OAuth + webhook foundation can ship.
+        </p>
+
+        <p>
+          The prerequisite stack before writing the first real line of app code, sequenced for deliberate skill‑building:
+        </p>
+
+        <ul>
+          <li><strong>Async JavaScript (Weeks 1-2)</strong> — Promises, <code>async/await</code>, <code>try/catch</code> around async functions, and the <code>fetch</code> API. Every webhook handler is an async function and every Admin API call returns a Promise. Eloquent JavaScript Ch. 11 + small exercises to rebuild muscle memory.</li>
+          <li><strong>TypeScript basics (Weeks 2-3)</strong> — Type annotations, interfaces, union types, optional properties, generics at reading level. Effective TypeScript Ch. 1-3 to make the compiler an ally rather than noise.</li>
+          <li><strong>Express + HTTP (Weeks 4-5)</strong> — Routes, middleware, <code>req/res/next</code>, request body parsing, JSON responses. Express "Hello World" → typed handlers → <code>curl</code> testing daily.</li>
+          <li><strong>Environment variables + Shopify setup (Week 6)</strong> — <code>.env</code>/dotenv, Shopify Partner account, dev store, OAuth skeleton. .gitignore habits transfer directly.</li>
+          <li><strong>OAuth flow + first webhook (Weeks 7-10)</strong> — Full OAuth implementation + <code>orders/create</code> webhook with HMAC verification. ngrok debugging takes longer than tutorials suggest.</li>
+          <li><strong>Polish + DB insert (Weeks 11-12)</strong> — Idempotency, Postgres setup, raw SQL <code>INSERT</code>, Fly.io deploy. Schema design leverages theory strengths.</li>
+        </ul>
+
+        <p>
+          This 10-12 week ramp‑up (12-18 hrs/wk) accounts for debugging slowdowns and syntax unfamiliarity while aligning with WGU course pacing. Copy‑paste starters (Shopify CLI, MSW mocks) accelerate without skipping fundamentals.
+        </p>
+      </div>
+
+
+      <!-- PROFESSIONAL DEVELOPMENT ARC -->
+<div class="essay-section">
+  <h2>Professional Development Arc</h2>
+
+  <p>
+    My first exposure to programming occurred approximately three months before entering the Per Scholas Software Engineering bootcamp (Dec 2023–Apr 2024). That period produced functional familiarity—CRUD applications with MongoDB, experiments with browser storage, collaborative workflows—but not yet fluency. After the bootcamp, progress temporarily slowed while deeper foundations were built in mathematics and information technology (CompTIA A+ July 2024; Google IT Automation 2023–present; ongoing tutoring in Linux, networking, and computational math).
+  </p>
+
+  <p>
+    That pause was not regression. It was consolidation. The volume of new concepts introduced within a short window—high-level versus low-level languages, frameworks versus libraries, JSON and JSX, TypeScript’s type system, object-oriented design, data structures and algorithms, design patterns, WebSockets, C#, .NET (MAUI/Blazor), Python automation, Linux systems administration—required time to organize into a coherent mental model. Simultaneously, professional exposure to operational environments clarified where automation is necessary and where abstraction breaks down in production systems.
+  </p>
+
+  <p>
+    Operations experience provided the concrete reference points that pure coursework could not: POS failure modes, inventory synchronization gaps, fulfillment latency, and the downstream cost of fragile integrations. Concepts such as idempotent webhook handlers, database indexing strategies, message queues, and retry logic are not theoretical—they map directly to observed breakdowns in live environments.
+  </p>
+
+  <p>
+    During this period, computer science study continued independently (algorithms, discrete mathematics, systems fundamentals) prior to formal enrollment at WGU. The current emphasis on DSA and design patterns is therefore not a late discovery but a deliberate strengthening of hands-on implementation skills to match an already-developed systems perspective.
+  </p>
+
+  <div class="callout">
+    The present objective is alignment: bringing coding fluency up to the level of systems intuition. The Shopify production application serves as the integration layer between theory, operations, and implementation.
+  </div>
+</div>
+
+
+        
+
+
+      <!-- NEETCODE / THEORY -->
+      <div class="essay-section">
+        <h2>NeetCode, LeetCode, and Where Theory Fits</h2>
+
+        <p>
+          Working through NeetCode and LeetCode alongside this Shopify project has made something very clear: material sticks much better when it can be used immediately on a real system. The problems that felt abstract at first started to make sense once they were linked to concrete tasks like designing drop‑code logic, reasoning about idempotent webhook handlers, or thinking through rate limits on external integrations.
+        </p>
+
+        <p>
+          That same experience reshaped how heavier theory books are used. Pattern‑oriented resources like NeetCode, Skiena, and Grokking Algorithms take priority—they provide diagrams and problem families that map directly to app needs. More formal texts become supporting references: visited once intuition exists, to identify which topics merit deeper exploration versus which would only slow current momentum.
+        </p>
+
+        <p>
+          The project itself set the priority: patterns first via NeetCode/LeetCode and practical books; formal theory later to sharpen tools already in active use.
+        </p>
+      </div>
+
+      <!-- TECH STACK -->
+      <div class="essay-section">
+        <h2>Tech Stack</h2>
+
+        <p>
+          Technology choices made now expect evolution. The versioned release structure keeps adjustments contained rather than requiring rewrites.
+        </p>
+
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Layer</th>
+                <th>Technology</th>
+                <th>Version</th>
+                <th>Notes</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Language</td><td>TypeScript (strict)</td><td>v0.1+</td><td>All backend code with <code>strict</code> mode. Easier to relax later than add.</td></tr>
+              <tr><td>Runtime</td><td>Node.js + Express</td><td>v0.1+</td><td>Routing/middleware foundation. Hono/Fastify evaluation later if needed.</td></tr>
+              <tr><td>Database</td><td>PostgreSQL</td><td>v0.1+</td><td>Raw SQL first; Prisma after SQL fluency established.</td></tr>
+              <tr><td>Shopify API</td><td>Admin REST → GraphQL</td><td>v0.1 → v1.0</td><td>REST through Phase 3; GraphQL migration Phase 4+.</td></tr>
+              <tr><td>Webhooks</td><td>Shopify + HMAC</td><td>v0.1+</td><td>Order/inventory/fulfillment topics with signature verification.</td></tr>
+              <tr><td>Fulfillment</td><td>ShipStation API</td><td>v0.2+</td><td>MSW mocks initially, real calls after behavior understood.</td></tr>
+              <tr><td>Messaging</td><td>Klaviyo (free tier)</td><td>v0.2+</td><td>Transactional email/SMS for order events and drops.</td></tr>
+              <tr><td>ORM</td><td>Prisma</td><td>v0.3+</td><td>Schema‑to‑TypeScript type generation after raw SQL phase.</td></tr>
+              <tr><td>Storefront</td><td>Liquid → Hydrogen</td><td>v0.2 → v1.0</td><td>Liquid first (certification alignment); Hydrogen for headless.</td></tr>
+              <tr><td>Testing</td><td>Vitest/Supertest/Playwright</td><td>v0.2+</td><td>Unit/integration early; E2E as flows solidify.</td></tr>
+              <tr><td>Mocking</td><td>MSW</td><td>v0.1+</td><td>Intercepts external APIs so development isn't blocked.</td></tr>
+              <tr><td>Deployment</td><td>Fly.io + Railway</td><td>v0.3+</td><td>App server + managed Postgres on free tiers.</td></tr>
+              <tr><td>Monitoring</td><td>Linux scripts + cron/systemd</td><td>v1.0</td><td>Uptime/latency/DB health from CLI tools.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- RELEASE PLAN -->
+      <div class="essay-section">
+        <h2>Release Plan</h2>
+
+        <p>
+          10-12 week preparation → series of shippable versions mapping to curriculum phases. Study and implementation stay synchronized.
+        </p>
+
+        <!-- v0.1 -->
+        <div class="section-block">
+          <div class="section-heading">v0.1 — Proof of Concept</div>
+          <p class="meta">
+            <span>Phase 1 · Weeks 1-12 (Feb–May 2026)</span>
+            <span class="dot">•</span>
+            <span>D278 · D197 · D335 (+ preparation)</span>
+          </p>
+
+          <p>
+            <strong>Goal</strong> — Working OAuth flow + <code>orders/create</code> webhook writing to PostgreSQL with idempotency and HMAC verification. Foundation for everything else; correctness over speed.
+          </p>
+
+          <p>
+            <strong>Deliverables</strong> — OAuth 2.0 with Admin API; secure token storage; webhook handler; HMAC verification; idempotent <code>orders</code> table inserts; initial 3‑table schema; Fly.io deploy.
+          </p>
+
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr><th>Table</th><th>Key Columns</th><th>Purpose</th></tr>
+              </thead>
+              <tbody>
+                <tr><td><code>orders</code></td><td>id, shopify_order_id, customer_email, total_price, status, created_at</td><td>Transaction records; <code>shopify_order_id</code> prevents duplicates.</td></tr>
+                <tr><td><code>products</code></td><td>id, shopify_product_id, title, price, inventory_count</td><td>Local product mirror for fast inventory lookups.</td></tr>
+                <tr><td><code>sms_subscribers</code></td><td>id, phone_number, subscribed_at, is_eligible_for_drop</td><td>Gated drop foundation; app‑written flag read by theme.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- v0.2 -->
+        <div class="section-block">
+          <div class="section-heading">v0.2 — Webhook Suite + Liquid Theme</div>
+          <p class="meta">
+            <span>Phase 2 · Weeks 13–24 (May–Aug 2026)</span>
+            <span class="dot">•</span>
+            <span>D276 · D280 · D277 · D370</span>
+          </p>
+
+          <p>
+            <strong>Goal</strong> — Full webhook coverage; Klaviyo order emails; Liquid theme surfaces app data; ShipStation mocked with MSW.
+          </p>
+
+          <p><strong>Schema growth</strong> — <code>line_items</code>, <code>inventory_events</code>, <code>fulfillments</code>, <code>klaviyo_events</code>.</p>
+        </div>
+
+        <!-- v0.3 -->
+        <div class="section-block">
+          <div class="section-heading">v0.3 — Gated Drops + Production</div>
+          <p class="meta">
+            <span>Phase 3 · Weeks 25–34 (Aug–Oct 2026)</span>
+            <span class="dot">•</span>
+            <span>C949 · D426 · D427</span>
+          </p>
+
+          <p>
+            <strong>Goal</strong> — Real ShipStation; end‑to‑end SMS drops with single‑use codes; Prisma replaces raw SQL; production deploy.
+          </p>
+        </div>
+
+        <!-- v1.0 -->
+        <div class="section-block">
+          <div class="section-heading">v1.0 — Hydrogen + Monitoring</div>
+          <p class="meta">
+            <span>Phase 5 · 2027</span>
+            <span class="dot">•</span>
+            <span>Advanced C# · CLR · DDIA</span>
+          </p>
+
+          <p>
+            <strong>Goal</strong> — Hydrogen storefront; GraphQL migration; C# real‑time dashboard; Linux monitoring layer leveraging A+/Net+ directly.
+          </p>
+
+          <p>
+            The monitoring layer matters most: <code>curl</code> uptime checks, <code>uptime</code>/<code>vmstat</code> load, Postgres <code>pg_stat_activity</code> pool health. These are the diagnostics missing from every prior ops environment—building them closes that gap.
+          </p>
+        </div>
+      </div>
+
+      <!-- CAPSTONE -->
+      <div class="essay-section">
+        <h2>Capstone Alignment</h2>
+
+        <p>
+          WGU Software Development Capstone target. v0.3+ satisfies requirements (working app, design artifacts, tests, deployment). Every course touches this: D278 (OAuth diagrams), D426 (schema normalization), C949 (drop code analysis), systems courses (monitoring). The project <em>is</em> the curriculum applied to real constraints.
+        </p>
+
+        <p>
+          Full curriculum, reading list (pending bibliography update), and project tracking on <a href="../curriculum.html">Curriculum</a> and <a href="../projects.html">Projects</a> pages.
+        </p>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <span>Full curriculum and project portfolio at this site.</span>
+      <nav class="footer-nav">
+        <a href="../index.html">About</a>
+        <a href="../curriculum.html">Curriculum</a>
+        <a href="../calendar.html">Calendar</a>
+        <a href="../projects.html">Projects</a>
+        <a href="../books.html">Books</a>
+        <a href="../log.html">Log</a>
+        <a href="../it-resources.html">IT/IS</a>
+        <a href="../syllabus.html">Teaching</a>
+        <a href="../the-vault.html">Vault</a>
+      </nav>
+    </div>
+  </footer>
+</body>
+</html>

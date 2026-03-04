@@ -3,92 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>30-Week Calendar — From Operations to Systems</title>
+<title>Calendar — ops → systems</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
-<style>
-  /* WGU / NeetCode explainer boxes */
-  .wgu-box { border: 1px solid var(--border-2); margin-bottom: 2.5rem; }
-  .wgu-box-hd { background: var(--surface); border-bottom: 1px solid var(--border); padding: 0.55rem 0.9rem; font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-3); }
-  .wgu-box-body { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
-  .wgu-box-col { padding: 0.65rem 0.85rem; font-size: 0.8rem; color: var(--text-2); line-height: 1.65; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); }
-  .wgu-box-col:nth-child(2n) { border-right: none; }
-  .wgu-box-col:nth-last-child(-n+2) { border-bottom: none; }
-  .wgu-box-col strong { color: var(--hi); display: block; margin-bottom: 0.3rem; font-weight: 500; font-size: 0.76rem; }
-  @media (max-width: 600px) { .wgu-box-body { grid-template-columns: 1fr; } .wgu-box-col { border-right: none; } .wgu-box-col:nth-last-child(-n+2) { border-bottom: 1px solid var(--border); } .wgu-box-col:last-child { border-bottom: none; } }
-
-  /* Phase header */
-  .cal-phase-hd { display: flex; align-items: baseline; gap: 0.75rem; flex-wrap: wrap; margin: 2.5rem 0 0.6rem; padding-bottom: 0.4rem; border-bottom: 1px solid var(--border-2); }
-  .cal-phase-hd h2 { font-size: 0.9rem; font-weight: 500; color: var(--hi); }
-  .cal-phase-dates { font-size: 0.68rem; color: var(--text-3); }
-  .cal-phase-desc { font-size: 0.8rem; color: var(--text-2); margin-bottom: 1rem; line-height: 1.6; }
-
-  /* Month table */
-  .month-table { width: 100%; border-collapse: collapse; border: 1px solid var(--border); margin-bottom: 0; table-layout: fixed; }
-
-  .month-label-cell { width: 64px; padding: 0.6rem 0.4rem; background: var(--surface); border-right: 1px solid var(--border-2); vertical-align: middle; text-align: center; }
-  .month-label-text { font-size: 0.58rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-3); writing-mode: vertical-rl; text-orientation: mixed; transform: rotate(180deg); white-space: nowrap; }
-
-  .week-hd-cell { padding: 0; vertical-align: top; }
-  .week-hd { display: grid; grid-template-columns: 72px 1fr auto auto; align-items: center; gap: 0.6rem; padding: 0.5rem 0.85rem; background: var(--surface); cursor: pointer; user-select: none; border-bottom: 1px solid var(--border); }
-  .week-hd:hover { background: var(--surface-2); }
-
-  .week-hd-row { border-bottom: 1px solid var(--border); }
-  .week-hd-row:last-child { border-bottom: none; }
-
-  .week-body-row { display: none; border-bottom: 1px solid var(--border); }
-  .week-body-row.open { display: table-row; }
-  .week-body-row:last-child { border-bottom: none; }
-  .week-body-cell { padding: 0; vertical-align: top; }
-
-  .week-num { font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-3); white-space: nowrap; }
-  .week-title { font-size: 0.8rem; color: var(--hi); }
-  .week-date { font-size: 0.6rem; color: var(--text-3); white-space: nowrap; }
-  .week-toggle { font-size: 0.68rem; color: var(--text-3); transition: transform 0.15s; }
-  .week-toggle.open { transform: rotate(180deg); }
-
-  /* Domain grid */
-  .domain-grid { display: grid; grid-template-columns: repeat(5, 1fr); border-bottom: 1px solid var(--border); }
-  @media (max-width: 800px) { .domain-grid { grid-template-columns: 1fr 1fr; } }
-  @media (max-width: 480px) { .domain-grid { grid-template-columns: 1fr; } }
-  .domain-cell { padding: 0.6rem 0.7rem; border-right: 1px solid var(--border); font-size: 0.77rem; color: var(--text-2); line-height: 1.55; vertical-align: top; }
-  .domain-cell:last-child { border-right: none; }
-  .domain-label { font-size: 0.58rem; letter-spacing: 0.09em; text-transform: uppercase; color: var(--text-3); margin-bottom: 0.3rem; }
-  .domain-cell ul { padding-left: 0.9rem; margin: 0; }
-  .domain-cell li { font-size: 0.77rem; margin-bottom: 0.2rem; line-height: 1.5; }
-
-  /* NeetCode strip */
-  .neetcode-strip { background: var(--surface); border-left: 2px solid var(--border-2); padding: 0.5rem 0.85rem; font-size: 0.77rem; color: var(--text-3); line-height: 1.6; border-bottom: 1px solid var(--border); }
-  .neetcode-strip strong { color: var(--text-2); font-weight: 500; }
-
-  /* Notes */
-  .notes-row { padding: 0.55rem 0.85rem; display: grid; grid-template-columns: 90px 1fr; gap: 0.5rem; align-items: start; border-bottom: 1px solid var(--border); }
-  .notes-row:last-child { border-bottom: none; }
-  .notes-label { font-size: 0.58rem; letter-spacing: 0.09em; text-transform: uppercase; color: var(--text-3); padding-top: 0.15rem; }
-  .notes-field { width: 100%; background: transparent; border: none; border-bottom: 1px solid var(--border); color: var(--text); font-family: var(--font); font-size: 0.78rem; line-height: 1.6; padding: 0.1rem 0; resize: none; min-height: 2rem; outline: none; }
-  .notes-field:focus { border-bottom-color: var(--gray-3); }
-  .notes-field::placeholder { color: var(--text-3); }
-
-  /* Arrow connector between month tables */
-  .month-arrow { text-align: center; padding: 0.4rem 0; color: var(--text-3); font-size: 1rem; user-select: none; line-height: 1; }
-
-  /* Legend */
-  .cal-legend { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.5rem; }
-
-  @media (max-width: 600px) {
-    .month-label-cell { display: none; }
-    .week-hd { grid-template-columns: 1fr auto; }
-    .week-num, .week-date { display: none; }
-  }
-</style>
 </head>
 <body>
 
 <nav class="nav">
   <a href="index.html" class="nav-brand">ops → systems</a>
- <div class="nav-links">
+  <button class="nav-toggle" onclick="document.getElementById('drawer').classList.toggle('open')">menu</button>
+  <div class="nav-links">
     <a href="index.html">About</a>
     <a href="curriculum.html">Curriculum</a>
     <a href="calendar.html" class="active">Calendar</a>
@@ -99,465 +25,765 @@
     <a href="syllabus.html">Teaching</a>
   </div>
 </nav>
+<div class="nav-drawer" id="drawer">
+  <a href="index.html">About</a>
+  <a href="curriculum.html">Curriculum</a>
+  <a href="calendar.html" class="active">Calendar</a>
+  <a href="projects.html">Projects</a>
+  <a href="books.html">Books</a>
+  <a href="log.html">Log</a>
+  <a href="it-resources.html">IT/IS</a>
+  <a href="syllabus.html">Teaching</a>
+</div>
 
-<main class="page-wide">
-<div class="inner">
+<main>
+<div class="page">
 
-  <p class="kicker">Week-by-week · Feb 15, 2026 → Sep 6, 2026</p>
-  <h1>30-Week Study Calendar</h1>
-  <p style="color:var(--text-2);margin-bottom:0.5rem;">Phases 1–3 in detail. Each week maps WGU coursework, reading, LeetCode, NeetCode, and the Shopify build across five domains. Click any week to expand.</p>
-  <p style="font-size:0.75rem;color:var(--text-3);margin-bottom:2rem;">Notes fields are in-browser only — nothing is saved to a server. Copy anything worth keeping elsewhere.</p>
-
-  <!-- WGU explainer -->
-  <div class="wgu-box">
-    <div class="wgu-box-hd">WGU — How It Actually Works</div>
-    <div class="wgu-box-body">
-      <div class="wgu-box-col"><strong>Competency Units (CU) vs. GPA</strong>WGU does not use GPA. No letter grades. You demonstrate competency and pass, or you continue until you do. Each course carries Competency Units — analogous to credit hours. 120 CU to graduate; 79 already satisfied by prior credentials. The remaining 41 CU are the active curriculum on this calendar.</div>
-      <div class="wgu-box-col"><strong>Minimum requirement per term</strong>Each term is six months, flat tuition. You must complete at least one CU per term to remain enrolled. No maximum — students with prior background routinely finish a full term's worth of courses in 6–10 weeks. Acceleration is financially rewarded: fewer terms = lower total cost.</div>
-      <div class="wgu-box-col"><strong>Proctored exams — what students don't expect</strong>Most WGU assessments are performance tasks graded by evaluators. Some courses have proctored objective assessments — timed, multiple-choice, browser-proctored. These require a private room, webcam covering face and workspace, and government ID. <em>An external webcam is strongly recommended</em> — built-in cameras are often too narrow and trigger flags. Test setup before exam day, not on it.</div>
-      <div class="wgu-box-col"><strong>Common misconceptions</strong>Online does not mean open book for proctored exams. Proctoring software monitors screen, webcam, and microphone throughout. Performance tasks are open-resource but evaluated on demonstrated understanding — AI-generated or copied submissions fail. Retake cooldown periods exist. First-attempt passing is worth optimizing for.</div>
-    </div>
+  <p class="kicker">Week-by-week plan</p>
+  <h1 class="page-title">Calendar</h1>
+  <p class="lead">30-week plan covering Phases 1–3. Five domains tracked in parallel each week. Click any week row to expand. Phase 4 calendar follows after Phases 1–3 are complete.</p>
+  <div class="meta mb-2">
+    <span>Updated 2026</span><span class="dot">·</span><span>Phases 1–3 detailed · Phase 4 outlined</span>
   </div>
 
-  <!-- NeetCode overview -->
-  <div class="wgu-box" style="margin-bottom:2rem;">
-    <div class="wgu-box-hd">NeetCode — Why It's in This Calendar</div>
-    <div class="wgu-box-body">
-      <div class="wgu-box-col"><strong>What NeetCode is</strong>NeetCode (neetcode.io) is a structured interview prep resource built around the NeetCode 150 — organized by pattern, not difficulty. Where LeetCode is 2500+ problems, NeetCode is an opinionated subset with video explanations covering the 15 core patterns that appear in the vast majority of SWE interviews.</div>
-      <div class="wgu-box-col"><strong>The 15 core patterns</strong>Arrays &amp; Hashing · Two Pointers · Sliding Window · Stack · Binary Search · Linked List · Trees · Tries · Heap / Priority Queue · Backtracking · Graphs · Advanced Graphs · 1D Dynamic Programming · 2D Dynamic Programming · Bit Manipulation. Introduced here in roadmap order, synchronized with LeetCode problems each week.</div>
-      <div class="wgu-box-col"><strong>How to use it alongside LeetCode</strong>Attempt the problem independently first. Watch the NeetCode video only if you're stuck — not as a substitute for thinking. Goal: pattern recognition, not memorization. When you can solve a new problem in a familiar pattern without looking up the approach, the pattern has landed.</div>
-      <div class="wgu-box-col"><strong>Roadmap vs. NeetCode 150</strong>The roadmap (neetcode.io/roadmap) shows all 150 problems by pattern with difficulty — start here. For Phases 1–2 you're covering Arrays &amp; Hashing, Two Pointers, and Sliding Window — roughly the first 30 roadmap problems. Do not skip ahead. Pattern depth beats problem count at this stage.</div>
-    </div>
-  </div>
-
-  <!-- Domain legend -->
-  <p class="activity-label" style="margin-bottom:0.5rem;">Five domains tracked each week</p>
+  <!-- LEGEND -->
   <div class="cal-legend">
     <span class="tag">CS Fundamentals</span>
     <span class="tag">Systems Depth</span>
     <span class="tag">Language &amp; Tooling</span>
     <span class="tag">Commerce &amp; Backend</span>
-    <span class="tag">Teaching &amp; Communication</span>
+    <span class="tag">Teaching &amp; Comms</span>
   </div>
 
-  <!-- ══════════════════════════
-       PHASE 1 · Weeks 1–8
-       ══════════════════════════ -->
+  <!-- NEETCODE OVERVIEW -->
+  <div class="callout">
+    <strong>NeetCode roadmap runs in parallel throughout all three phases.</strong> Arrays &amp; Hashing (weeks 1–4) → Two Pointers (weeks 5–8) → Stack, Binary Search, Linked Lists, Trees (Phase 2) → Tries, Heap, Backtracking, Graphs (Phase 3). 2–3 problems per session alongside coursework. Pattern fluency before CLRS depth.
+  </div>
+
+  <!-- SHOPIFY CERTIFICATION CALLOUT -->
+  <div class="callout mt-1">
+    <strong>2026 Goal — Shopify Developer Certification.</strong> A concrete milestone that tracks naturally against Phase 1–2 work already sequenced here: OAuth flows, Admin REST API, webhooks with HMAC verification, Liquid templating. REST is the API model through Phase 3. GraphQL is the Phase 4 upgrade once REST has been used in Node, Next.js, and C# contexts and the mental model is solid. Target: weeks 17–20.
+  </div>
+
+
+  <!-- ===================== PHASE 1 ===================== -->
   <div class="cal-phase-hd">
-    <h2>Phase 1 — Foundations &amp; Tooling</h2>
-    <span class="cal-phase-dates">Weeks 1–8 · Feb 15 – Apr 11, 2026</span>
+    <h2>Phase 1</h2>
+    <span class="cal-phase-dates">Weeks 1–12 · Jan – Apr 2026</span>
   </div>
-  <p class="cal-phase-desc">WGU: D278 Scripting Foundations · D197 Version Control · D335 Python. NeetCode: Arrays &amp; Hashing (weeks 1–4), Two Pointers (weeks 5–8). Shopify: requirements gathering and schema design.</p>
+  <p class="cal-phase-desc">
+    Foundations: async JavaScript, TypeScript basics, Express + HTTP, Shopify OAuth, and the first webhook with HMAC verification. WGU: D278 Scripting, D197 Git, D335 Python. NeetCode: Arrays &amp; Hashing → Two Pointers. Portfolio site architecture documented as the first build log project — static HTML → Next.js / React / TypeScript migration serves as a public case study in stack decision-making. SQL foundations begin alongside D426 prep.
+  </p>
 
-  <!-- FEBRUARY · Weeks 1–2 -->
-  <table class="month-table">
-    <tbody>
-      <tr class="week-hd-row">
-        <td class="month-label-cell" rowspan="4"><span class="month-label-text">February 2026</span></td>
-        <td class="week-hd-cell"><div class="week-hd" onclick="toggleWeek(this)"><span class="week-num">Week 01</span><span class="week-title">Orientation — PAC/IPO, Git setup, Python basics</span><span class="week-date">Feb 15–21</span><span class="week-toggle">▼</span></div></td>
-      </tr>
-      <tr class="week-body-row">
-        <td class="week-body-cell">
-          <div class="domain-grid">
-            <div class="domain-cell"><div class="domain-label">CS Fundamentals</div><ul><li>NeetCode: Contains Duplicate (#1)</li><li>LeetCode #217 — Easy</li><li>Read: NeetCode roadmap overview</li></ul></div>
-            <div class="domain-cell"><div class="domain-label">Systems Depth</div><ul><li>WSL2 audit — Python 3, Git, editor working</li><li>Verify Ollama local LLM setup</li></ul></div>
-            <div class="domain-cell"><div class="domain-label">Language &amp; Tooling</div><ul><li>D278: PAC/IPO/pseudocode exercises (days 1–3)</li><li>D197: Git init, first repo, .gitignore, first commit</li><li>D335: variables, types, control flow</li></ul></div>
-            <div class="domain-cell"><div class="domain-label">Commerce &amp; Backend</div><ul><li>Shopify Partner account setup</li><li>Read: App types overview (public vs custom vs private)</li></ul></div>
-            <div class="domain-cell"><div class="domain-label">Teaching &amp; Comms</div><ul><li>Site live on GitHub Pages — confirm all pages load</li><li>calendar.html drafted</li></ul></div>
-          </div>
-          <div class="neetcode-strip"><strong>Arrays &amp; Hashing:</strong> Trading time for space. Naive solution checks every pair — O(n²). A hash set reduces lookup to O(1), the whole problem to O(n). This trade-off recurs throughout the roadmap.</div>
-          <div class="notes-row"><span class="notes-label">Notes</span><textarea class="notes-field" placeholder="What clicked. What didn't. What to revisit." rows="2"></textarea></div>
-        </td>
-      </tr>
-      <tr class="week-hd-row">
-        <td class="week-hd-cell"><div class="week-hd" onclick="toggleWeek(this)"><span class="week-num">Week 02</span><span class="week-title">PAC/IPO in Python · Git branching · Arrays continued</span><span class="week-date">Feb 22–28</span><span class="week-toggle">▼</span></div></td>
-      </tr>
-      <tr class="week-body-row">
-        <td class="week-body-cell">
-          <div class="domain-grid">
-            <div class="domain-cell"><div class="domain-label">CS Fundamentals</div><ul><li>NeetCode: Valid Anagram (#2), Two Sum (#3)</li><li>LeetCode #242, #1 — Easy</li><li>Focus: HashMap construction and lookup</li></ul></div>
-            <div class="domain-cell"><div class="domain-label">Systems Depth</div><ul><li>How Linux Works ch.1 — disks, kernel, user space</li><li>CLI drills: find, grep, pipe, redirect</li></ul></div>
-            <div class="domain-cell"><div class="domain-label">Language &amp; Tooling</div><ul><li>D278: rewrite PAC/IPO exercises as Python functions</li><li>D197: branching, merging, first merge conflict</li><li>D335: functions, lists, dicts, comprehensions</li></ul></div>
-            <div class="domain-cell"><div class="domain-label">Commerce &amp; Backend</div><ul><li>Shopify Admin API — REST vs GraphQL overview</li><li>Draft requirements doc for the app (plain text)</li></ul></div>
-            <div class="domain-cell"><div class="domain-label">Teaching &amp; Comms</div><ul><li>Teaching session prep: PAC/IPO as debugging frame</li><li>Draft teaching notes post outline</li></ul></div>
-          </div>
-          <div class="neetcode-strip"><strong>Two Sum:</strong> Store each value as you go; check if (target − current) already exists. One pass, O(n). "Store and check complement" recurs in 3Sum, 4Sum, and subarray problems.</div>
-          <div class="notes-row"><span class="notes-label">Notes</span><textarea class="notes-field" placeholder="What clicked. What didn't. What to revisit." rows="2"></textarea></div>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-
-  <div class="month-arrow">↓</div>
-
-  <!-- MARCH · Weeks 3–6 -->
-  <table class="month-table">
-    <tbody>
-      <tr class="week-hd-row">
-        <td class="month-label-cell" rowspan="8"><span class="month-label-text">March 2026</span></td>
-        <td class="week-hd-cell"><div class="week-hd" onclick="toggleWeek(this)"><span class="week-num">Week 03</span><span class="week-title">Python functions &amp; modules · Group Anagrams · SICP ch.1</span><span class="week-date">Mar 1–7</span><span class="week-toggle">▼</span></div></td>
-      </tr>
-      <tr class="week-body-row">
-        <td class="week-body-cell">
-          <div class="domain-grid">
-            <div class="domain-cell"><div class="domain-label">CS Fundamentals</div><ul><li>NeetCode: Group Anagrams (#4), Top K Frequent (#5)</li><li>LeetCode #49, #347 — Medium</li><li>SICP ch.1: substitution model, recursion vs iteration</li></ul></div>
-            <div class="domain-cell"><div class="domain-label">Systems Depth</div><ul><li>How Linux Works ch.2 — processes, /proc</li><li>ps, top, kill — what a process actually is</li></ul></div>
-            <div class="domain-cell"><div class="domain-label">Language &amp; Tooling</div><ul><li>D335: modules, file I/O, error handling</li><li>D278: pseudocode for Shopify webhook handler in PAC format</li><li>Git: branch → PR → merge on own repo</li></ul></div>
-            <div class="domain-cell"><div class="domain-label">Commerce &amp; Backend</div><ul><li>Create development store in Partner dashboard</li><li>Admin API REST — GET /orders.json</li></ul></div>
-            <div class="domain-cell"><div class="domain-label">Teaching &amp; Comms</div><ul><li>Publish Teaching Notes post if draft is ready</li><li>Student session: walk through Two Sum</li></ul></div>
-          </div>
-          <div class="neetcode-strip"><strong>Group Anagrams:</strong> Sorting each string gives a canonical key — anagrams share the same sorted form. "Canonical form hashing." Top K Frequent introduces the heap — reappears in Kth Largest, Merge K Lists, and scheduling problems.</div>
-          <div class="notes-row"><span class="notes-label">Notes</span><textarea class="notes-field" placeholder="What clicked. What didn't. What to revisit." rows="2"></textarea></div>
-        </td>
-      </tr>
-      <tr class="week-hd-row">
-        <td class="week-hd-cell"><div class="week-hd" onclick="toggleWeek(this)"><span class="week-num">Week 04</span><span class="week-title">D278 assessment target · Encode/Decode · Product of Array</span><span class="week-date">Mar 8–14</span><span class="week-toggle">▼</span></div></td>
-      </tr>
-      <tr class="week-body-row">
-        <td class="week-body-cell">
-          <div class="domain-grid">
-            <div class="domain-cell"><div class="domain-label">CS Fundamentals</div><ul><li>NeetCode: Encode &amp; Decode Strings (#6), Product of Array Except Self (#7)</li><li>LeetCode #238 — Medium</li><li>Grokking Algorithms ch.1–2: binary search, Big-O</li></ul></div>
-            <div class="domain-cell"><div class="domain-label">Systems Depth</div><ul><li>How Linux Works ch.3 — devices, udev</li><li>stdin/stdout/stderr at the shell level</li></ul></div>
-            <div class="domain-cell"><div class="domain-label">Language &amp; Tooling</div><ul><li><strong>D278 assessment this week</strong></li><li>D335: OOP basics — classes, __init__, methods</li><li>Learning Git ch.1–3: commits, history, diff</li></ul></div>
-            <div class="domain-cell"><div class="domain-label">Commerce &amp; Backend</div><ul><li>Shopify OAuth 2.0 — read docs, draw sequence diagram</li><li>IPO the OAuth flow before implementing</li></ul></div>
-            <div class="domain-cell"><div class="domain-label">Teaching &amp; Comms</div><ul><li>Build Log: Requirements → Schema post draft</li></ul></div>
-          </div>
-          <div class="neetcode-strip"><strong>Product of Array Except Self:</strong> No division, O(n): prefix products left-to-right, suffix products right-to-left, combine them. This "prefix array" pattern reappears in Trapping Rain Water, Subarray Sum, and range queries.</div>
-          <div class="notes-row"><span class="notes-label">WGU CU check</span><textarea class="notes-field" placeholder="D278 passed? CU earned this term so far:" rows="1"></textarea></div>
-          <div class="notes-row"><span class="notes-label">Notes</span><textarea class="notes-field" placeholder="What clicked. What didn't. What to revisit." rows="2"></textarea></div>
-        </td>
-      </tr>
-      <tr class="week-hd-row">
-        <td class="week-hd-cell"><div class="week-hd" onclick="toggleWeek(this)"><span class="week-num">Week 05</span><span class="week-title">Two Pointers begins · D197 assessment target · Python OOP</span><span class="week-date">Mar 15–21</span><span class="week-toggle">▼</span></div></td>
-      </tr>
-      <tr class="week-body-row">
-        <td class="week-body-cell">
-          <div class="domain-grid">
-            <div class="domain-cell"><div class="domain-label">CS Fundamentals</div><ul><li>NeetCode: Valid Palindrome (#9), Two Sum II (#10)</li><li>LeetCode #125, #167 — Easy/Medium</li><li>Pattern: sorted array + two pointers moving inward</li></ul></div>
-            <div class="domain-cell"><div class="domain-label">Systems Depth</div><ul><li>How Linux Works ch.4 — filesystems, inodes</li><li>What a file descriptor actually is</li></ul></div>
-            <div class="domain-cell"><div class="domain-label">Language &amp; Tooling</div><ul><li><strong>D197 assessment this week</strong></li><li>D335: inheritance, dunder methods, dataclasses</li><li>Learning Git ch.4–6: remotes, fetch, rebase intro</li></ul></div>
-            <div class="domain-cell"><div class="domain-label">Commerce &amp; Backend</div><ul><li>OAuth token exchange skeleton in Node/TS</li><li>Draft "what the docs don't tell you" section of OAuth post</li></ul></div>
-            <div class="domain-cell"><div class="domain-label">Teaching &amp; Comms</div><ul><li>Code Jam #1 prep: define problem, shared repo</li></ul></div>
-          </div>
-          <div class="neetcode-strip"><strong>Two Pointers:</strong> Works when data is sorted and you need a pair satisfying a condition. Left moves right, right moves left — eliminates candidates O(1) per step. Key question: "Is the array sorted, or can I sort it without losing information?"</div>
-          <div class="notes-row"><span class="notes-label">WGU CU check</span><textarea class="notes-field" placeholder="D197 passed? CU earned this term so far:" rows="1"></textarea></div>
-          <div class="notes-row"><span class="notes-label">Notes</span><textarea class="notes-field" placeholder="What clicked. What didn't. What to revisit." rows="2"></textarea></div>
-        </td>
-      </tr>
-      <tr class="week-hd-row">
-        <td class="week-hd-cell"><div class="week-hd" onclick="toggleWeek(this)"><span class="week-num">Week 06</span><span class="week-title">3Sum · Python scripting project · Shopify OAuth complete</span><span class="week-date">Mar 22–28</span><span class="week-toggle">▼</span></div></td>
-      </tr>
-      <tr class="week-body-row">
-        <td class="week-body-cell">
-          <div class="domain-grid">
-            <div class="domain-cell"><div class="domain-label">CS Fundamentals</div><ul><li>NeetCode: 3Sum (#11), Container with Most Water (#12)</li><li>LeetCode #15, #11 — Medium</li><li>Grokking Algorithms ch.3: recursion</li></ul></div>
-            <div class="domain-cell"><div class="domain-label">Systems Depth</div><ul><li>How Linux Works ch.5 — shell scripting basics</li><li>Write a shell script useful to the dev workflow</li></ul></div>
-            <div class="domain-cell"><div class="domain-label">Language &amp; Tooling</div><ul><li>D335: Python script hitting Shopify Admin API (GET orders)</li><li>Google IT Automation: regular expressions</li></ul></div>
-            <div class="domain-cell"><div class="domain-label">Commerce &amp; Backend</div><ul><li>OAuth flow working end-to-end in dev store</li><li>Store access token in env vars, not hardcoded</li></ul></div>
-            <div class="domain-cell"><div class="domain-label">Teaching &amp; Comms</div><ul><li>Code Jam #1 kickoff: Git flow, branch naming, PR template</li><li>Publish OAuth Build Log post</li></ul></div>
-          </div>
-          <div class="neetcode-strip"><strong>3Sum:</strong> Sort first, fix one element, two pointers on the remainder. Sorting makes duplicates skippable in O(1). Reduces O(n³) brute-force to O(n²). Understanding why you can skip duplicates is critical before hitting 4Sum.</div>
-          <div class="notes-row"><span class="notes-label">Notes</span><textarea class="notes-field" placeholder="What clicked. What didn't. What to revisit." rows="2"></textarea></div>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-
-  <div class="month-arrow">↓</div>
-
-  <!-- APRIL · Weeks 7–8 -->
-  <table class="month-table">
-    <tbody>
-      <tr class="week-hd-row">
-        <td class="month-label-cell" rowspan="4"><span class="month-label-text">April 2026</span></td>
-        <td class="week-hd-cell"><div class="week-hd" onclick="toggleWeek(this)"><span class="week-num">Week 07</span><span class="week-title">Sliding Window begins · D335 assessment target · Webhooks</span><span class="week-date">Mar 29–Apr 4</span><span class="week-toggle">▼</span></div></td>
-      </tr>
-      <tr class="week-body-row">
-        <td class="week-body-cell">
-          <div class="domain-grid">
-            <div class="domain-cell"><div class="domain-label">CS Fundamentals</div><ul><li>NeetCode: Best Time to Buy Stock (#13), Longest Substring No Repeat (#14)</li><li>LeetCode #121, #3 — Easy/Medium</li><li>Intro to Sliding Window pattern</li></ul></div>
-            <div class="domain-cell"><div class="domain-label">Systems Depth</div><ul><li>OSI model — which layer does HTTP live at?</li><li>Wireshark: capture a local HTTP request, identify layers</li></ul></div>
-            <div class="domain-cell"><div class="domain-label">Language &amp; Tooling</div><ul><li><strong>D335 assessment this week</strong></li><li>TypeScript intro: tsconfig basics, first typed function</li></ul></div>
-            <div class="domain-cell"><div class="domain-label">Commerce &amp; Backend</div><ul><li>Register webhook for order/create</li><li>ngrok to expose local server for delivery testing</li></ul></div>
-            <div class="domain-cell"><div class="domain-label">Teaching &amp; Comms</div><ul><li>Teaching Notes: Event Loop confusion (Python vs JS)</li><li>Code Jam #1 mid-point check-in</li></ul></div>
-          </div>
-          <div class="neetcode-strip"><strong>Sliding Window:</strong> Expand right, contract left. Best Time to Buy Stock is the degenerate case. Longest Substring is the first true sliding window — expand until constraint is violated, then shrink. Structure: <em>expand right · contract left · track maximum valid window</em>. Appears in 20+ medium/hard problems.</div>
-          <div class="notes-row"><span class="notes-label">WGU CU check</span><textarea class="notes-field" placeholder="D335 passed? CU earned this term so far:" rows="1"></textarea></div>
-          <div class="notes-row"><span class="notes-label">Notes</span><textarea class="notes-field" placeholder="What clicked. What didn't. What to revisit." rows="2"></textarea></div>
-        </td>
-      </tr>
-      <tr class="week-hd-row">
-        <td class="week-hd-cell"><div class="week-hd" onclick="toggleWeek(this)"><span class="week-num">Week 08</span><span class="week-title">Phase 1 close · Sliding Window continued · Webhook handlers</span><span class="week-date">Apr 5–11</span><span class="week-toggle">▼</span></div></td>
-      </tr>
-      <tr class="week-body-row">
-        <td class="week-body-cell">
-          <div class="domain-grid">
-            <div class="domain-cell"><div class="domain-label">CS Fundamentals</div><ul><li>NeetCode: Longest Repeating Char Replacement (#15), Permutation in String (#16)</li><li>LeetCode #424, #567 — Medium</li><li>Phase 1 review: revisit any Easy that needed hints</li></ul></div>
-            <div class="domain-cell"><div class="domain-label">Systems Depth</div><ul><li>How Linux Works ch.6 — user space, init, systemd</li><li>Write a simple systemd service unit for a local script</li></ul></div>
-            <div class="domain-cell"><div class="domain-label">Language &amp; Tooling</div><ul><li>TypeScript: interfaces, type aliases, union types</li><li>Learning Git: stash, reflog, cherry-pick</li><li>Phase 1 retrospective: what WGU courses remain</li></ul></div>
-            <div class="domain-cell"><div class="domain-label">Commerce &amp; Backend</div><ul><li>HMAC signature verification on incoming webhooks</li><li>Handler that validates, parses, and logs order payload</li></ul></div>
-            <div class="domain-cell"><div class="domain-label">Teaching &amp; Comms</div><ul><li>Code Jam #1 wrap-up post</li><li>Publish Phase 1 Log post</li></ul></div>
-          </div>
-          <div class="neetcode-strip"><strong>Phase 1 check:</strong> By end of week 8, solve Easy sliding window and two-pointer problems independently without hints. If you still need the video first — try the problem, fail specifically, then watch. Failing with a clear idea of why is more useful than watching a solution you could have reached.</div>
-          <div class="notes-row"><span class="notes-label">Phase 1 CU total</span><textarea class="notes-field" placeholder="D278 ✓  D197 ✓  D335 ✓  — total CU earned:" rows="1"></textarea></div>
-          <div class="notes-row"><span class="notes-label">Phase 1 retro</span><textarea class="notes-field" placeholder="What to carry into Phase 2." rows="2"></textarea></div>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-
-  <!-- ══════════════════════════
-       PHASE 2 · Weeks 9–20
-       ══════════════════════════ -->
-  <div class="cal-phase-hd" style="margin-top:3rem;">
-    <h2>Phase 2 — Web Foundations &amp; Front-End Depth</h2>
-    <span class="cal-phase-dates">Weeks 9–20 · Apr 12 – Jul 4, 2026</span>
+  <div class="wgu-box">
+    <div class="wgu-box-hd">Phase 1 WGU Courses</div>
+    <div class="wgu-box-body">
+      <div class="wgu-box-col"><strong>D278</strong> Scripting and Programming — Foundations (3 CU)</div>
+      <div class="wgu-box-col"><strong>D197</strong> Version Control (2 CU)</div>
+      <div class="wgu-box-col"><strong>D335</strong> Introduction to Python (3 CU)</div>
+      <div class="wgu-box-col"><strong>Target cert</strong> Shopify Developer Certification — weeks 17–20</div>
+    </div>
   </div>
-  <p class="cal-phase-desc">WGU: D276 Web Foundations · D280 JavaScript · D277 Front-End · D370 IT Leadership. NeetCode: Stack, Binary Search, Linked Lists, Trees. Shopify: PostgreSQL schema, Liquid integration, deployment.</p>
 
-  <div class="month-arrow">↓</div>
-
-  <!-- APR–MAY · Weeks 9–12 -->
+  <!-- MONTH: January -->
   <table class="month-table">
     <tbody>
-      <tr class="week-hd-row">
-        <td class="month-label-cell" rowspan="8"><span class="month-label-text">Apr – May 2026</span></td>
-        <td class="week-hd-cell"><div class="week-hd" onclick="toggleWeek(this)"><span class="week-num">Week 09</span><span class="week-title">HTML/CSS foundations · Stack pattern · D276 begins</span><span class="week-date">Apr 12–18</span><span class="week-toggle">▼</span></div></td>
-      </tr>
-      <tr class="week-body-row">
-        <td class="week-body-cell">
-          <div class="domain-grid">
-            <div class="domain-cell"><div class="domain-label">CS Fundamentals</div><ul><li>NeetCode: Valid Parentheses (#20), Min Stack (#21)</li><li>LeetCode #20, #155 — Easy/Medium</li><li>Stack: LIFO — when does push/pop solve what arrays don't?</li></ul></div>
-            <div class="domain-cell"><div class="domain-label">Systems Depth</div><ul><li>DNS resolution — what actually happens when you type a URL</li><li>How Linux Works ch.9 — networking fundamentals</li></ul></div>
-            <div class="domain-cell"><div class="domain-label">Language &amp; Tooling</div><ul><li>D276: HTML semantics, CSS box model, flexbox</li><li>D280: JS event loop, var/let/const, arrow functions</li><li>Eloquent JavaScript ch.1–3</li></ul></div>
-            <div class="domain-cell"><div class="domain-label">Commerce &amp; Backend</div><ul><li>Design PostgreSQL schema for orders and inventory</li><li>ER diagram — normalization to 3NF</li></ul></div>
-            <div class="domain-cell"><div class="domain-label">Teaching &amp; Comms</div><ul><li>Build Log: Schema Design Decisions post</li></ul></div>
+      <!-- Week 1 -->
+      <tr>
+        <td class="month-label-cell" rowspan="4"><span class="month-label-text">January</span></td>
+        <td class="week-hd-cell">
+          <div class="week-hd" onclick="toggleWeek('w1')">
+            <span class="week-num">W1</span>
+            <span class="week-title">Setup · Git · Async JS foundations</span>
+            <span class="week-date">Jan 5</span>
+            <span class="week-toggle" id="w1-toggle">▼</span>
           </div>
-          <div class="neetcode-strip"><strong>Stack — Valid Parentheses:</strong> Every opening bracket gets pushed; every closing bracket pops and checks for a match. Min Stack augments the data structure to track the running minimum without changing its interface.</div>
-          <div class="notes-row"><span class="notes-label">Notes</span><textarea class="notes-field" placeholder="What clicked. What didn't. What to revisit." rows="2"></textarea></div>
         </td>
       </tr>
-      <tr class="week-hd-row">
-        <td class="week-hd-cell"><div class="week-hd" onclick="toggleWeek(this)"><span class="week-num">Week 10</span><span class="week-title">JS closures &amp; async · Evaluate RPN · D276 assessment target</span><span class="week-date">Apr 19–25</span><span class="week-toggle">▼</span></div></td>
-      </tr>
-      <tr class="week-body-row">
+      <tr class="week-body-row" id="w1">
         <td class="week-body-cell">
           <div class="domain-grid">
-            <div class="domain-cell"><div class="domain-label">CS Fundamentals</div><ul><li>NeetCode: Evaluate RPN (#22), Generate Parentheses (#23)</li><li>LeetCode #150, #22 — Medium</li></ul></div>
-            <div class="domain-cell"><div class="domain-label">Systems Depth</div><ul><li>TCP handshake — draw three-way handshake from memory</li><li>HTTP/1.1 vs HTTP/2: persistent connections, multiplexing</li></ul></div>
-            <div class="domain-cell"><div class="domain-label">Language &amp; Tooling</div><ul><li><strong>D276 assessment target</strong></li><li>D280: closures, prototypes, async/await, Promises</li><li>Eloquent JS ch.4–6</li></ul></div>
-            <div class="domain-cell"><div class="domain-label">Commerce &amp; Backend</div><ul><li>Create PostgreSQL tables, run first migration</li><li>Insert a test order record from a webhook payload</li></ul></div>
-            <div class="domain-cell"><div class="domain-label">Teaching &amp; Comms</div><ul><li>Teaching Notes: Why the Event Loop Confuses Python-First Learners</li></ul></div>
+            <div class="domain-cell"><div class="domain-label">CS Fundamentals</div>NeetCode: Arrays &amp; Hashing — two sum, contains duplicate, valid anagram</div>
+            <div class="domain-cell"><div class="domain-label">Systems Depth</div>WSL2 setup, terminal basics, How Linux Works ch. 1–3</div>
+            <div class="domain-cell"><div class="domain-label">Language &amp; Tooling</div>D278 start. Git init, clone, commit, push. Async JS: callbacks vs. Promises intro</div>
+            <div class="domain-cell"><div class="domain-label">Commerce &amp; Backend</div>Shopify Partner account setup. Explore Partner Dashboard and app types</div>
+            <div class="domain-cell"><div class="domain-label">Teaching &amp; Comms</div>Begin documenting portfolio site architecture decisions for first build log post</div>
           </div>
-          <div class="neetcode-strip"><strong>Generate Parentheses:</strong> First backtracking problem. Add '(' if open count &lt; n; add ')' if close count &lt; open. Valid states are a small subset of all strings — backtracking prunes invalid branches early. Structure (build · check · recurse · undo) appears in Subsets, Permutations, and N-Queens.</div>
-          <div class="notes-row"><span class="notes-label">WGU CU check</span><textarea class="notes-field" placeholder="D276 passed? CU total:" rows="1"></textarea></div>
-          <div class="notes-row"><span class="notes-label">Notes</span><textarea class="notes-field" placeholder="What clicked. What didn't. What to revisit." rows="2"></textarea></div>
+          <div class="notes-row">
+            <span class="notes-label">Notes</span>
+            <textarea class="notes-field" rows="2" placeholder="Week 1 notes..."></textarea>
+          </div>
         </td>
       </tr>
-      <tr class="week-hd-row">
-        <td class="week-hd-cell"><div class="week-hd" onclick="toggleWeek(this)"><span class="week-num">Week 11</span><span class="week-title">Binary Search begins · D280 assessment target · React intro</span><span class="week-date">Apr 26–May 2</span><span class="week-toggle">▼</span></div></td>
-      </tr>
-      <tr class="week-body-row">
-        <td class="week-body-cell">
-          <div class="domain-grid">
-            <div class="domain-cell"><div class="domain-label">CS Fundamentals</div><ul><li>NeetCode: Binary Search (#33), Search a 2D Matrix (#34)</li><li>LeetCode #704, #74 — Easy/Medium</li><li>Binary Search: O(log n) by halving the search space each step</li></ul></div>
-            <div class="domain-cell"><div class="domain-label">Systems Depth</div><ul><li>TLS handshake — how does HTTPS actually work?</li><li>Shopify webhook HMAC in context of TLS</li></ul></div>
-            <div class="domain-cell"><div class="domain-label">Language &amp; Tooling</div><ul><li><strong>D280 assessment target</strong></li><li>Learning React: components, props, useState, useEffect</li><li>TypeScript: generics intro</li></ul></div>
-            <div class="domain-cell"><div class="domain-label">Commerce &amp; Backend</div><ul><li>Inventory webhook handler — writes to PostgreSQL on inventory_levels/update</li><li>Test with real inventory change in dev store</li></ul></div>
-            <div class="domain-cell"><div class="domain-label">Teaching &amp; Comms</div><ul><li>Build Log: Webhook Handlers — Reliability and Failure Modes</li></ul></div>
+      <!-- Week 2 -->
+      <tr>
+        <td class="week-hd-cell">
+          <div class="week-hd" onclick="toggleWeek('w2')">
+            <span class="week-num">W2</span>
+            <span class="week-title">Promises · async/await · Git branching</span>
+            <span class="week-date">Jan 12</span>
+            <span class="week-toggle" id="w2-toggle">▼</span>
           </div>
-          <div class="neetcode-strip"><strong>Binary Search:</strong> The off-by-one errors (lo &lt;= hi vs lo &lt; hi, mid+1 vs mid) are notorious. Write the template once, comment every line explaining why, reuse it. Search a 2D Matrix: row = mid // cols, col = mid % cols — this indexing trick reappears throughout matrix problems.</div>
-          <div class="notes-row"><span class="notes-label">WGU CU check</span><textarea class="notes-field" placeholder="D280 passed? CU total:" rows="1"></textarea></div>
-          <div class="notes-row"><span class="notes-label">Notes</span><textarea class="notes-field" placeholder="What clicked. What didn't. What to revisit." rows="2"></textarea></div>
         </td>
       </tr>
-      <tr class="week-hd-row">
-        <td class="week-hd-cell"><div class="week-hd" onclick="toggleWeek(this)"><span class="week-num">Week 12</span><span class="week-title">TypeScript strict mode · Koko Eating Bananas · D277 begins</span><span class="week-date">May 3–9</span><span class="week-toggle">▼</span></div></td>
-      </tr>
-      <tr class="week-body-row">
+      <tr class="week-body-row" id="w2">
         <td class="week-body-cell">
           <div class="domain-grid">
-            <div class="domain-cell"><div class="domain-label">CS Fundamentals</div><ul><li>NeetCode: Koko Eating Bananas (#35), Find Min in Rotated Sorted Array (#36)</li><li>LeetCode #875, #153 — Medium</li><li>Effective TypeScript ch.1–3</li></ul></div>
-            <div class="domain-cell"><div class="domain-label">Systems Depth</div><ul><li>Processes vs threads at the OS level</li><li>Node.js event loop: relation to OS I/O model</li></ul></div>
-            <div class="domain-cell"><div class="domain-label">Language &amp; Tooling</div><ul><li>D277: responsive design, accessibility, component thinking</li><li>TypeScript: strict mode, unknown vs any, type narrowing</li></ul></div>
-            <div class="domain-cell"><div class="domain-label">Commerce &amp; Backend</div><ul><li>Fulfillment tracking webhook — map status to DB state</li><li>Add idempotency key to handler (prevent duplicate inserts)</li></ul></div>
-            <div class="domain-cell"><div class="domain-label">Teaching &amp; Comms</div><ul><li>Code Jam #2 prep: TypeScript-first project, students configure tsconfig</li></ul></div>
+            <div class="domain-cell"><div class="domain-label">CS Fundamentals</div>NeetCode: Arrays &amp; Hashing continued — group anagrams, top K frequent</div>
+            <div class="domain-cell"><div class="domain-label">Systems Depth</div>How Linux Works ch. 4–6: processes, devices, filesystems</div>
+            <div class="domain-cell"><div class="domain-label">Language &amp; Tooling</div>D197 start. async/await patterns. try/catch with async. fetch() from first principles</div>
+            <div class="domain-cell"><div class="domain-label">Commerce &amp; Backend</div>Shopify CLI install. Create dev store. Explore Admin API reference</div>
+            <div class="domain-cell"><div class="domain-label">Teaching &amp; Comms</div>Publish building-this-site post: static HTML design decisions + stack migration plan</div>
           </div>
-          <div class="neetcode-strip"><strong>Binary Search on Answer Space:</strong> Koko Eating Bananas doesn't search an array — it searches for the minimum valid "speed" across a range. Any problem framed as "find minimum X such that condition(X) is true" can use this. One of the most powerful generalizations of binary search.</div>
-          <div class="notes-row"><span class="notes-label">Notes</span><textarea class="notes-field" placeholder="What clicked. What didn't. What to revisit." rows="2"></textarea></div>
+          <div class="notes-row">
+            <span class="notes-label">Notes</span>
+            <textarea class="notes-field" rows="2" placeholder="Week 2 notes..."></textarea>
+          </div>
+        </td>
+      </tr>
+      <!-- Week 3 -->
+      <tr>
+        <td class="week-hd-cell" colspan="2">
+          <div class="week-hd" onclick="toggleWeek('w3')">
+            <span class="week-num">W3</span>
+            <span class="week-title">TypeScript basics · interfaces · type inference</span>
+            <span class="week-date">Jan 19</span>
+            <span class="week-toggle" id="w3-toggle">▼</span>
+          </div>
+        </td>
+      </tr>
+      <tr class="week-body-row" id="w3">
+        <td class="week-body-cell" colspan="2">
+          <div class="domain-grid">
+            <div class="domain-cell"><div class="domain-label">CS Fundamentals</div>NeetCode: Arrays &amp; Hashing — product of array except self, valid sudoku</div>
+            <div class="domain-cell"><div class="domain-label">Systems Depth</div>How Linux Works ch. 7–9: shell scripts, networking basics, moving files around</div>
+            <div class="domain-cell"><div class="domain-label">Language &amp; Tooling</div>TypeScript: annotations, interfaces, type inference. Effective TypeScript items 1–10</div>
+            <div class="domain-cell"><div class="domain-label">Commerce &amp; Backend</div>Shopify REST Admin API: first authenticated request. Read orders via REST</div>
+            <div class="domain-cell"><div class="domain-label">Teaching &amp; Comms</div>D278 coursework documentation — scripting concepts log</div>
+          </div>
+          <div class="notes-row">
+            <span class="notes-label">Notes</span>
+            <textarea class="notes-field" rows="2" placeholder="Week 3 notes..."></textarea>
+          </div>
+        </td>
+      </tr>
+      <!-- Week 4 -->
+      <tr>
+        <td class="week-hd-cell" colspan="2">
+          <div class="week-hd" onclick="toggleWeek('w4')">
+            <span class="week-num">W4</span>
+            <span class="week-title">TypeScript generics · Express intro</span>
+            <span class="week-date">Jan 26</span>
+            <span class="week-toggle" id="w4-toggle">▼</span>
+          </div>
+        </td>
+      </tr>
+      <tr class="week-body-row" id="w4">
+        <td class="week-body-cell" colspan="2">
+          <div class="domain-grid">
+            <div class="domain-cell"><div class="domain-label">CS Fundamentals</div>NeetCode: Two Pointers intro — valid palindrome, two sum II</div>
+            <div class="domain-cell"><div class="domain-label">Systems Depth</div>How Linux Works ch. 10–12: shell environment, processes in depth, network config</div>
+            <div class="domain-cell"><div class="domain-label">Language &amp; Tooling</div>TypeScript generics. Express setup: routes, middleware, req/res/next cycle</div>
+            <div class="domain-cell"><div class="domain-label">Commerce &amp; Backend</div>Express server scaffold. First route returning mocked order data as JSON</div>
+            <div class="domain-cell"><div class="domain-label">Teaching &amp; Comms</div>D197 coursework documentation — Git concepts log</div>
+          </div>
+          <div class="notes-row">
+            <span class="notes-label">Notes</span>
+            <textarea class="notes-field" rows="2" placeholder="Week 4 notes..."></textarea>
+          </div>
         </td>
       </tr>
     </tbody>
   </table>
-
   <div class="month-arrow">↓</div>
 
-  <!-- MAY–JUNE · Weeks 13–16 -->
+  <!-- MONTH: February -->
   <table class="month-table">
     <tbody>
-      <tr class="week-hd-row">
-        <td class="month-label-cell" rowspan="2"><span class="month-label-text">May – Jun 2026</span></td>
-        <td class="week-hd-cell"><div class="week-hd" onclick="toggleWeek(this)"><span class="week-num">Weeks 13–16</span><span class="week-title">Linked Lists · D277 &amp; D370 · Shopify Liquid integration</span><span class="week-date">May 10–Jun 6</span><span class="week-toggle">▼</span></div></td>
+      <!-- Week 5 -->
+      <tr>
+        <td class="month-label-cell" rowspan="4"><span class="month-label-text">February</span></td>
+        <td class="week-hd-cell">
+          <div class="week-hd" onclick="toggleWeek('w5')">
+            <span class="week-num">W5</span>
+            <span class="week-title">HTTP deep dive · middleware · env vars</span>
+            <span class="week-date">Feb 2</span>
+            <span class="week-toggle" id="w5-toggle">▼</span>
+          </div>
+        </td>
       </tr>
-      <tr class="week-body-row">
+      <tr class="week-body-row" id="w5">
         <td class="week-body-cell">
           <div class="domain-grid">
-            <div class="domain-cell"><div class="domain-label">CS Fundamentals</div><ul><li>NeetCode: Reverse LL (#41), Merge Two Sorted (#42), Reorder List (#43), Remove Nth from End (#44), Copy List with Random Pointer (#45), Add Two Numbers (#46), LRU Cache (#47), Merge K Sorted (#48), Reverse Nodes in K-Group (#49)</li><li>CLRS ch.10: linked list as foundational data structure</li></ul></div>
-            <div class="domain-cell"><div class="domain-label">Systems Depth</div><ul><li>Stack vs heap at the C level</li><li>What a pointer is — draw it</li><li>Why linked lists have poor cache locality vs arrays</li></ul></div>
-            <div class="domain-cell"><div class="domain-label">Language &amp; Tooling</div><ul><li><strong>D277 assessment target (week 14)</strong></li><li><strong>D370 assessment target (week 15)</strong></li><li>Effective TypeScript ch.4–6</li><li>React: custom hooks, context, useReducer</li></ul></div>
-            <div class="domain-cell"><div class="domain-label">Commerce &amp; Backend</div><ul><li>Shopify Liquid: surface app-generated data on product page</li><li>Gated SMS product release: metafield-driven visibility logic</li></ul></div>
-            <div class="domain-cell"><div class="domain-label">Teaching &amp; Comms</div><ul><li>Build Log: Liquid Storefront Integration</li><li>Code Jam #2: run and debrief</li><li>Book Notes: SICP ch.1–2 post</li></ul></div>
+            <div class="domain-cell"><div class="domain-label">CS Fundamentals</div>NeetCode: Two Pointers — 3sum, container with most water</div>
+            <div class="domain-cell"><div class="domain-label">Systems Depth</div>Networking for Sys Admins: DNS, TCP basics. curl for manual API testing</div>
+            <div class="domain-cell"><div class="domain-label">Language &amp; Tooling</div>HTTP verbs, status codes, headers. Express middleware chain. dotenv for env vars</div>
+            <div class="domain-cell"><div class="domain-label">Commerce &amp; Backend</div>Shopify OAuth flow: authorization URL, redirect, token exchange. Read the docs fully before writing code</div>
+            <div class="domain-cell"><div class="domain-label">Teaching &amp; Comms</div>D335 Python start — document setup and first scripts</div>
           </div>
-          <div class="neetcode-strip"><strong>Linked Lists — fast/slow pointer:</strong> Floyd's cycle detection (Reorder List) is used for cycle detection, finding the middle, and palindrome checking. LRU Cache combines a doubly linked list with a hash map — first design problem in the roadmap. The question is not "can you code" but "which data structures to combine and why."</div>
-          <div class="notes-row"><span class="notes-label">WGU CU check</span><textarea class="notes-field" placeholder="D277 ✓  D370 ✓  — CU total:" rows="1"></textarea></div>
-          <div class="notes-row"><span class="notes-label">Notes</span><textarea class="notes-field" placeholder="Weeks 13–16 notes." rows="3"></textarea></div>
+          <div class="notes-row">
+            <span class="notes-label">Notes</span>
+            <textarea class="notes-field" rows="2" placeholder="Week 5 notes..."></textarea>
+          </div>
+        </td>
+      </tr>
+      <!-- Week 6 -->
+      <tr>
+        <td class="week-hd-cell">
+          <div class="week-hd" onclick="toggleWeek('w6')">
+            <span class="week-num">W6</span>
+            <span class="week-title">Shopify OAuth implementation</span>
+            <span class="week-date">Feb 9</span>
+            <span class="week-toggle" id="w6-toggle">▼</span>
+          </div>
+        </td>
+      </tr>
+      <tr class="week-body-row" id="w6">
+        <td class="week-body-cell">
+          <div class="domain-grid">
+            <div class="domain-cell"><div class="domain-label">CS Fundamentals</div>NeetCode: Two Pointers — trapping rain water, review Arrays &amp; Hashing patterns</div>
+            <div class="domain-cell"><div class="domain-label">Systems Depth</div>HTTPS, TLS handshake conceptually. Why OAuth tokens must travel over HTTPS</div>
+            <div class="domain-cell"><div class="domain-label">Language &amp; Tooling</div>OAuth implementation: state param, nonce, redirect handler, token storage in env</div>
+            <div class="domain-cell"><div class="domain-label">Commerce &amp; Backend</div>Complete OAuth flow end to end. Access token retrieved and logged. ngrok for local tunnel</div>
+            <div class="domain-cell"><div class="domain-label">Teaching &amp; Comms</div>Document OAuth flow with sequence diagram in build log draft</div>
+          </div>
+          <div class="notes-row">
+            <span class="notes-label">Notes</span>
+            <textarea class="notes-field" rows="2" placeholder="Week 6 notes..."></textarea>
+          </div>
+        </td>
+      </tr>
+      <!-- Week 7 -->
+      <tr>
+        <td class="week-hd-cell">
+          <div class="week-hd" onclick="toggleWeek('w7')">
+            <span class="week-num">W7</span>
+            <span class="week-title">Webhooks · HMAC verification</span>
+            <span class="week-date">Feb 16</span>
+            <span class="week-toggle" id="w7-toggle">▼</span>
+          </div>
+        </td>
+      </tr>
+      <tr class="week-body-row" id="w7">
+        <td class="week-body-cell">
+          <div class="domain-grid">
+            <div class="domain-cell"><div class="domain-label">CS Fundamentals</div>NeetCode: Sliding Window intro — best time to buy/sell stock, longest substring without repeat</div>
+            <div class="domain-cell"><div class="domain-label">Systems Depth</div>Hash functions: SHA-256, HMAC. Why HMAC verification prevents spoofed webhooks</div>
+            <div class="domain-cell"><div class="domain-label">Language &amp; Tooling</div>Webhook endpoint: receive POST, verify HMAC signature, parse body. Raw body buffering requirement</div>
+            <div class="domain-cell"><div class="domain-label">Commerce &amp; Backend</div>orders/create webhook registered and firing. Payload logged. HMAC check passing</div>
+            <div class="domain-cell"><div class="domain-label">Teaching &amp; Comms</div>Publish build log entry: Shopify OAuth flow — what it does, why each step exists</div>
+          </div>
+          <div class="notes-row">
+            <span class="notes-label">Notes</span>
+            <textarea class="notes-field" rows="2" placeholder="Week 7 notes..."></textarea>
+          </div>
+        </td>
+      </tr>
+      <!-- Week 8 -->
+      <tr>
+        <td class="week-hd-cell" colspan="2">
+          <div class="week-hd" onclick="toggleWeek('w8')">
+            <span class="week-num">W8</span>
+            <span class="week-title">PostgreSQL · raw SQL · idempotency</span>
+            <span class="week-date">Feb 23</span>
+            <span class="week-toggle" id="w8-toggle">▼</span>
+          </div>
+        </td>
+      </tr>
+      <tr class="week-body-row" id="w8">
+        <td class="week-body-cell" colspan="2">
+          <div class="domain-grid">
+            <div class="domain-cell"><div class="domain-label">CS Fundamentals</div>NeetCode: Sliding Window — longest repeating char replacement, minimum window substring</div>
+            <div class="domain-cell"><div class="domain-label">Systems Depth</div>Head First SQL ch. 1–5: SELECT, WHERE, INSERT, UPDATE, DELETE. PostgreSQL local setup</div>
+            <div class="domain-cell"><div class="domain-label">Language &amp; Tooling</div>pg library. Raw SQL INSERT with idempotency key. ON CONFLICT DO NOTHING pattern</div>
+            <div class="domain-cell"><div class="domain-label">Commerce &amp; Backend</div>orders table created. Webhook handler writes to DB. Duplicate webhook fired twice — idempotency confirmed</div>
+            <div class="domain-cell"><div class="domain-label">Teaching &amp; Comms</div>Document idempotency pattern: why it exists, operations context (POS double-charges)</div>
+          </div>
+          <div class="notes-row">
+            <span class="notes-label">Notes</span>
+            <textarea class="notes-field" rows="2" placeholder="Week 8 notes..."></textarea>
+          </div>
         </td>
       </tr>
     </tbody>
   </table>
-
   <div class="month-arrow">↓</div>
 
-  <!-- JUNE–JULY · Weeks 17–20 -->
+  <!-- MONTH: March -->
   <table class="month-table">
     <tbody>
-      <tr class="week-hd-row">
-        <td class="month-label-cell" rowspan="2"><span class="month-label-text">Jun – Jul 2026</span></td>
-        <td class="week-hd-cell"><div class="week-hd" onclick="toggleWeek(this)"><span class="week-num">Weeks 17–20</span><span class="week-title">Trees begins · Shopify deployment · Phase 2 close</span><span class="week-date">Jun 7–Jul 4</span><span class="week-toggle">▼</span></div></td>
+      <!-- Week 9 -->
+      <tr>
+        <td class="month-label-cell" rowspan="4"><span class="month-label-text">March</span></td>
+        <td class="week-hd-cell">
+          <div class="week-hd" onclick="toggleWeek('w9')">
+            <span class="week-num">W9</span>
+            <span class="week-title">SQL joins · schema design · Fly.io deploy</span>
+            <span class="week-date">Mar 2</span>
+            <span class="week-toggle" id="w9-toggle">▼</span>
+          </div>
+        </td>
       </tr>
-      <tr class="week-body-row">
+      <tr class="week-body-row" id="w9">
         <td class="week-body-cell">
           <div class="domain-grid">
-            <div class="domain-cell"><div class="domain-label">CS Fundamentals</div><ul><li>NeetCode: Invert Tree (#50), Max Depth (#51), Diameter (#52), Balanced (#53), Same Tree (#54), Subtree (#55), LCA (#56), Level Order (#57), Right Side View (#58), Count Good Nodes (#59), Validate BST (#60)</li><li>Core principle: every node is the root of its own subtree</li></ul></div>
-            <div class="domain-cell"><div class="domain-label">Systems Depth</div><ul><li>How Linux Works: finish remaining chapters</li><li>Set up a cron job — how the OS schedules recurring tasks</li></ul></div>
-            <div class="domain-cell"><div class="domain-label">Language &amp; Tooling</div><ul><li>TypeScript: mapped types, conditional types, utility types</li><li>Shopify app: TypeScript throughout, no implicit any</li></ul></div>
-            <div class="domain-cell"><div class="domain-label">Commerce &amp; Backend</div><ul><li>Deploy to Railway or Fly.io: env vars, production DB</li><li>Submit for App Review or document why not yet</li></ul></div>
-            <div class="domain-cell"><div class="domain-label">Teaching &amp; Comms</div><ul><li>Build Log: Deployment + Retrospective posts</li><li>Phase 2 Log post</li></ul></div>
+            <div class="domain-cell"><div class="domain-label">CS Fundamentals</div>NeetCode: Stack intro — valid parentheses, min stack, evaluate reverse polish notation</div>
+            <div class="domain-cell"><div class="domain-label">Systems Depth</div>Head First SQL ch. 6–10: JOINs, subqueries, constraints. Schema design for orders + line items</div>
+            <div class="domain-cell"><div class="domain-label">Language &amp; Tooling</div>D278 wrap-up. Fly.io deploy: Dockerfile basics, environment secrets, production PostgreSQL</div>
+            <div class="domain-cell"><div class="domain-label">Commerce &amp; Backend</div>v0.1 deployed to Fly.io. Webhook firing against live URL. Orders persisting in production DB</div>
+            <div class="domain-cell"><div class="domain-label">Teaching &amp; Comms</div>Publish v0.1 build log: OAuth + webhook + PostgreSQL — what was hard, what worked</div>
           </div>
-          <div class="neetcode-strip"><strong>Trees:</strong> Invert and Max Depth are 4–6 lines. If they take longer, rebuild the recursive model first. Level Order BFS (queue-based) underpins graph BFS later. LCA is the first problem where a recursive call carries information upward through the tree — pattern appears in Path Sum, Serialize/Deserialize, and many hard problems.</div>
-          <div class="notes-row"><span class="notes-label">Phase 2 CU total</span><textarea class="notes-field" placeholder="D276 ✓  D280 ✓  D277 ✓  D370 ✓  — total CU to date:" rows="1"></textarea></div>
-          <div class="notes-row"><span class="notes-label">Phase 2 retro</span><textarea class="notes-field" placeholder="What to carry into Phase 3." rows="2"></textarea></div>
+          <div class="notes-row">
+            <span class="notes-label">Notes</span>
+            <textarea class="notes-field" rows="2" placeholder="Week 9 notes..."></textarea>
+          </div>
+        </td>
+      </tr>
+      <!-- Week 10 -->
+      <tr>
+        <td class="week-hd-cell">
+          <div class="week-hd" onclick="toggleWeek('w10')">
+            <span class="week-num">W10</span>
+            <span class="week-title">Vitest · Supertest · test patterns</span>
+            <span class="week-date">Mar 9</span>
+            <span class="week-toggle" id="w10-toggle">▼</span>
+          </div>
+        </td>
+      </tr>
+      <tr class="week-body-row" id="w10">
+        <td class="week-body-cell">
+          <div class="domain-grid">
+            <div class="domain-cell"><div class="domain-label">CS Fundamentals</div>NeetCode: Stack continued — daily temperatures, car fleet</div>
+            <div class="domain-cell"><div class="domain-label">Systems Depth</div>Practical SQL ch. 1–5: aggregates, window functions, real datasets</div>
+            <div class="domain-cell"><div class="domain-label">Language &amp; Tooling</div>Vitest for unit tests. Supertest for route integration tests. MSW for mocking Shopify API responses</div>
+            <div class="domain-cell"><div class="domain-label">Commerce &amp; Backend</div>Test suite for HMAC verification, idempotency, and order handler. CI runs tests on push</div>
+            <div class="domain-cell"><div class="domain-label">Teaching &amp; Comms</div>D197 wrap-up. Document test strategy: three layers (unit, integration, E2E planned)</div>
+          </div>
+          <div class="notes-row">
+            <span class="notes-label">Notes</span>
+            <textarea class="notes-field" rows="2" placeholder="Week 10 notes..."></textarea>
+          </div>
+        </td>
+      </tr>
+      <!-- Week 11 -->
+      <tr>
+        <td class="week-hd-cell">
+          <div class="week-hd" onclick="toggleWeek('w11')">
+            <span class="week-num">W11</span>
+            <span class="week-title">Portfolio site: React scaffold · Nav component</span>
+            <span class="week-date">Mar 16</span>
+            <span class="week-toggle" id="w11-toggle">▼</span>
+          </div>
+        </td>
+      </tr>
+      <tr class="week-body-row" id="w11">
+        <td class="week-body-cell">
+          <div class="domain-grid">
+            <div class="domain-cell"><div class="domain-label">CS Fundamentals</div>NeetCode: Binary Search intro — binary search, search 2D matrix</div>
+            <div class="domain-cell"><div class="domain-label">Systems Depth</div>Practical SQL ch. 6–9: advanced queries, indexes, performance basics</div>
+            <div class="domain-cell"><div class="domain-label">Language &amp; Tooling</div>Scaffold Vite + React + TypeScript. Nav component. File-based routing with Next.js pages</div>
+            <div class="domain-cell"><div class="domain-label">Commerce &amp; Backend</div>Shopify certification study: Partner ecosystem, App development module</div>
+            <div class="domain-cell"><div class="domain-label">Teaching &amp; Comms</div>D335 Python midpoint — document Python vs. JS mental model differences</div>
+          </div>
+          <div class="notes-row">
+            <span class="notes-label">Notes</span>
+            <textarea class="notes-field" rows="2" placeholder="Week 11 notes..."></textarea>
+          </div>
+        </td>
+      </tr>
+      <!-- Week 12 -->
+      <tr>
+        <td class="week-hd-cell" colspan="2">
+          <div class="week-hd" onclick="toggleWeek('w12')">
+            <span class="week-num">W12</span>
+            <span class="week-title">Phase 1 review · buffer · catch-up</span>
+            <span class="week-date">Mar 23</span>
+            <span class="week-toggle" id="w12-toggle">▼</span>
+          </div>
+        </td>
+      </tr>
+      <tr class="week-body-row" id="w12">
+        <td class="week-body-cell" colspan="2">
+          <div class="domain-grid">
+            <div class="domain-cell"><div class="domain-label">CS Fundamentals</div>NeetCode: Binary Search — Koko eating bananas, find min in rotated sorted array. Review all patterns to date</div>
+            <div class="domain-cell"><div class="domain-label">Systems Depth</div>Review: Linux, networking, SQL. Identify any gaps before Phase 2</div>
+            <div class="domain-cell"><div class="domain-label">Language &amp; Tooling</div>Buffer week: catch up on portfolio scaffold, TypeScript strict mode, any D278/D197/D335 remainders</div>
+            <div class="domain-cell"><div class="domain-label">Commerce &amp; Backend</div>Shopify certification study: Liquid templating module</div>
+            <div class="domain-cell"><div class="domain-label">Teaching &amp; Comms</div>Phase 1 retrospective note: what took longer than expected, what to adjust in Phase 2</div>
+          </div>
+          <div class="notes-row">
+            <span class="notes-label">Notes</span>
+            <textarea class="notes-field" rows="2" placeholder="Week 12 notes..."></textarea>
+          </div>
         </td>
       </tr>
     </tbody>
   </table>
+  <div class="month-arrow">↓</div>
 
-  <!-- ══════════════════════════
-       PHASE 3 · Weeks 21–30
-       ══════════════════════════ -->
-  <div class="cal-phase-hd" style="margin-top:3rem;">
-    <h2>Phase 3 — Algorithms &amp; Databases</h2>
-    <span class="cal-phase-dates">Weeks 21–30 · Jul 5 – Sep 6, 2026</span>
+
+  <!-- ===================== PHASE 2 ===================== -->
+  <div class="cal-phase-hd">
+    <h2>Phase 2</h2>
+    <span class="cal-phase-dates">Weeks 13–24 · Apr – Jul 2026</span>
   </div>
-  <p class="cal-phase-desc">WGU: C949 DSA I · D426 Data Management · D427 Data Management Applications. NeetCode: Tries, Heap, Backtracking, Graphs. BSCS supplement: Discrete Math I alongside C949. Interview cadence increases to 6–8 problems/week.</p>
+  <p class="cal-phase-desc">
+    Portfolio site: Next.js / React / TypeScript migration — React components, routing, TypeScript strict mode. REST is the API model throughout Phase 2; GraphQL is the Phase 4 upgrade once REST has been used in Node, Next.js, and C# contexts and the mental model is solid. WGU: D276 Web Development, D280 JavaScript Programming, D277 Front-End, D370 IT Leadership. NeetCode: Stack, Binary Search, Linked Lists, Trees. Shopify Developer Certification target: weeks 17–20.
+  </p>
 
-  <div class="month-arrow">↓</div>
+  <div class="wgu-box">
+    <div class="wgu-box-hd">Phase 2 WGU Courses</div>
+    <div class="wgu-box-body">
+      <div class="wgu-box-col"><strong>D276</strong> Web Development Foundations (3 CU)</div>
+      <div class="wgu-box-col"><strong>D280</strong> JavaScript Programming (3 CU)</div>
+      <div class="wgu-box-col"><strong>D277</strong> Front-End Web Development (3 CU)</div>
+      <div class="wgu-box-col"><strong>D370</strong> IT Leadership &amp; Management (3 CU)</div>
+    </div>
+  </div>
 
-  <!-- JULY · Weeks 21–23 -->
+  <!-- MONTH: April -->
   <table class="month-table">
     <tbody>
-      <tr class="week-hd-row">
-        <td class="month-label-cell" rowspan="2"><span class="month-label-text">July 2026</span></td>
-        <td class="week-hd-cell"><div class="week-hd" onclick="toggleWeek(this)"><span class="week-num">Weeks 21–23</span><span class="week-title">C949 opens · Tries &amp; Heap · D426 ER modeling</span><span class="week-date">Jul 5–25</span><span class="week-toggle">▼</span></div></td>
+      <!-- Week 13 -->
+      <tr>
+        <td class="month-label-cell" rowspan="4"><span class="month-label-text">April</span></td>
+        <td class="week-hd-cell">
+          <div class="week-hd" onclick="toggleWeek('w13')">
+            <span class="week-num">W13</span>
+            <span class="week-title">Next.js pages · React components · props</span>
+            <span class="week-date">Apr 6</span>
+            <span class="week-toggle" id="w13-toggle">▼</span>
+          </div>
+        </td>
       </tr>
-      <tr class="week-body-row">
+      <tr class="week-body-row" id="w13">
         <td class="week-body-cell">
           <div class="domain-grid">
-            <div class="domain-cell"><div class="domain-label">CS Fundamentals</div><ul><li>NeetCode: Implement Trie (#61), Design Add/Search Words (#62), Word Search II (#63)</li><li>NeetCode: Kth Largest Stream (#64), Last Stone Weight (#65), K Closest Points (#66), Kth Largest Element (#67), Task Scheduler (#68), Design Twitter (#69)</li><li>C949 formal study begins</li><li>Discrete Math I: logic, sets, proof by induction</li></ul></div>
-            <div class="domain-cell"><div class="domain-label">Systems Depth</div><ul><li>CS:APP ch.1: tour of computer systems</li><li>CS:APP ch.2: representing and manipulating information</li></ul></div>
-            <div class="domain-cell"><div class="domain-label">Language &amp; Tooling</div><ul><li>PostgreSQL: psql basics, CREATE TABLE, INSERT, SELECT</li><li>Practical SQL ch.1–4</li></ul></div>
-            <div class="domain-cell"><div class="domain-label">Commerce &amp; Backend</div><ul><li>D426 ER modeling — apply to Shopify app schema</li><li>Normalize schema to 3NF, document what changed and why</li></ul></div>
-            <div class="domain-cell"><div class="domain-label">Teaching &amp; Comms</div><ul><li>Code Jam #3 prep: graph problem, Git flow review</li><li>Book Notes: Grokking Algorithms post</li></ul></div>
+            <div class="domain-cell"><div class="domain-label">CS Fundamentals</div>NeetCode: Linked Lists — reverse linked list, merge two sorted lists</div>
+            <div class="domain-cell"><div class="domain-label">Systems Depth</div>How Next.js SSR vs. SSG vs. ISR differ. When to use each</div>
+            <div class="domain-cell"><div class="domain-label">Language &amp; Tooling</div>Next.js file-based routing. React components with typed props. D276 start</div>
+            <div class="domain-cell"><div class="domain-label">Commerce &amp; Backend</div>Shopify certification study: storefront and CLI modules</div>
+            <div class="domain-cell"><div class="domain-label">Teaching &amp; Comms</div>Draft certification study notes as public-facing reference doc</div>
           </div>
-          <div class="neetcode-strip"><strong>Tries &amp; Heaps:</strong> A Trie's root-to-leaf paths spell words — insert and search are O(m), faster than hash sets for prefix queries. Design Twitter combines a heap (merge k sorted streams) with hash maps (store user feeds). Same pattern as Merge K Sorted Lists and Find Median from Data Stream.</div>
-          <div class="notes-row"><span class="notes-label">Notes</span><textarea class="notes-field" placeholder="Weeks 21–23 notes." rows="3"></textarea></div>
+          <div class="notes-row">
+            <span class="notes-label">Notes</span>
+            <textarea class="notes-field" rows="2" placeholder="Week 13 notes..."></textarea>
+          </div>
+        </td>
+      </tr>
+      <!-- Week 14 -->
+      <tr>
+        <td class="week-hd-cell">
+          <div class="week-hd" onclick="toggleWeek('w14')">
+            <span class="week-num">W14</span>
+            <span class="week-title">React state · hooks · portfolio pages migrated</span>
+            <span class="week-date">Apr 13</span>
+            <span class="week-toggle" id="w14-toggle">▼</span>
+          </div>
+        </td>
+      </tr>
+      <tr class="week-body-row" id="w14">
+        <td class="week-body-cell">
+          <div class="domain-grid">
+            <div class="domain-cell"><div class="domain-label">CS Fundamentals</div>NeetCode: Linked Lists — reorder list, remove nth node from end</div>
+            <div class="domain-cell"><div class="domain-label">Systems Depth</div>useState, useEffect mental model. React rendering lifecycle</div>
+            <div class="domain-cell"><div class="domain-label">Language &amp; Tooling</div>useState, useEffect. Migrate About and Books pages to React. D280 start</div>
+            <div class="domain-cell"><div class="domain-label">Commerce &amp; Backend</div>Shopify certification: full practice exam pass. Identify weak areas</div>
+            <div class="domain-cell"><div class="domain-label">Teaching &amp; Comms</div>Publish certification prep notes</div>
+          </div>
+          <div class="notes-row">
+            <span class="notes-label">Notes</span>
+            <textarea class="notes-field" rows="2" placeholder="Week 14 notes..."></textarea>
+          </div>
+        </td>
+      </tr>
+      <!-- Week 15 -->
+      <tr>
+        <td class="week-hd-cell">
+          <div class="week-hd" onclick="toggleWeek('w15')">
+            <span class="week-num">W15</span>
+            <span class="week-title">Portfolio deployed · Vercel · all pages migrated</span>
+            <span class="week-date">Apr 20</span>
+            <span class="week-toggle" id="w15-toggle">▼</span>
+          </div>
+        </td>
+      </tr>
+      <tr class="week-body-row" id="w15">
+        <td class="week-body-cell">
+          <div class="domain-grid">
+            <div class="domain-cell"><div class="domain-label">CS Fundamentals</div>NeetCode: Trees intro — invert binary tree, max depth of binary tree</div>
+            <div class="domain-cell"><div class="domain-label">Systems Depth</div>Vercel deployment model: serverless functions, preview deploys, env vars</div>
+            <div class="domain-cell"><div class="domain-label">Language &amp; Tooling</div>Remaining pages migrated. Vercel deploy. TypeScript strict mode enabled site-wide</div>
+            <div class="domain-cell"><div class="domain-label">Commerce &amp; Backend</div>Shopify certification: review weak areas from practice exam</div>
+            <div class="domain-cell"><div class="domain-label">Teaching &amp; Comms</div>Build log: portfolio site — site-3 post (what went right, what went wrong, time taken)</div>
+          </div>
+          <div class="notes-row">
+            <span class="notes-label">Certification</span>
+            <textarea class="notes-field" rows="2" placeholder="Shopify certification status..."></textarea>
+          </div>
+        </td>
+      </tr>
+      <!-- Week 16 -->
+      <tr>
+        <td class="week-hd-cell" colspan="2">
+          <div class="week-hd" onclick="toggleWeek('w16')">
+            <span class="week-num">W16</span>
+            <span class="week-title">Webhook suite expansion · inventory + fulfillment</span>
+            <span class="week-date">Apr 27</span>
+            <span class="week-toggle" id="w16-toggle">▼</span>
+          </div>
+        </td>
+      </tr>
+      <tr class="week-body-row" id="w16">
+        <td class="week-body-cell" colspan="2">
+          <div class="domain-grid">
+            <div class="domain-cell"><div class="domain-label">CS Fundamentals</div>NeetCode: Trees — same tree, subtree of another tree, lowest common ancestor</div>
+            <div class="domain-cell"><div class="domain-label">Systems Depth</div>Event-driven architecture: webhook fan-out, ordering guarantees, at-least-once delivery</div>
+            <div class="domain-cell"><div class="domain-label">Language &amp; Tooling</div>D276 / D280 ongoing. Expand webhook handler to inventory_levels/update and fulfillments/create</div>
+            <div class="domain-cell"><div class="domain-label">Commerce &amp; Backend</div>inventory_items and fulfillments tables. Each webhook idempotent. All events persisted</div>
+            <div class="domain-cell"><div class="domain-label">Teaching &amp; Comms</div>Document at-least-once delivery pattern with operations analogy</div>
+          </div>
+          <div class="notes-row">
+            <span class="notes-label">Notes</span>
+            <textarea class="notes-field" rows="2" placeholder="Week 16 notes..."></textarea>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="month-arrow">↓</div>
+
+  <!-- MONTH: May -->
+  <table class="month-table">
+    <tbody>
+      <!-- Week 17 -->
+      <tr>
+        <td class="month-label-cell" rowspan="4"><span class="month-label-text">May</span></td>
+        <td class="week-hd-cell">
+          <div class="week-hd" onclick="toggleWeek('w17')">
+            <span class="week-num">W17</span>
+            <span class="week-title">Shopify certification · Liquid theming</span>
+            <span class="week-date">May 4</span>
+            <span class="week-toggle" id="w17-toggle">▼</span>
+          </div>
+        </td>
+      </tr>
+      <tr class="week-body-row" id="w17">
+        <td class="week-body-cell">
+          <div class="domain-grid">
+            <div class="domain-cell"><div class="domain-label">CS Fundamentals</div>NeetCode: Trees — level order traversal, right side view, count good nodes</div>
+            <div class="domain-cell"><div class="domain-label">Systems Depth</div>Liquid template engine: objects, tags, filters. Theme architecture</div>
+            <div class="domain-cell"><div class="domain-label">Language &amp; Tooling</div>Liquid custom sections. Shopify CLI theme dev. D277 Front-End start</div>
+            <div class="domain-cell"><div class="domain-label">Commerce &amp; Backend</div><strong>Shopify Developer Certification — target this week</strong></div>
+            <div class="domain-cell"><div class="domain-label">Teaching &amp; Comms</div>Publish certification reflection post regardless of outcome</div>
+          </div>
+          <div class="notes-row">
+            <span class="notes-label">Certification</span>
+            <textarea class="notes-field" rows="2" placeholder="Passed / scheduled / deferred..."></textarea>
+          </div>
+        </td>
+      </tr>
+      <!-- Week 18 -->
+      <tr>
+        <td class="week-hd-cell">
+          <div class="week-hd" onclick="toggleWeek('w18')">
+            <span class="week-num">W18</span>
+            <span class="week-title">Klaviyo email triggers · customer webhooks</span>
+            <span class="week-date">May 11</span>
+            <span class="week-toggle" id="w18-toggle">▼</span>
+          </div>
+        </td>
+      </tr>
+      <tr class="week-body-row" id="w18">
+        <td class="week-body-cell">
+          <div class="domain-grid">
+            <div class="domain-cell"><div class="domain-label">CS Fundamentals</div>NeetCode: Trees — validate BST, kth smallest in BST, construct tree from preorder/inorder</div>
+            <div class="domain-cell"><div class="domain-label">Systems Depth</div>Klaviyo API: profiles, events, lists. Webhook-to-email trigger architecture</div>
+            <div class="domain-cell"><div class="domain-label">Language &amp; Tooling</div>customers/create and customers/update webhooks. Klaviyo profile sync on order event</div>
+            <div class="domain-cell"><div class="domain-label">Commerce &amp; Backend</div>Order placed → Klaviyo event fired → confirmation email triggered. End-to-end verified</div>
+            <div class="domain-cell"><div class="domain-label">Teaching &amp; Comms</div>D370 IT Leadership start — connect DevOps concepts to coursework</div>
+          </div>
+          <div class="notes-row">
+            <span class="notes-label">Notes</span>
+            <textarea class="notes-field" rows="2" placeholder="Week 18 notes..."></textarea>
+          </div>
+        </td>
+      </tr>
+      <!-- Week 19 -->
+      <tr>
+        <td class="week-hd-cell">
+          <div class="week-hd" onclick="toggleWeek('w19')">
+            <span class="week-num">W19</span>
+            <span class="week-title">ShipStation mock · fulfillment routing</span>
+            <span class="week-date">May 18</span>
+            <span class="week-toggle" id="w19-toggle">▼</span>
+          </div>
+        </td>
+      </tr>
+      <tr class="week-body-row" id="w19">
+        <td class="week-body-cell">
+          <div class="domain-grid">
+            <div class="domain-cell"><div class="domain-label">CS Fundamentals</div>NeetCode: Trees review + Heap intro — kth largest element</div>
+            <div class="domain-cell"><div class="domain-label">Systems Depth</div>ShipStation REST API docs. Mocking external services with MSW in tests</div>
+            <div class="domain-cell"><div class="domain-label">Language &amp; Tooling</div>Fulfillment routing logic: tag-based routing to mock ShipStation endpoint. Retry on failure</div>
+            <div class="domain-cell"><div class="domain-label">Commerce &amp; Backend</div>v0.2 milestone: full webhook suite, Klaviyo, Liquid theme, ShipStation mocked</div>
+            <div class="domain-cell"><div class="domain-label">Teaching &amp; Comms</div>Publish v0.2 build log</div>
+          </div>
+          <div class="notes-row">
+            <span class="notes-label">Notes</span>
+            <textarea class="notes-field" rows="2" placeholder="Week 19 notes..."></textarea>
+          </div>
+        </td>
+      </tr>
+      <!-- Week 20 -->
+      <tr>
+        <td class="week-hd-cell" colspan="2">
+          <div class="week-hd" onclick="toggleWeek('w20')">
+            <span class="week-num">W20</span>
+            <span class="week-title">Phase 2 review · buffer · WGU wrap-up</span>
+            <span class="week-date">May 25</span>
+            <span class="week-toggle" id="w20-toggle">▼</span>
+          </div>
+        </td>
+      </tr>
+      <tr class="week-body-row" id="w20">
+        <td class="week-body-cell" colspan="2">
+          <div class="domain-grid">
+            <div class="domain-cell"><div class="domain-label">CS Fundamentals</div>NeetCode: Heap — task scheduler, find median from data stream. Review all patterns</div>
+            <div class="domain-cell"><div class="domain-label">Systems Depth</div>Buffer: any remaining D276/D277/D280 coursework</div>
+            <div class="domain-cell"><div class="domain-label">Language &amp; Tooling</div>D277 / D370 wrap-up. TypeScript strict review. Any portfolio polish</div>
+            <div class="domain-cell"><div class="domain-label">Commerce &amp; Backend</div>Certification confirmed or rescheduled. Document status</div>
+            <div class="domain-cell"><div class="domain-label">Teaching &amp; Comms</div>Phase 2 retrospective</div>
+          </div>
+          <div class="notes-row">
+            <span class="notes-label">Notes</span>
+            <textarea class="notes-field" rows="2" placeholder="Week 20 notes..."></textarea>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="month-arrow">↓</div>
+
+
+  <!-- ===================== PHASE 3 ===================== -->
+  <div class="cal-phase-hd">
+    <h2>Phase 3</h2>
+    <span class="cal-phase-dates">Weeks 21–30 · Jun – Sep 2026</span>
+  </div>
+  <p class="cal-phase-desc">
+    DSA depth, real ShipStation integration, Prisma replacing raw SQL. WGU: C949 Data Structures and Algorithms I, D426 Data Management Foundations, D427 Data Management Applications. Head First SQL and Practical SQL active alongside D426. NeetCode: Tries, Heap, Backtracking, Graphs. Phase 4 calendar (C# / GraphQL / Hydrogen / Cloud) published as Phases 1–3 complete.
+  </p>
+
+  <div class="wgu-box">
+    <div class="wgu-box-hd">Phase 3 WGU Courses</div>
+    <div class="wgu-box-body">
+      <div class="wgu-box-col"><strong>C949</strong> Data Structures and Algorithms I (4 CU)</div>
+      <div class="wgu-box-col"><strong>D426</strong> Data Management — Foundations (3 CU)</div>
+      <div class="wgu-box-col"><strong>D427</strong> Data Management — Applications (3 CU)</div>
+      <div class="wgu-box-col"><strong>Reading</strong> Head First SQL + Practical SQL alongside D426</div>
+    </div>
+  </div>
+
+  <!-- Weeks 21–30 summary rows -->
+  <table class="month-table">
+    <tbody>
+      <!-- Week 21 -->
+      <tr>
+        <td class="month-label-cell" rowspan="6"><span class="month-label-text">Jun – Jul</span></td>
+        <td class="week-hd-cell">
+          <div class="week-hd" onclick="toggleWeek('w21')">
+            <span class="week-num">W21</span>
+            <span class="week-title">Tries · Prisma intro · C949 start</span>
+            <span class="week-date">Jun 1</span>
+            <span class="week-toggle" id="w21-toggle">▼</span>
+          </div>
+        </td>
+      </tr>
+      <tr class="week-body-row" id="w21">
+        <td class="week-body-cell">
+          <div class="domain-grid">
+            <div class="domain-cell"><div class="domain-label">CS Fundamentals</div>NeetCode: Tries — implement trie, design add/search words data structure</div>
+            <div class="domain-cell"><div class="domain-label">Systems Depth</div>Prisma schema, migrations, generated client. Compare raw SQL vs. ORM trade-offs</div>
+            <div class="domain-cell"><div class="domain-label">Language &amp; Tooling</div>Prisma replaces raw pg queries. Schema migration from existing tables. C949 start</div>
+            <div class="domain-cell"><div class="domain-label">Commerce &amp; Backend</div>D426 Data Management start. Head First SQL alongside coursework</div>
+            <div class="domain-cell"><div class="domain-label">Teaching &amp; Comms</div>Document raw SQL → Prisma migration: what changed, what got easier, what got harder</div>
+          </div>
+          <div class="notes-row">
+            <span class="notes-label">Notes</span>
+            <textarea class="notes-field" rows="2" placeholder="Week 21 notes..."></textarea>
+          </div>
+        </td>
+      </tr>
+      <!-- Week 22 -->
+      <tr>
+        <td class="week-hd-cell">
+          <div class="week-hd" onclick="toggleWeek('w22')">
+            <span class="week-num">W22–24</span>
+            <span class="week-title">Real ShipStation · SMS drops · Backtracking</span>
+            <span class="week-date">Jun 8</span>
+            <span class="week-toggle" id="w22-toggle">▼</span>
+          </div>
+        </td>
+      </tr>
+      <tr class="week-body-row" id="w22">
+        <td class="week-body-cell">
+          <div class="domain-grid">
+            <div class="domain-cell"><div class="domain-label">CS Fundamentals</div>NeetCode: Backtracking — subsets, combination sum, permutations, word search</div>
+            <div class="domain-cell"><div class="domain-label">Systems Depth</div>ShipStation REST API: live integration, rate limiting, error handling. Retry with exponential backoff</div>
+            <div class="domain-cell"><div class="domain-label">Language &amp; Tooling</div>SMS integration: single-use codes for order status drops. Token generation + expiry pattern</div>
+            <div class="domain-cell"><div class="domain-label">Commerce &amp; Backend</div>v0.3 milestone: live ShipStation, SMS, Prisma. Practical SQL + D427 active</div>
+            <div class="domain-cell"><div class="domain-label">Teaching &amp; Comms</div>Publish v0.3 build log</div>
+          </div>
+          <div class="notes-row">
+            <span class="notes-label">Notes</span>
+            <textarea class="notes-field" rows="2" placeholder="Weeks 22–24 notes..."></textarea>
+          </div>
+        </td>
+      </tr>
+      <!-- Week 25–30 -->
+      <tr>
+        <td class="week-hd-cell">
+          <div class="week-hd" onclick="toggleWeek('w25')">
+            <span class="week-num">W25–30</span>
+            <span class="week-title">Graphs · C949 / D426 / D427 completion · Phase 3 close</span>
+            <span class="week-date">Jul +</span>
+            <span class="week-toggle" id="w25-toggle">▼</span>
+          </div>
+        </td>
+      </tr>
+      <tr class="week-body-row" id="w25">
+        <td class="week-body-cell">
+          <div class="domain-grid">
+            <div class="domain-cell"><div class="domain-label">CS Fundamentals</div>NeetCode: Graphs — number of islands, clone graph, pacific atlantic water flow, course schedule</div>
+            <div class="domain-cell"><div class="domain-label">Systems Depth</div>D427 Data Management Applications: transactions, stored procedures, advanced SQL</div>
+            <div class="domain-cell"><div class="domain-label">Language &amp; Tooling</div>C949 completion. Graph algorithm implementations in TypeScript alongside NeetCode</div>
+            <div class="domain-cell"><div class="domain-label">Commerce &amp; Backend</div>Platform stabilization. Bug fixes, monitoring, observability improvements</div>
+            <div class="domain-cell"><div class="domain-label">Teaching &amp; Comms</div>Phase 3 retrospective. Phase 4 calendar drafted and published</div>
+          </div>
+          <div class="notes-row">
+            <span class="notes-label">Notes</span>
+            <textarea class="notes-field" rows="2" placeholder="Weeks 25–30 notes..."></textarea>
+          </div>
         </td>
       </tr>
     </tbody>
   </table>
 
-  <div class="month-arrow">↓</div>
 
-  <!-- JUL–AUG · Weeks 24–26 -->
-  <table class="month-table">
-    <tbody>
-      <tr class="week-hd-row">
-        <td class="month-label-cell" rowspan="2"><span class="month-label-text">Jul – Aug 2026</span></td>
-        <td class="week-hd-cell"><div class="week-hd" onclick="toggleWeek(this)"><span class="week-num">Weeks 24–26</span><span class="week-title">Backtracking · SQL indexes &amp; transactions · D426 assessment target</span><span class="week-date">Jul 26–Aug 15</span><span class="week-toggle">▼</span></div></td>
-      </tr>
-      <tr class="week-body-row">
-        <td class="week-body-cell">
-          <div class="domain-grid">
-            <div class="domain-cell"><div class="domain-label">CS Fundamentals</div><ul><li>NeetCode: Subsets (#70), Combination Sum (#71), Permutations (#72), Subsets II (#73), Combination Sum II (#74), Word Search (#75)</li><li>CLRS ch.22: adjacency list vs matrix</li><li>Discrete Math I: graph theory, trees, spanning trees</li></ul></div>
-            <div class="domain-cell"><div class="domain-label">Systems Depth</div><ul><li>CS:APP ch.6: memory hierarchy, cache locality</li><li>Why cache locality matters for how you structure DB queries</li></ul></div>
-            <div class="domain-cell"><div class="domain-label">Language &amp; Tooling</div><ul><li>Practical SQL ch.5–9: GROUP BY, JOINs, subqueries, window functions</li><li>PostgreSQL: EXPLAIN ANALYZE on a slow query</li></ul></div>
-            <div class="domain-cell"><div class="domain-label">Commerce &amp; Backend</div><ul><li><strong>D426 assessment target (week 25)</strong></li><li>D427: ACID properties, isolation levels</li><li>Add transaction wrapper to webhook handler insert</li></ul></div>
-            <div class="domain-cell"><div class="domain-label">Teaching &amp; Comms</div><ul><li>Code Jam #3: run and debrief</li><li>Phase 3 Log post draft</li></ul></div>
-          </div>
-          <div class="neetcode-strip"><strong>Backtracking template:</strong> Make a choice · recurse · undo the choice. Subsets and Permutations are the cleanest examples. Subsets II and Combination Sum II add duplicate handling — sort first, skip duplicate choices at the same recursion level. Word Search is the 2D grid variant with visited tracking. Master Subsets before touching Word Search.</div>
-          <div class="notes-row"><span class="notes-label">WGU CU check</span><textarea class="notes-field" placeholder="D426 passed? CU total:" rows="1"></textarea></div>
-          <div class="notes-row"><span class="notes-label">Notes</span><textarea class="notes-field" placeholder="Weeks 24–26 notes." rows="3"></textarea></div>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-
-  <div class="month-arrow">↓</div>
-
-  <!-- AUG–SEP · Weeks 27–30 -->
-  <table class="month-table">
-    <tbody>
-      <tr class="week-hd-row">
-        <td class="month-label-cell" rowspan="2"><span class="month-label-text">Aug – Sep 2026</span></td>
-        <td class="week-hd-cell"><div class="week-hd" onclick="toggleWeek(this)"><span class="week-num">Weeks 27–30</span><span class="week-title">Graphs · C949 &amp; D427 assessment targets · 30-week close</span><span class="week-date">Aug 16–Sep 6</span><span class="week-toggle">▼</span></div></td>
-      </tr>
-      <tr class="week-body-row">
-        <td class="week-body-cell">
-          <div class="domain-grid">
-            <div class="domain-cell"><div class="domain-label">CS Fundamentals</div><ul><li>NeetCode: Number of Islands (#76), Clone Graph (#77), Max Area of Island (#78), Pacific Atlantic (#79), Surrounded Regions (#80), Rotting Oranges (#81), Walls and Gates (#82), Course Schedule (#83), Course Schedule II (#84), Redundant Connection (#85)</li><li>BFS vs DFS — when does each apply?</li><li>Union-Find: path compression + union by rank</li></ul></div>
-            <div class="domain-cell"><div class="domain-label">Systems Depth</div><ul><li>Networking for Sys Admins ch.1–4</li><li>What happens at the network layer when your webhook fires</li></ul></div>
-            <div class="domain-cell"><div class="domain-label">Language &amp; Tooling</div><ul><li>Practical SQL ch.10–15: performance tuning, full-text search</li><li>MongoDB: The Definitive Guide ch.1–3 — document model vs relational</li></ul></div>
-            <div class="domain-cell"><div class="domain-label">Commerce &amp; Backend</div><ul><li><strong>D427 assessment target (week 28)</strong></li><li><strong>C949 assessment target (week 29)</strong></li><li>Shopify app: internal reporting dashboard — SQL aggregation queries</li></ul></div>
-            <div class="domain-cell"><div class="domain-label">Teaching &amp; Comms</div><ul><li>Code Jam #4: graph problem, full debrief post</li><li>30-week retrospective post</li><li>Phase 3 complete — plan Phase 4 C# curriculum</li></ul></div>
-          </div>
-          <div class="neetcode-strip"><strong>Graphs:</strong> Number of Islands is the entry point — DFS or BFS from each unvisited '1'. Course Schedule introduces directed graphs and cycle detection (topological sort via Kahn's or DFS with state coloring). Union-Find in Redundant Connection: understand path compression and union by rank from scratch — these two optimizations make it nearly O(1) per operation.</div>
-          <div class="notes-row"><span class="notes-label">Phase 3 &amp; 30-week CU</span><textarea class="notes-field" placeholder="C949 ✓  D426 ✓  D427 ✓  — total CU earned across all 30 weeks:" rows="1"></textarea></div>
-          <div class="notes-row"><span class="notes-label">30-week retro</span><textarea class="notes-field" placeholder="What changed from week 1 to week 30. What Phase 4 needs to address." rows="4"></textarea></div>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-
-  <!-- Footer -->
-  <div style="margin-top:3rem;padding-top:2rem;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;">
-    <span style="font-size:0.72rem;color:var(--text-3);">Phase 4 calendar (C# / Backend / Cloud) — coming as Phases 1–3 complete</span>
-    <a href="curriculum.html" class="forward" style="margin:0;">
-      <span class="forward-label">Full detail</span>
-      <span class="forward-title">Curriculum →</span>
-    </a>
+  <!-- PHASE 4 FOOTER -->
+  <div class="phase-note mt-3">
+    <strong>Phase 4 calendar — coming as Phases 1–3 complete.</strong> C# / Advanced Java, GraphQL migration (REST mental model must be solid first), Hydrogen storefront, cloud deployment. The Complete Developer (Docker / cloud) is the Phase 4 reading anchor.
   </div>
 
 </div>
 </main>
 
-<script>
-function toggleWeek(hd) {
-  // .week-hd div → .week-hd-cell td → .week-hd-row tr → next sibling is .week-body-row
-  const hdRow = hd.closest('tr');
-  const bodyRow = hdRow.nextElementSibling;
-  const toggle = hd.querySelector('.week-toggle');
-  if (!bodyRow) return;
-  const isOpen = bodyRow.classList.contains('open');
-  bodyRow.classList.toggle('open', !isOpen);
-  toggle.classList.toggle('open', !isOpen);
-}
-</script>
-
 <footer class="footer">
   <div class="footer-inner">
-    <span>Full curriculum and project portfolio at this site.</span>
+    <span class="footer-brand">Full curriculum and project portfolio at this site.</span>
     <nav class="footer-nav">
-      <a href="about.html">About</a>
+      <a href="index.html">About</a>
       <a href="curriculum.html">Curriculum</a>
       <a href="calendar.html">Calendar</a>
       <a href="projects.html">Projects</a>
@@ -569,6 +795,16 @@ function toggleWeek(hd) {
     </nav>
   </div>
 </footer>
+
+<script>
+function toggleWeek(id) {
+  const row = document.getElementById(id);
+  const toggle = document.getElementById(id + '-toggle');
+  if (!row) return;
+  row.classList.toggle('open');
+  if (toggle) toggle.classList.toggle('open');
+}
+</script>
 
 </body>
 </html>

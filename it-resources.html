@@ -8,88 +8,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
-  <style>
-    .book-section { margin-bottom: 3rem; }
-    .book-section h2 {
-      font-size: 0.95rem; font-weight: 500; color: var(--hi);
-      margin-bottom: 1rem; padding-bottom: 0.4rem;
-      border-bottom: 1px solid var(--border); letter-spacing: 0.02em;
-    }
-    .section-note {
-      font-size: 0.8rem; color: var(--text-3);
-      margin-bottom: 0.9rem; font-style: italic; line-height: 1.6;
-    }
-    .resource { border: 1px solid var(--border); margin-bottom: 1.25rem; transition: border-color 0.1s; }
-    .resource:hover { border-color: var(--border-2); }
-    .resource-hd {
-      display: flex; align-items: baseline; justify-content: space-between;
-      padding: 0.9rem 1.1rem 0.4rem; gap: 1rem; flex-wrap: wrap;
-    }
-    .resource-hd h3 { font-size: 0.9rem; font-weight: 500; }
-    .resource-hd h3 a { color: var(--hi); }
-    .resource-type {
-      font-size: 0.6rem; letter-spacing: 0.08em; text-transform: uppercase;
-      padding: 0.15rem 0.4rem; border: 1px solid var(--border-2); color: var(--text-3);
-      white-space: nowrap; flex-shrink: 0;
-    }
-    .resource-type.free { border-color: var(--gray-3); color: var(--gray-2); }
-    .resource-body { padding: 0 1.1rem 1.1rem; font-size: 0.82rem; color: var(--text-2); line-height: 1.65; }
-    .resource-body p { font-size: 0.82rem; color: var(--text-2); margin-bottom: 0; }
-    .resource-link { display: inline-block; margin-top: 0.5rem; font-size: 0.72rem; color: var(--text-3); letter-spacing: 0.04em; }
-    .resource-link:hover { color: var(--hi); text-decoration: underline; text-underline-offset: 3px; }
-    .resource-sep { color: var(--border-2); margin: 0 0.4rem; font-size: 0.72rem; }
-
-    .career-diagram {
-      background: var(--surface);
-      border: 1px solid var(--border-2);
-      padding: 1.5rem 1.25rem;
-      overflow-x: auto;
-      margin-bottom: 2rem;
-      -webkit-overflow-scrolling: touch;
-    }
-    .career-diagram pre {
-      font-family: var(--font);
-      font-size: 0.72rem;
-      color: var(--text-2);
-      line-height: 1.55;
-      margin: 0;
-      white-space: pre;
-    }
-
-    .section-block { margin-top: 3rem; padding-top: 2.5rem; border-top: 1px solid var(--border); }
-    .section-h { font-size: 0.95rem; font-weight: 500; color: var(--hi); margin-bottom: 1.25rem; padding-bottom: 0.4rem; border-bottom: 1px solid var(--border); letter-spacing: 0.02em; }
-
-    .callout {
-      background: var(--surface); border-left: 2px solid var(--gray-4);
-      padding: 0.85rem 1.1rem; font-size: 0.85rem; color: var(--text-2);
-      line-height: 1.65; margin-bottom: 2rem;
-    }
-    .essay-section { margin-bottom: 2.5rem; }
-    .essay-section h2 {
-      font-size: 1rem; font-weight: 500; color: var(--hi);
-      margin-bottom: 0.9rem; padding-bottom: 0.35rem;
-      border-bottom: 1px solid var(--border); letter-spacing: 0.02em;
-    }
-    .forward {
-      display: inline-flex; flex-direction: column; gap: 0.15rem;
-      padding: 1rem 1.25rem; background: var(--surface);
-      border: 1px solid var(--border-2); margin: 2.5rem 0; transition: border-color 0.1s;
-    }
-    .forward:hover { border-color: var(--gray-3); text-decoration: none; }
-    .forward-label { font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-3); }
-    .forward-title { font-size: 0.9rem; color: var(--hi); }
-
-    .sub-label {
-      font-size: 0.62rem; color: var(--text-3);
-      letter-spacing: 0.06em; text-transform: uppercase;
-      font-weight: 400; margin-left: 0.6rem;
-    }
-
-    @media (max-width: 600px) {
-      .career-diagram { padding: 1rem 0.6rem; }
-      .career-diagram pre { font-size: 0.58rem; }
-    }
-  </style>
 </head>
 <body>
 
@@ -109,14 +27,17 @@
 
 <main class="page">
 
-  <p class="kicker">learning material</p>
-  <h1>IT Resources</h1>
-  <p class="lead">Curated resources for IT and IS students — networking, hardware, certification prep, and the professional context that textbooks skip. Relevant titles from the main bibliography are carried over and annotated here for IT-specific use.</p>
-  <div class="meta" style="font-size:0.7rem;color:var(--text-3);letter-spacing:0.04em;display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;margin-bottom:2rem;">
-    <span>last updated 2025</span>
-    <span style="color:var(--border-2);">·</span>
-    <span>network+ · comptia · systems · itsm</span>
-  </div>
+ <p class="kicker">learning material</p>
+<h1 class="page-title">IT Resources</h1>
+
+<div class="meta-updated">
+  <span>★ from main bibliography — holy grail reference</span>
+  <span class="dot">·</span>
+  <span>† optional deeper theory</span>
+  <span class="dot">·</span>
+  <span>last updated Feb 2026</span>
+</div>
+
 
   <div class="callout">
     ★ = carried over from the main bibliography — holy grail / career-long reference.<br>
@@ -128,7 +49,7 @@
   <!-- CAREER PATHS -->
   <div class="essay-section">
     <h2>IT / IS Career Paths at a Glance</h2>
-    <p style="font-size:0.82rem;color:var(--text-3);margin-bottom:1.25rem;">IT and IS degrees share a common trunk before branching into distinct tracks. The diagram below maps where the branches go, what the day-to-day work looks like, and how paths relate to each other. Salary bands are approximate US market figures (2024–25).</p>
+    <p>IT and IS degrees share a common trunk before branching into distinct tracks. The diagram below maps where the branches go, what the day-to-day work looks like, and how paths relate to each other. Salary bands are approximate US market figures (2024–25).</p>
 
     <div class="career-diagram">
 <pre>
@@ -306,11 +227,11 @@
       <h2>Systems, OS &amp; Networking <span class="sub-label">from main bibliography</span></h2>
       <p class="section-note">These titles appear in the main book list under Systems, OS &amp; Networking. They're relevant enough to IT/IS students to warrant annotation here with IT-specific context. ★ = holy grail / career-long reference. † = optional deeper theory.</p>
 
-      <div class="callout" style="margin-bottom:1.5rem;">
+      <div class="callout">
         If you're coming from an IT background rather than CS, CS:APP and the Tanenbaum OS text may feel heavy early on. Start with <em>How Linux Works</em> and the UNIX Admin Handbook, then return to the more theoretical texts once you have context for what they're describing.
       </div>
 
-      <table class="data-table" style="margin-bottom:0;">
+      <table class="data-table">
         <thead>
           <tr>
             <th></th>
@@ -440,9 +361,9 @@
   <!-- BIBLIOGRAPHY -->
   <div class="section-block">
     <h2 class="section-h">Bibliography</h2>
-    <p style="font-size:0.82rem;color:var(--text-3);margin-bottom:1.5rem;">Formatted consistent with the main books page. Authors listed surname-first where known. Linked to primary publisher or author site.</p>
+    <p>Formatted consistent with the main books page. Authors listed surname-first where known. Linked to primary publisher or author site.</p>
 
-    <div style="overflow-x:auto;margin-bottom:2rem;">
+    <div>
       <table class="data-table">
         <thead>
           <tr>
@@ -633,8 +554,8 @@
       </table>
     </div>
 
-    <div class="callout" style="margin-bottom:0;">
-      <strong style="color:var(--text);">On Pearson practice software:</strong> The Exam Cram series bundles Pearson's VUE test engine, which mirrors the real exam interface more closely than most third-party tools. It tracks weak domain areas over time and supports both practice and simulation modes. If you're using Exam Cram, use the software — it's the part most students skip and shouldn't.
+    <div class="callout">
+      <strong>On Pearson practice software:</strong> The Exam Cram series bundles Pearson's VUE test engine, which mirrors the real exam interface more closely than most third-party tools. It tracks weak domain areas over time and supports both practice and simulation modes. If you're using Exam Cram, use the software — it's the part most students skip and shouldn't.
     </div>
   </div>
 
