@@ -4,21 +4,309 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Project: Chiaroscuro | The Vault</title>
-
-<!-- Google Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
-
-<!-- Main CSS -->
 <link rel="stylesheet" href="style.css">
+
+<style>
+  /* ── vault layout ── */
+  .v-section {
+    margin-bottom: 3rem;
+    padding-bottom: 2.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .v-section:last-child { border-bottom: none; margin-bottom: 0; }
+
+  .v-h {
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--hi);
+    margin-bottom: 1.4rem;
+  }
+  .v-h--white { color: var(--text); }
+
+  .v-sub {
+    font-size: 0.63rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0.3rem;
+    margin: 1.4rem 0 0.8rem;
+  }
+  .v-sub:first-child { margin-top: 0; }
+
+  .v-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2.5rem;
+  }
+  @media (max-width: 700px) { .v-grid { grid-template-columns: 1fr; } }
+
+  .v-p {
+    font-size: 0.84rem;
+    color: var(--text);
+    line-height: 1.78;
+    margin-bottom: 1rem;
+  }
+  .v-p:last-child { margin-bottom: 0; }
+
+  .v-note {
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    line-height: 1.7;
+    margin-bottom: 0.9rem;
+  }
+
+  .v-callout {
+    border: 1px dashed var(--border);
+    padding: 1rem 1.2rem;
+    margin: 1.2rem 0;
+    font-size: 0.81rem;
+    color: var(--text);
+    line-height: 1.72;
+  }
+
+  .vault-proof pre {
+    font-size: 0.72rem;
+    line-height: 1.55;
+    color: var(--text-dim);
+    overflow-x: auto;
+    padding: 0.8rem 0;
+  }
+
+  /* ── toggle arrow (used on all collapsibles in vault) ── */
+  .v-toggle {
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    transition: transform 0.15s;
+    display: inline-block;
+    flex-shrink: 0;
+  }
+  .v-toggle.open { transform: rotate(180deg); }
+
+  /* ── film / game entries ── */
+  .v-entry {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0.3rem;
+    margin-bottom: 0.3rem;
+  }
+  .v-entry:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+
+  .v-entry-hd {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.75rem;
+    cursor: pointer;
+    padding: 0.55rem 0;
+    user-select: none;
+  }
+  .v-entry-hd:hover .v-entry-title { color: var(--hi); }
+
+  .v-entry-title {
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--text);
+    flex: 1;
+  }
+  .v-entry-meta {
+    font-size: 0.63rem;
+    color: var(--text-dim);
+    letter-spacing: 0.04em;
+    display: block;
+    margin-bottom: 0.2rem;
+  }
+  .v-entry-script {
+    font-size: 0.62rem;
+    color: var(--text-dim);
+  }
+  .v-entry-script a {
+    color: var(--text-dim);
+    border-bottom: 1px dashed var(--border);
+    text-decoration: none;
+  }
+  .v-entry-script a:hover { color: var(--hi); }
+
+  .v-entry-body {
+    display: none;
+    padding: 0.6rem 0 0.8rem;
+  }
+  .v-entry-body.open { display: block; }
+
+  .v-entry-body-text {
+    font-size: 0.82rem;
+    color: var(--text);
+    line-height: 1.72;
+  }
+
+  /* ── artist entries ── */
+  .v-artist-block {
+    margin-bottom: 1.8rem;
+    padding-bottom: 1.8rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .v-artist-block:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+  .v-artist-block--featured {
+    border-left: 2px solid var(--hi);
+    padding-left: 1rem;
+    margin-left: -1rem;
+  }
+  .v-technique-label {
+    font-size: 0.58rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 0.2rem;
+    opacity: 0.75;
+  }
+  .v-artist-hd {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    cursor: pointer;
+    padding: 0.4rem 0;
+    border-bottom: 1px solid var(--border);
+    user-select: none;
+  }
+  .v-artist-hd:hover h3 { color: var(--hi); }
+  .v-artist-hd h3 {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--text);
+    margin: 0;
+    letter-spacing: 0.02em;
+  }
+  .v-artist-body {
+    display: none;
+    padding: 0.7rem 0 0.5rem;
+  }
+  .v-artist-body.open { display: block; }
+
+  .v-painting-wrap { margin-top: 0.8rem; }
+  .v-painting-wrap + .v-painting-wrap { margin-top: 0.9rem; }
+  .v-artist-img {
+    display: block;
+    max-width: 100%;
+    opacity: 0.9;
+    margin-top: 0.4rem;
+  }
+  .v-artist-img--wide { width: 100%; }
+  .v-artist-caption {
+    font-size: 0.63rem;
+    color: var(--text-dim);
+    font-style: italic;
+    display: block;
+    margin-top: 0.3rem;
+  }
+
+  /* ── philosopher entries ── */
+  .v-phil-row {
+    display: grid;
+    grid-template-columns: 68px 1fr;
+    gap: 0.9rem;
+    align-items: start;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .v-phil-row:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+  .v-phil-photo {
+    width: 68px;
+    height: 86px;
+    object-fit: cover;
+    object-position: top;
+    opacity: 0.82;
+    display: block;
+  }
+  .v-phil-fact {
+    font-size: 0.69rem;
+    color: var(--text-dim);
+    font-style: italic;
+    line-height: 1.5;
+    margin-top: 0.3rem;
+    padding-top: 0.3rem;
+    border-top: 1px dashed var(--border);
+  }
+
+  /* ── Voltaire scrollable (not collapsible) ── */
+  .v-scroll-block {
+    max-height: 240px;
+    overflow-y: auto;
+    padding-right: 0.4rem;
+    margin-top: 0.5rem;
+    border-left: 1px solid var(--border);
+    padding-left: 0.8rem;
+  }
+
+  /* ── literary entries ── */
+  .v-lit-entry {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0.3rem;
+    margin-bottom: 0.3rem;
+  }
+  .v-lit-entry:last-child { border-bottom: none; margin-bottom: 0; }
+  .v-lit-hd {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    cursor: pointer;
+    padding: 0.5rem 0;
+    user-select: none;
+  }
+  .v-lit-hd:hover .v-lit-name { color: var(--hi); }
+  .v-lit-name {
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--text);
+    flex: 1;
+  }
+  .v-lit-body {
+    display: none;
+    padding: 0.5rem 0 0.8rem;
+  }
+  .v-lit-body.open { display: block; }
+  .v-lit-deepcut {
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    display: inline-block;
+    border: 1px solid var(--border);
+    padding: 0.1rem 0.4rem;
+    margin-left: 0.4rem;
+    vertical-align: middle;
+  }
+
+  /* ── conglomerate table ── */
+  .v-conglomerate {
+    font-size: 0.68rem;
+    color: var(--text-dim);
+    line-height: 1.6;
+    overflow-x: auto;
+    margin: 0.8rem 0;
+  }
+
+  /* ── pedestrian footnote ── */
+  .v-pedestrian { opacity: 0.75; }
+  .v-pedestrian .v-h { color: var(--text-dim); }
+  .v-pedestrian .v-p, .v-pedestrian .v-entry-body-text {
+    font-size: 0.79rem;
+    color: var(--text-dim);
+  }
+</style>
 </head>
 
 <body>
-<script src="nav.js"></script>
-<!-- Navbar -->
 <nav class="nav">
   <a href="index.html" class="nav-brand">chiaoscuro</a>
+  <button class="nav-toggle" onclick="toggleDrawer()">menu</button>
   <div class="nav-links">
     <a href="index.html">About</a>
     <a href="curriculum.html">Curriculum</a>
@@ -28,45 +316,209 @@
     <a href="log.html">Log</a>
     <a href="it-resources.html">IT/IS</a>
     <a href="syllabus.html">Teaching</a>
-    <!-- <a href="the-vault.html" class="active">Vault</a> -->
-    <!-- REMOVE ACTIVE CLASS? TEST FOOTER -->
   </div>
 </nav>
+<div class="nav-drawer" id="drawer">
+  <a href="index.html">About</a>
+  <a href="curriculum.html">Curriculum</a>
+  <a href="calendar.html">Calendar</a>
+  <a href="projects.html">Projects</a>
+  <a href="books.html">Books</a>
+  <a href="log.html">Log</a>
+  <a href="it-resources.html">IT/IS</a>
+  <a href="syllabus.html">Teaching</a>
+</div>
 
 <main class="page">
 
-  <!-- Vault Header -->
   <header class="vault-header">
     <p class="kicker">Archive · Internal Systems Material</p>
     <h1 class="page-title">Project: Chiaroscuro</h1>
     <p class="cipher-text">Status: Encrypted // AES-256 System Active</p>
   </header>
 
-  <!-- Golden Ratio Columns -->
-  <section class="golden-ratio-grid">
 
-    <!-- Theory / Narrative Column -->
-    <div class="theory-column">
-      <h2>The Premise: Studying Light, Not Faking Art</h2>
-      <p>
-        A psychological thriller about power dynamics and moral ambiguity. Choose to save or damn your stalker—but are you qualified to judge when their drive was simply companionship?
-      </p>
+  <!-- ══════════════════════════════════════════
+       ORIGIN
+  ══════════════════════════════════════════ -->
+  <section class="v-section">
+    <p class="v-h">Where This Comes From</p>
+    <div class="v-grid">
 
-      <p>
-        Built by math/systems training, not art school. Artists like <span class="highlight">Caravaggio</span>, <span class="highlight">Fra Angelico</span>, <span class="highlight">El Greco</span>, and <span class="highlight">Holbein</span> become dissected problems: light as weaponized attention, shadow as moral ambiguity.
-      </p>
+      <div>
+        <p class="v-p">
+          The entry point was a film club — passive, observational, not yet expressive. Scripts were read before screenings: cues and pauses mapped, deliberate silences treated as structure rather than absence, the space between lines studied as carefully as the lines themselves. Art theory arrived the same way — anatomy as a discipline for capturing what already exists rather than inventing what doesn't, proportion and ratio as logic that rewards study, lighting and shadow as problems with discoverable solutions. The intention underneath all of it was never neutral. The work that kept demanding attention was the kind that refused to let you look away from what people would rather not see — and the formal tools were the means of understanding how that refusal gets constructed and sustained.
+        </p>
+        <p class="v-p">
+          Without structure, spectacle replaces immersion. The films that held attention longest weren't the loudest or the most relentless — they were the ones that understood negative space, that knew a sustained shot earns what comes after it, that trusted the viewer to complete what the frame deliberately left unfinished. That trust is rarer than it should be. Most work explains itself; the work worth studying withholds in calculated ways, using the gap between what is shown and what is meant as the active site of the experience rather than a problem to be resolved. There is a quality in the best of it — a kind of earned confidence that refuses to confirm whether the viewer has understood correctly, because whether you have understood correctly is itself the question. Those films demanded recognition not through awards or consensus but through the experience of walking away changed, or of briefly inhabiting someone else's life from the inside, which is the harder thing and the only version that lasts.
+        </p>
+        <p class="v-p">
+          The technical vocabulary for executing this work is now fully assembled. The approach in Blender is not conventional 3D rendering — it is oil painting in three dimensions: building scenes the way a painter builds a canvas, in deliberate layers, attending to how surfaces accumulate texture and how light changes character across depth and material. The goal is the visual logic of a painting: the intentional mark, the chosen exaggeration, the shadow that communicates rather than simply describes. Unity URP handles rendering and atmosphere. C# handles the logic beneath: state machines, behavioral and narrative architecture, the systems governing how the world responds to the player in ways that feel authored rather than procedural. The CS foundation and hardware intuition shape how the project performs — not only whether it runs, but whether it runs in ways that serve the aesthetic. Performance decisions at the engine level are also visual decisions: a draw distance, a shadow resolution, a frame budget are choices about what the world feels like to inhabit. How light behaves and what darkness conceals are not decorative concerns in this work. They are the grammar. The artists whose techniques appear throughout demanded fluency in exactly that grammar before they would reveal anything.
+        </p>
 
-      <h2>Philosophy as Moral Trap</h2>
-<p>
-  <span class="highlight">Machiavelli</span>'s power inversion + <span class="highlight">Nietzsche</span>'s <em>amor fati</em> versus <span class="highlight">Baudrillard</span>'s simulation—can you accept fate when reality feels co-authored? Captor becomes captive; control reveals itself as mutual delusion.
-</p>
+        <!-- ═══════ ARTIST ENTRIES ═══════ -->
 
-<p>
-  <span class="highlight">Jung</span>ian shadow work through tailoring reveals <span class="highlight">Pierrot</span>/<span class="highlight">Harlequin</span> ego fractures: the sad-clown masks we wear for love. <span class="highlight">Thanatos</span> (death drive) powers vision corruption from devotional serenity to grotesque decay. <span class="highlight">Existentialism</span> asks: what is right when companionship and predation wear the same face?
-</p>
+        <!-- CARAVAGGIO -->
+        <div class="v-artist-block">
+          <p class="v-technique-label">Tenebrism</p>
+          <div class="v-artist-hd" onclick="toggleSection('a-caravaggio')">
+            <h3>Michelangelo Merisi da Caravaggio — 1571–1610</h3>
+            <span class="v-toggle" id="a-caravaggio-toggle">▼</span>
+          </div>
+          <div class="v-artist-body" id="a-caravaggio">
+            <p class="v-p">Caravaggio did not invent the contrast of light and dark, but he radicalized it into something closer to a theological argument. Where earlier painters used shadow to model form, Caravaggio used it to erase form entirely: backgrounds vanish into black, figures emerge from that void lit by a single, specific, directional source that often has no logical origin within the scene. This is tenebrism — from the Italian <em>tenebroso</em>, dark or gloomy — and it functions as an epistemic claim. What the light does not touch does not exist. The world is only as large as what has been illuminated. His figures are caught at the instant of maximum psychological pressure. The horror is clinical. The light is surgical. Nothing in the painting performs emotion on behalf of the viewer. The influence on this project is structural: tenebrism is the game's default epistemic condition.</p>
+          </div>
+          <div class="v-painting-wrap">
+            <a href="https://en.wikipedia.org/wiki/Judith_Beheading_Holofernes_(Caravaggio)" target="_blank" rel="noopener">
+              <img class="v-artist-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Caravaggio_-_Giuditta_che_taglia_la_testa_a_Oloferne_-_Google_Art_Project.jpg/400px-Caravaggio_-_Giuditta_che_taglia_la_testa_a_Oloferne_-_Google_Art_Project.jpg" alt="Caravaggio — Judith Beheading Holofernes, c.1598–1599">
+            </a>
+            <span class="v-artist-caption">Caravaggio, <em>Judith Beheading Holofernes</em>, c.1598–1599 · Galleria Nazionale d'Arte Antica, Rome · public domain</span>
+          </div>
+        </div>
 
-      <h2>Proof Sketch: Ego → Obsession → Verdict</h2>
-      <pre>
+        <!-- PACIOLI -->
+        <div class="v-artist-block">
+          <p class="v-technique-label">De Divina Proportione</p>
+          <div class="v-artist-hd" onclick="toggleSection('a-pacioli')">
+            <h3>Luca Pacioli — c.1447–1517</h3>
+            <span class="v-toggle" id="a-pacioli-toggle">▼</span>
+          </div>
+          <div class="v-artist-body" id="a-pacioli">
+            <p class="v-p">Pacioli was a Franciscan friar, a mathematician, and one of the most consequential figures in the history of both art and commerce. He codified double-entry bookkeeping in <em>Summa de arithmetica</em> (1494) — the structural logic underlying every financial record made since, earning him the title father of modern accounting. He then collaborated with Leonardo da Vinci on <em><a href="https://en.wikipedia.org/wiki/De_divina_proportione" target="_blank" rel="noopener">De Divina Proportione</a></em> (1509), illustrated entirely by Leonardo during a period of sustained political violence across the Italian states. Pacioli had been orphaned young and raised by a merchant patron. He became the bridge between the ledger and the canvas — demonstrating that the same underlying ratios govern both — and in doing so made one of the lasting arguments that technical mastery and artistic vision are not opposites.</p>
+          </div>
+          <div class="v-painting-wrap">
+            <a href="https://en.wikipedia.org/wiki/Luca_Pacioli" target="_blank" rel="noopener">
+              <img class="v-artist-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/Pacioli.jpg/400px-Pacioli.jpg" alt="Portrait of Luca Pacioli, attributed to Jacopo de' Barbari, c.1495–1500">
+            </a>
+            <span class="v-artist-caption">Attr. Jacopo de' Barbari, <em>Portrait of Luca Pacioli</em>, c.1495–1500 · Capodimonte Museum, Naples · public domain</span>
+          </div>
+        </div>
+
+        <!-- FIBONACCI -->
+        <div class="v-artist-block">
+          <p class="v-technique-label">The Sequence · φ ≈ 1.618</p>
+          <div class="v-artist-hd" onclick="toggleSection('a-fibonacci')">
+            <h3>Leonardo Fibonacci — c.1170–c.1250</h3>
+            <span class="v-toggle" id="a-fibonacci-toggle">▼</span>
+          </div>
+          <div class="v-artist-body" id="a-fibonacci">
+            <p class="v-p">The Fibonacci sequence (1, 1, 2, 3, 5, 8, 13, 21, 34…) is generated by the simplest possible recursive rule: each term is the sum of the two preceding it. As the sequence grows, the ratio between consecutive terms converges toward φ ≈ 1.618 — the golden ratio. It appears in the spiral arrangement of seeds in a sunflower, the branching of trees, the chambered nautilus: one of the places where pure mathematics and biological growth arrive at the same answer without being introduced. Hofstadter's <em>Gödel, Escher, Bach</em> returns to exactly this territory — self-similar structures emerging from simple recursive rules, systems whose behavior at scale could not have been predicted from either element alone. Used throughout this project for scene layout, character positioning, and compositional staging: the ratio that makes a composition feel inevitable without announcing the rule it followed.</p>
+          </div>
+          <div class="v-painting-wrap">
+            <a href="https://en.wikipedia.org/wiki/Fibonacci_sequence" target="_blank" rel="noopener">
+              <img class="v-artist-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/FibonacciSpiral.svg/400px-FibonacciSpiral.svg.png" alt="Fibonacci spiral — each square side follows the sequence">
+            </a>
+            <span class="v-artist-caption">Fibonacci spiral — each square's side length follows the sequence; the arc approaches the golden spiral · public domain</span>
+          </div>
+        </div>
+
+        <!-- LEONARDO / SFUMATO -->
+        <div class="v-artist-block">
+          <p class="v-technique-label">Sfumato</p>
+          <div class="v-artist-hd" onclick="toggleSection('a-leonardo')">
+            <h3>Leonardo da Vinci — 1452–1519</h3>
+            <span class="v-toggle" id="a-leonardo-toggle">▼</span>
+          </div>
+          <div class="v-artist-body" id="a-leonardo">
+            <p class="v-p">Leonardo coined the term himself — from <em>fumo</em>, Italian for smoke — and theorized it in his <em>Trattato della pittura</em>. The technique involves building tone in thin, translucent layers with no perceptible brushwork, dissolving edges into atmosphere rather than defining them with drawn contours. Earlier Flemish painters achieved soft tonal transitions, but Leonardo was the first to systematize the observation that the eye does not resolve edges at distance — that strict outlines are a convention of draftsmanship rather than a fact of perception. Its first full realization is in <em>Virgin of the Rocks</em> (1483–86). The <em>Mona Lisa</em> carries it furthest, particularly around the corners of the mouth and eyes — the regions of the face where expression is most ambiguous and most easily projected onto by the viewer. The application here is not imitative: volumetric lighting, compositing passes, and depth-of-field settings in Blender approximate the quality of an edge that refuses to resolve. Clarity is not honesty. The characters in this project do not resolve into legibility from any distance.</p>
+          </div>
+          <div class="v-painting-wrap">
+            <a href="https://en.wikipedia.org/wiki/Virgin_of_the_Rocks" target="_blank" rel="noopener">
+              <img class="v-artist-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Leonardo_da_Vinci_-_Virgin_of_the_Rocks_%28Louvre%29.jpg/280px-Leonardo_da_Vinci_-_Virgin_of_the_Rocks_%28Louvre%29.jpg" alt="Leonardo da Vinci — Virgin of the Rocks, 1483–86">
+            </a>
+            <span class="v-artist-caption">Leonardo da Vinci, <em>Virgin of the Rocks</em> (Louvre), 1483–86 · public domain</span>
+          </div>
+        </div>
+
+        <!-- EL GRECO — FEATURED -->
+        <div class="v-artist-block v-artist-block--featured">
+          <p class="v-technique-label">★ Primary Inspiration · Foreshortening &amp; Spatial Distortion</p>
+          <div class="v-artist-hd" onclick="toggleSection('a-elgreco')">
+            <h3>El Greco (Domenikos Theotokopoulos) — 1541–1614</h3>
+            <span class="v-toggle" id="a-elgreco-toggle">▼</span>
+          </div>
+          <div class="v-artist-body" id="a-elgreco">
+            <p class="v-p">Born in Crete, trained in the Byzantine icon tradition, apprenticed in Venice under Titian's workshop, eventually settled in Toledo — El Greco absorbed more distinct visual traditions than almost any painter of his era and synthesized them into something that resembled none of them. His elongated figures, compressed perspectives, and acid palette were dismissed as the product of defective eyesight for centuries. The current understanding is that he knew exactly what he was doing: distortion in the service of spiritual content was a deliberate inheritance from the Byzantine tradition, where anatomical accuracy was irrelevant and emotional-spiritual truth was the only criterion. His figures are not anatomically wrong. They are emotionally correct.</p>
+            <p class="v-p"><em>View of Toledo</em> (c.1599–1600) is his only surviving pure landscape and one of the most psychologically charged paintings in Western art. The topography is rearranged — buildings repositioned, geography distorted — to serve an emotional argument rather than a geographical one. The sky occupies more than half the canvas: grey-green, turbulent, lit from sources that correspond to no single sun. The city strains upward as if under pressure. The proportions are wrong in every empirical sense and completely correct in every expressive one. Every environment in this project is a <em>View of Toledo</em> — the sky always doing something, architecture leaning when it should stand, the landscape externalizing the interior state of whoever inhabits it.</p>
+          </div>
+          <div class="v-painting-wrap">
+            <a href="https://en.wikipedia.org/wiki/View_of_Toledo_(painting)" target="_blank" rel="noopener">
+              <img class="v-artist-img v-artist-img--wide" src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/00/View_of_Toledo%2C_by_El_Greco.jpg/600px-View_of_Toledo%2C_by_El_Greco.jpg" alt="El Greco — View of Toledo, c.1599–1600">
+            </a>
+            <span class="v-artist-caption">El Greco, <em>View of Toledo</em>, c.1599–1600 · Metropolitan Museum of Art, New York · public domain</span>
+          </div>
+        </div>
+
+        <!-- BOSCH -->
+        <div class="v-artist-block">
+          <p class="v-technique-label">The Grotesque as Moral Allegory</p>
+          <div class="v-artist-hd" onclick="toggleSection('a-bosch')">
+            <h3>Hieronymus Bosch — c.1450–1516</h3>
+            <span class="v-toggle" id="a-bosch-toggle">▼</span>
+          </div>
+          <div class="v-artist-body" id="a-bosch">
+            <p class="v-p">Bosch produced visual worlds of such density and internal consistency that they resist full explication five centuries later. His imagery is not decorative horror — it is a systematic visual language for the consequences of appetite, pride, and spiritual failure, rendered with enough beauty that the viewer wants to keep looking, which is precisely the trap. He painted at the end of the medieval period, when the symbolic vocabulary of sin and salvation was still common cultural property, and he used that vocabulary with enough strangeness that scholars continue to debate whether his images are orthodox moralizing or something considerably more ambivalent. He is also one of the earliest visual ancestors of what Giger would develop in a different register — the biological grotesque, architecture with appetites, space that is also organism.</p>
+          </div>
+          <div class="v-painting-wrap">
+            <a href="https://en.wikipedia.org/wiki/The_Garden_of_Earthly_Delights" target="_blank" rel="noopener">
+              <img class="v-artist-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/The_Garden_of_earthly_delights.jpg/400px-The_Garden_of_earthly_delights.jpg" alt="Hieronymus Bosch — The Garden of Earthly Delights (center panel), c.1490–1510">
+            </a>
+            <span class="v-artist-caption">Hieronymus Bosch, <em>The Garden of Earthly Delights</em> (center panel), c.1490–1510 · Prado, Madrid · public domain</span>
+          </div>
+        </div>
+
+        <!-- FRA ANGELICO -->
+        <div class="v-artist-block">
+          <p class="v-technique-label">Gold Ground &amp; Devotional Flatness</p>
+          <div class="v-artist-hd" onclick="toggleSection('a-angelico')">
+            <h3>Fra Angelico (Guido di Pietro) — c.1395–1455</h3>
+            <span class="v-toggle" id="a-angelico-toggle">▼</span>
+          </div>
+          <div class="v-artist-body" id="a-angelico">
+            <p class="v-p">Fra Angelico was a Dominican friar who painted as an act of devotion — a structural fact that shaped his technique. He worked primarily in tempera on gold ground, a Byzantine inheritance: the gold background is not a space, it is the absence of space — an undifferentiated luminosity that places sacred figures outside of time and geography entirely. His figures are serene not because they are naive about suffering but because serenity in this tradition is the visual register of a consciousness that has fully absorbed what it has survived. The gold is not decoration. It is the argument that what is depicted exists in a different ontological register than the viewer. Fra Angelico's calm is not ignorance of what happened to these figures. It is what remains after full acknowledgment with nothing left to protect.</p>
+          </div>
+          <!-- Two paintings — both embedded, always visible -->
+          <div class="v-painting-wrap">
+            <a href="https://en.wikipedia.org/wiki/The_Mocking_of_Christ_(Fra_Angelico,_Florence)" target="_blank" rel="noopener">
+              <img class="v-artist-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Fra_Angelico_-_The_Mocking_of_Christ_-_WGA00575.jpg/350px-Fra_Angelico_-_The_Mocking_of_Christ_-_WGA00575.jpg" alt="Fra Angelico — The Mocking of Christ (Christ Mocked), c.1440">
+            </a>
+            <span class="v-artist-caption">Fra Angelico, <em>The Mocking of Christ</em>, c.1440 · Museo di San Marco, Florence · public domain</span>
+          </div>
+          <div class="v-painting-wrap">
+            <a href="https://en.wikipedia.org/wiki/Christ_Crowned_with_Thorns_(Fra_Angelico)" target="_blank" rel="noopener">
+              <img class="v-artist-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Fra_Angelico_-_Christ_Crowned_with_Thorns_-_WGA00566.jpg/350px-Fra_Angelico_-_Christ_Crowned_with_Thorns_-_WGA00566.jpg" alt="Fra Angelico — Christ Crowned with Thorns, c.1440">
+            </a>
+            <span class="v-artist-caption">Fra Angelico, <em>Christ Crowned with Thorns</em>, c.1440 · Museo di San Marco, Florence · public domain</span>
+          </div>
+        </div>
+
+        <!-- HOLBEIN -->
+        <div class="v-artist-block">
+          <p class="v-technique-label">Anamorphosis</p>
+          <div class="v-artist-hd" onclick="toggleSection('a-holbein')">
+            <h3>Hans Holbein the Younger — 1497–1543</h3>
+            <span class="v-toggle" id="a-holbein-toggle">▼</span>
+          </div>
+          <div class="v-artist-body" id="a-holbein">
+            <p class="v-p">Holbein was the preeminent portraitist of the northern European court tradition — technically immaculate, psychologically precise, capable of rendering the specific texture of power in a face without flattering or condemning it. He worked in England as court painter to Henry VIII and produced images of the Tudor court that remain among the most unsettling records of political authority in Western painting. His realism was not neutral: every detail of costume, posture, and expression was a claim about the subject's relationship to status, learning, and mortality. <em>The Ambassadors</em> (1533) presents two French diplomats at the height of their worldly standing, surrounded by instruments of learning, with a smeared diagonal shape in the foreground that resolves into a human skull only from a specific oblique vantage point. The painting contains this information in plain sight from the beginning. Most viewers walk past it. This is the compositional logic for the game's most significant design decision: the revelation that reframes everything the player thought they understood is already in the frame.</p>
+          </div>
+          <div class="v-painting-wrap">
+            <a href="https://en.wikipedia.org/wiki/The_Ambassadors_(Holbein)" target="_blank" rel="noopener">
+              <img class="v-artist-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Hans_Holbein_the_Younger_-_The_Ambassadors_-_Google_Art_Project.jpg/400px-Hans_Holbein_the_Younger_-_The_Ambassadors_-_Google_Art_Project.jpg" alt="Hans Holbein the Younger — The Ambassadors, 1533">
+            </a>
+            <span class="v-artist-caption">Hans Holbein the Younger, <em>The Ambassadors</em>, 1533 · National Gallery, London · public domain</span>
+          </div>
+        </div>
+
+      </div><!-- /left col -->
+
+      <div>
+        <p class="v-p">Creative lineage accumulates the way soil forms: slowly, through pressure, decomposition, and time. What grows from it is nourished as much by what was uncomfortable or unresolved as by what was consciously admired — the formative mistakes, the stray encounters, the works rejected as much as the ones absorbed. This project is the first place where the tools assembled through that process and the intention that preceded all of it have finally met.</p>
+        <p class="v-p">The classic goth-teen heuristic holds as a surprisingly reliable critical test: if the work still matters when you imagine the end of your own life, it belongs here.</p>
+
+        <div class="vault-proof">
+          <p class="v-sub">Proof Sketch: Ego → Obsession → Verdict</p>
+          <pre>
 Ego Fracture    Obsession Path     Verdict Vectors
      |               |                 |
      v               v                 v
@@ -77,44 +529,648 @@ Ego Fracture    Obsession Path     Verdict Vectors
 [Mask]---->[Hide]<--[Damn]---->[Destruction]
      |        (narc     (cruelty     (isolation)
      |         shadow)   meter)
-     
-Companionship imprisons as surely as revenge—whose sentence prevails?
-      </pre>
 
-      <p class="cipher-text">
-        <strong>Q.E.D.:</strong> Tenebrism reveals what morality conceals in shadow.
-      </p>
-      
-      <p>
-        <em><strong>[Tenebrism Note]</strong> Extreme Baroque lighting where darkness dominates and a single light source spotlights key elements. Here: shadows = unasked questions; light = moral choices forced into view.</em>
-      </p>
+Companionship imprisons as surely as revenge — whose sentence prevails?
+          </pre>
+          <p class="v-note">Tenebrism: darkness dominates; a single light source forces key elements into view. Shadows = unasked questions. Light = moral choices that can no longer be deferred.</p>
+        </div>
+      </div>
+
     </div>
+  </section>
 
-    <!-- Influence / Visual Column -->
-    <div class="influence-column">
-      <h3>Reverse-Engineering Method</h3>
-      <p>
-        Math-trained dissection of classical light/shadow grammars and horror geometry constraints. Blender blockouts → Unity URP rigs where unlit surfaces = unasked moral questions about codependence versus freedom.
-      </p>
 
-      <h3>Visual Pathology</h3>
-      <p>
-        Tenebrist light carves ego masks from low-poly flesh. <span class="highlight">Sandman</span>'s dense ink voids + <span class="highlight">Silent Hill</span>'s fog culling, <span class="highlight">Garage: Bad Dream Adventure</span>'s warped geometry.
-      </p>
-      <p>
-        <span class="highlight">Dorian Gray</span> vision corruption marks moral descent (Fra Angelico serenity → grotesque). Only lit surfaces exist; algorithmic darkness conceals the unrenderable.
-      </p>
+  <!-- ══════════════════════════════════════════
+       PREMISE & PHILOSOPHY
+  ══════════════════════════════════════════ -->
+  <section class="v-section">
+    <p class="v-h">The Premise &amp; Its Philosophy</p>
+    <div class="v-grid">
 
-      <p class="cipher-text">
-        Tailoring exposes what faces and light conceal: the wound demanding witness, regardless of consequence.
-      </p>
+      <div>
+        <p class="v-sub">The Game</p>
+        <p class="v-p">A psychological thriller about power dynamics and moral ambiguity — rendered in a heavily stylized aesthetic, where technical constraint becomes expressive tool. Many scenes will be near-total darkness, communicating plot and character through posture, positioning, symbolic object placement, and silhouette rather than visible detail. The unreliable narrator — or narrators — means the player cannot trust what they see, only how it is framed. Choose to save or damn your stalker. But the question the game refuses to answer cleanly: are you qualified to judge when their drive was simply companionship? Beauty and ugliness are equally available to the light. The choice of what to reveal is the game's central moral act, made by the player as much as by the artists who built it.</p>
+        <p class="v-p">The visual sources — <span class="highlight">Caravaggio</span>, <span class="highlight">Fra Angelico</span>, <span class="highlight">El Greco</span>, <span class="highlight">Holbein</span> — are studied as technical problems and as arguments. Each makes a claim about where moral weight lives in an image: at the edge of light, in the direction of a gaze, in the part of the figure that the composition refuses to show.</p>
 
-      <div class="password-box" style="margin-top:2rem; padding:1rem; border:1px dashed var(--border);">
-        <p class="cipher-text">System encrypted. Enter passphrase to view technical logs, performance notes, and mood boards.</p>
-        <input type="password" placeholder="Passphrase">
+        <p class="v-sub">Amor Fati — The Core</p>
+        <p class="v-p">The philosophical spine of the game is <em>amor fati</em> — the love of fate, not as resigned acceptance but as something closer to surrender: the recognition that what has happened could not have happened otherwise, and that resistance to it is its own kind of suffering. Nietzsche meant it as liberation. Bataille understood it as the erotic dimension of the inescapable — that surrender to what cannot be undone carries its own particular charge. The game asks whether the player can inhabit this position without endorsing what it costs.</p>
+        <p class="v-p">Captor becomes captive. Control reveals itself as mutual delusion. Can you accept a fate that feels co-authored — a reality that someone else has been building around you? The simulation question (Baudrillard) runs underneath: if the version of events you have been given is constructed, what do you owe it? The answer the game refuses to provide is the point.</p>
+        <p class="v-p">Nietzsche's eternal recurrence is structural throughout: reliving the same life as condition rather than punishment. The game's ambient backdrop — people too consequential to face consequences, depravity normalized by proximity — is not commentary inserted from outside. It is the condition the characters already live inside. <span class="highlight">Existentialism</span> asks the question the game refuses to answer: what is right when companionship and predation wear the same face?</p>
+
+        <p class="v-sub">The Unreliable Narrator(s)</p>
+        <p class="v-p">The game has no trustworthy point of view. What the player sees is always the product of a perspective — compromised by design: by obsession, by grief, by the ego's insistence on the version of events that protects it. The same scene may be presented differently depending on whose consciousness the player currently occupies, and the game does not always announce the transition. The player's job is not to find the truth. It is to notice how many different truths can coexist, each internally consistent, each supported by the evidence available to the person holding it.</p>
+        <p class="v-p">This is a formal commitment, not a narrative trick. Stylized low-fidelity rendering means edges are soft, shadows are large, silhouettes carry the weight that faces would carry in higher fidelity. When you cannot see clearly, you interpret. When you interpret, you project. The game is interested in what you project — because what you project reveals whose side you have already chosen, often before you realize you were choosing. <span class="highlight">Holbein's anamorphosis</span> is the formal ancestor: the image that only resolves correctly from one specific vantage point. Every character in this game is an anamorphic image.</p>
+      </div>
+
+      <div>
+        <p class="v-sub">Power, Complicity, and the Player as Judge</p>
+        <p class="v-p">The game places the player in the position of witness — and then asks when witness becomes complicity. You are watching. You have been watching for some time. At what point does continued observation constitute a choice? The question is not abstract: the player's actions determine outcomes, which means inaction is also a decision. The game tracks this without announcing it. There is no guilt meter. There is only what happens, and what you did or did not do when it was still possible to do something different.</p>
+        <p class="v-p">The political backdrop enforces this logic at scale. The news reports playing in the game's ambient environment describe people who watched, who knew, who had the position and resources to intervene, and did not. The game does not moralize about this. It simply makes the same structure available at the intimate level and waits to see whether the player behaves differently when it is personal.</p>
+
+        <p class="v-sub">Ego, Control, and the Backdrop</p>
+        <p class="v-p">The Aghori are a Hindu ascetic sect whose practice centers on the dissolution of ego through confrontation with what society marks as polluted or forbidden — including, in some lineages, ritual engagement with death and the corpse. Their premise is that the ego's insistence on separation is the source of suffering rather than its prevention. In a documentary, a practitioner in deep meditation described a vision: the gods were not watching humanity from above in judgment. They were praying for it. That image — divine beings making petition rather than pronouncement, uncertain of the outcome — crosses every tradition without belonging to any of them. It can be read entirely without theology. The game does not resolve it. It holds it.</p>
+        <p class="v-p">This connects directly to the game's political backdrop. The ambient news reports — of people too consequential for consequences, of power exercised in ornate rooms with no accounting — are the secular version of the same structure: ego raised to institutional scale, control mistaken for truth.</p>
+
+        <p class="v-sub">Philosophy — Primary Texts</p>
+
+        <div class="v-phil-row">
+          <img class="v-phil-photo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Nietzsche187a.jpg/200px-Nietzsche187a.jpg" alt="Friedrich Nietzsche">
+          <div>
+            <div class="collapsible-hd" onclick="toggleSection('p-nietzsche')">
+              <h3>Friedrich Nietzsche — <em>Thus Spoke Zarathustra</em> / <em>The Gay Science</em></h3>
+              <span class="v-toggle" id="p-nietzsche-toggle">▼</span>
+            </div>
+            <p class="v-phil-fact">In January 1889, Nietzsche witnessed a horse being flogged in a Turin piazza, threw his arms around the animal weeping, then collapsed. He never fully recovered. Béla Tarr made a film about the horse.</p>
+            <div class="collapsible-body" id="p-nietzsche">
+              <p class="v-p">Eternal recurrence; <em>amor fati</em>; the will as something that can be directed toward its own fate rather than against it. The game's structural spine.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="v-phil-row">
+          <img class="v-phil-photo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Sigmund_Freud%2C_by_Max_Halberstadt_%281921%29.jpg/200px-Sigmund_Freud%2C_by_Max_Halberstadt_%281921%29.jpg" alt="Sigmund Freud">
+          <div>
+            <div class="collapsible-hd" onclick="toggleSection('p-freud')">
+              <h3>Sigmund Freud — Thanatos &amp; Eros</h3>
+              <span class="v-toggle" id="p-freud-toggle">▼</span>
+            </div>
+            <p class="v-phil-fact">Freud was a devoted collector of ancient statuettes and kept over 2,000 antique figurines arranged on his desk and shelves. He reportedly said he liked them more than he liked people.</p>
+            <div class="collapsible-body" id="p-freud">
+              <p class="v-p"><span class="highlight">Thanatos</span> (death drive) and <span class="highlight">Eros</span> (life drive) as the two forces in permanent conflict underneath every human action. Thanatos powers the vision corruption arc: the drift from Fra Angelico's devotional serenity toward something that cannot be looked at directly, the pull toward dissolution that the ego mistakes for desire. Eros is what keeps the characters returning. Neither wins.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="v-phil-row">
+          <img class="v-phil-photo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Jean_Baudrillard_%281%29.jpg/200px-Jean_Baudrillard_%281%29.jpg" alt="Jean Baudrillard">
+          <div>
+            <div class="collapsible-hd" onclick="toggleSection('p-baudrillard')">
+              <h3>Jean Baudrillard — <em>Simulacra and Simulation</em></h3>
+              <span class="v-toggle" id="p-baudrillard-toggle">▼</span>
+            </div>
+            <p class="v-phil-fact">Before becoming a philosopher, Baudrillard was a German literature professor and translator — he translated Brecht into French. He didn't publish his first major sociological work until he was 37.</p>
+            <div class="collapsible-body" id="p-baudrillard">
+              <p class="v-p">The map that precedes the territory; the simulation that replaces what it was meant to represent; reality as a product of its own reproduction. The direct philosophical ancestor of MGS2's argument and of the information-environment this project's backdrop inhabits.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="v-phil-row">
+          <img class="v-phil-photo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/CarlJung.jpg/200px-CarlJung.jpg" alt="Carl Jung">
+          <div>
+            <div class="collapsible-hd" onclick="toggleSection('p-jung')">
+              <h3>Carl Jung — <em>Man and His Symbols</em></h3>
+              <span class="v-toggle" id="p-jung-toggle">▼</span>
+            </div>
+            <p class="v-phil-fact">Jung built much of his Bollingen Tower by hand over several decades, laying stones himself and carving inscriptions into the walls. He called it the place where he felt most fully himself — "the place of individuation."</p>
+            <div class="collapsible-body" id="p-jung">
+              <p class="v-p">The shadow as the part of the self the ego refuses to acknowledge; individuation as the process of making it visible without being destroyed by it. The Jungian shadow is Silent Hill's entire design premise: the town is a projection of the protagonist's refused interior.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="v-phil-row">
+          <img class="v-phil-photo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/Georges_Bataille_vers_1943.jpg/200px-Georges_Bataille_vers_1943.jpg" alt="Georges Bataille">
+          <div>
+            <div class="collapsible-hd" onclick="toggleSection('p-bataille')">
+              <h3>Georges Bataille — <em>Eroticism, Death, and Sensuality</em></h3>
+              <span class="v-toggle" id="p-bataille-toggle">▼</span>
+            </div>
+            <p class="v-phil-fact">Bataille worked as a professional librarian at the Bibliothèque nationale de France for most of his adult life — cataloging medieval manuscripts by day while writing some of the most transgressive philosophy of the 20th century at night.</p>
+            <div class="collapsible-body" id="p-bataille">
+              <p class="v-p">Transgression as the boundary that defines the sacred; desire and death as structural partners; surrender not as weakness but as the condition of certain kinds of knowledge. <em>Amor fati</em> understood as erotic surrender to what cannot be undone.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="v-phil-row">
+          <img class="v-phil-photo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/George_Charles_Beresford_-_Virginia_Woolf_in_1902_-_Restoration.jpg/200px-George_Charles_Beresford_-_Virginia_Woolf_in_1902_-_Restoration.jpg" alt="Virginia Woolf">
+          <div>
+            <div class="collapsible-hd" onclick="toggleSection('p-woolf')">
+              <h3>Virginia Woolf — <em>On Being Ill</em> (1930)</h3>
+              <span class="v-toggle" id="p-woolf-toggle">▼</span>
+            </div>
+            <p class="v-phil-fact">Woolf wrote standing at a desk — reportedly producing up to 2,000 words in a single morning. She noted that standing helped her think in longer sentences. She wrote this way for over twenty years.</p>
+            <div class="collapsible-body" id="p-woolf">
+              <p class="v-p">Illness deserves a literature of its own — as fundamental to human experience as love or war, yet almost always omitted from the main arc of stories. The body that fails, the mind that distorts, the perception that cannot be trusted — these are not interruptions to the narrative. They are the narrative.</p>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
+  </section>
 
+
+  <!-- ══════════════════════════════════════════
+       GAMES
+  ══════════════════════════════════════════ -->
+  <section class="v-section">
+    <p class="v-h">Games</p>
+    <div class="v-grid">
+
+      <div>
+        <div class="v-entry">
+          <div class="v-entry-hd" onclick="toggleSection('g-silenthill')">
+            <div>
+              <span class="v-entry-title">Silent Hill (1999–2004, Konami / Team Silent)</span>
+              <span class="v-entry-meta">Survival Horror · PSX / PS2</span>
+            </div>
+            <span class="v-toggle" id="g-silenthill-toggle">▼</span>
+          </div>
+          <div class="v-entry-body" id="g-silenthill">
+            <p class="v-entry-body-text">The themes that matter here are not the monsters — it is the premise that the town itself is a manifestation of the protagonist's sins, that what you face is what you have refused to face. The Jungian shadow made navigable space. Technically, the fog culling and draw distance limitations are not compromises; they are the atmosphere. You cannot see what you have not yet earned the right to confront. The low-fidelity rendering is a saving grace — it creates something realism cannot, because realism insists on showing everything and horror requires the opposite. The performance cost of not rendering what is outside the draw distance becomes, in this context, the entire point. This project aims for the same: stylized low-fidelity rendering as moral epistemology, not nostalgia.</p>
+          </div>
+        </div>
+
+        <div class="v-entry">
+          <div class="v-entry-hd" onclick="toggleSection('g-scorn')">
+            <div>
+              <span class="v-entry-title">Scorn (2022, Ebb Software)</span>
+              <span class="v-entry-meta">First-Person Horror · PC</span>
+            </div>
+            <span class="v-toggle" id="g-scorn-toggle">▼</span>
+          </div>
+          <div class="v-entry-body" id="g-scorn">
+            <p class="v-entry-body-text">The most direct contemporary realization of <span class="highlight">H.R. Giger</span>'s visual language in an interactive context — biomechanical architecture where the environment is indistinguishable from organism, where every surface suggests both function and suffering. Giger's darker impulses — the merger of the mechanical and the erotic, the industrial and the biological, the tool and the body — are the direct lineage for this project's environmental design. The world of Chiaroscuro is not set-dressed. It breathes, reluctantly.</p>
+          </div>
+        </div>
+
+        <div class="v-entry">
+          <div class="v-entry-hd" onclick="toggleSection('g-garage')">
+            <div>
+              <span class="v-entry-title">Garage: Bad Dream Adventure (1999, Kinotrope)</span>
+              <span class="v-entry-meta">Puzzle / Adventure · PC</span>
+            </div>
+            <span class="v-toggle" id="g-garage-toggle">▼</span>
+          </div>
+          <div class="v-entry-body" id="g-garage">
+            <p class="v-entry-body-text">Giger-inflected environments where architecture is psychology. Reliving the same life is not punishment here but condition — the Nietzschean recurrence rendered as a fever dream of industrial decay. The game asks no questions it intends to answer. It presents a world and makes you inhabit it. That refusal to explain is a formal commitment, not a limitation.</p>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="v-entry">
+          <div class="v-entry-hd" onclick="toggleSection('g-kanelynch')">
+            <div>
+              <span class="v-entry-title">Kane &amp; Lynch: Dead Men (2007, IO Interactive)</span>
+              <span class="v-entry-meta">Third-Person Action · Multi</span>
+            </div>
+            <span class="v-toggle" id="g-kanelynch-toggle">▼</span>
+          </div>
+          <div class="v-entry-body" id="g-kanelynch">
+            <p class="v-entry-body-text">The comic series as much as the game. The grotesque visuals, the Hong Kong torture sequence that many found unwatchable — it was so real. Crime is ugly and being a criminal is ugly. Lynch in particular is a man whose violence is inseparable from his mental illness, whose capacity for harm and capacity for suffering are the same capacity, just pointed in different directions on different days. There is something worth sitting with in that — not excusing it, but understanding it. At the scale of the people these men harm, their actions are inexcusable. At the scale of what operates above them — ritual impunity, power exercised in ornate rooms with no accounting, <em>Eyes Wide Shut</em> on an institutional budget — the moral arithmetic does not simplify the way comfort requires. The game does not offer resolution. It offers pity alongside revulsion, which is harder.</p>
+          </div>
+        </div>
+
+        <div class="v-entry">
+          <div class="v-entry-hd" onclick="toggleSection('g-mgs2')">
+            <div>
+              <span class="v-entry-title">Metal Gear Solid 2: Sons of Liberty (2001, Konami)</span>
+              <span class="v-entry-meta">Stealth Action · PS2 · listed here for its ideas, not its aesthetics</span>
+            </div>
+            <span class="v-toggle" id="g-mgs2-toggle">▼</span>
+          </div>
+          <div class="v-entry-body" id="g-mgs2">
+            <p class="v-entry-body-text">The game's central argument — that information systems produce the selves that inhabit them, that a sufficiently advanced AI-controlled media environment cannot be distinguished from reality, that the individual's sense of autonomous thought may be a product rather than a cause — was made in 2001 and has aged into something that reads as documentary. Baudrillard's <em>Simulacra and Simulation</em> is the philosophical ancestor; <em>Serial Experiments Lain</em> is the more unsettling artistic parallel. MGS2 is listed here because it is known — and because familiarity with the argument it makes is useful for understanding what this project is working against.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════
+       CINEMA
+  ══════════════════════════════════════════ -->
+  <section class="v-section">
+    <p class="v-h">Cinema</p>
+    <div class="v-grid">
+
+      <div>
+        <div class="v-entry">
+          <div class="v-entry-hd" onclick="toggleSection('f-copkiller')">
+            <div>
+              <span class="v-entry-title">Cop Killer / The Order of Death (1983, Roberto Faenza)</span>
+              <span class="v-entry-meta">Thriller · Italy &nbsp;<span class="v-entry-script">[<a href="https://en.wikipedia.org/wiki/The_Order_of_Death_(film)" target="_blank" rel="noopener">info</a>]</span></span>
+            </div>
+            <span class="v-toggle" id="f-copkiller-toggle">▼</span>
+          </div>
+          <div class="v-entry-body" id="f-copkiller">
+            <p class="v-entry-body-text">The direct narrative ancestor of this project — a film so deliberately difficult to follow that its plot resists summary. A detective and the man who may be a serial killer become locked in an apartment together, and the relationship that develops is not interrogator and suspect but something more mutually entangled and harder to name. Enclosure as structure. The question of who is imprisoning whom — and whether the distinction still holds by the end — is the question this game begins with.</p>
+          </div>
+        </div>
+
+        <div class="v-entry">
+          <div class="v-entry-hd" onclick="toggleSection('f-venice')">
+            <div>
+              <span class="v-entry-title">Death in Venice (1971) / Rocco and His Brothers (1960) — Visconti</span>
+              <span class="v-entry-meta">Drama · Italy &nbsp;<span class="v-entry-script">[<a href="https://en.wikipedia.org/wiki/Death_in_Venice_(film)" target="_blank" rel="noopener">Death in Venice</a>] [<a href="https://en.wikipedia.org/wiki/Rocco_and_His_Brothers" target="_blank" rel="noopener">Rocco</a>]</span></span>
+            </div>
+            <span class="v-toggle" id="f-venice-toggle">▼</span>
+          </div>
+          <div class="v-entry-body" id="f-venice">
+            <p class="v-entry-body-text">Two Visconti films that approach the same problem from opposite angles: what love destroys when it cannot be fulfilled, and what love destroys when it can. In <em>Death in Venice</em>, Aschenbach pursues Tadzio — a boy who functions less as a person than as an embodiment of beauty Aschenbach has convinced himself he is only admiring aesthetically. Visconti shoots the beach in full daylight, the most exposed and unprotected setting possible: there is no shadow to retreat into, no darkness to make the obsession bearable. Cholera is spreading through the city. Aschenbach knows it. He stays anyway. He dies there, in the light, for nothing — or for the closest thing to beauty he ever let himself have. That beach scene is the visual model for the game's critical turning point.<br><br><em>Rocco and His Brothers</em>: loyalty that should be love but becomes something that consumes everyone it touches. The family as a closed system with no exit, where devotion is the mechanism of destruction rather than its prevention.</p>
+          </div>
+        </div>
+
+        <div class="v-entry">
+          <div class="v-entry-hd" onclick="toggleSection('f-meanstreets')">
+            <div>
+              <span class="v-entry-title">Mean Streets (1973) / Bad Lieutenant (1992) — Scorsese / Ferrara</span>
+              <span class="v-entry-meta">Crime / Drama · USA &nbsp;<span class="v-entry-script">[<a href="https://www.imsdb.com/scripts/Mean-Streets.html" target="_blank" rel="noopener">Mean Streets screenplay</a>] [<a href="https://en.wikipedia.org/wiki/Bad_Lieutenant" target="_blank" rel="noopener">Bad Lieutenant info</a>]</span></span>
+            </div>
+            <span class="v-toggle" id="f-meanstreets-toggle">▼</span>
+          </div>
+          <div class="v-entry-body" id="f-meanstreets">
+            <p class="v-entry-body-text">Two films connected by the same infrastructure of devotion and self-destruction: the conviction that suffering alongside someone constitutes a form of love, and the question of whether you can earn absolution for sins that are not yours by making them yours. In <em>Mean Streets</em>, Charlie keeps covering for Johnny knowing it will cost him everything — not from weakness but because the love is real even when the person it's directed at is genuinely corrosive. The film's Catholicism runs underneath everything: guilt as atmosphere, penance as performance.<br><br><em>Bad Lieutenant</em> takes the same structure further than it can survive. Ferrara's film includes a full frontal nude scene deployed without eroticism — the body exposed as evidence of degradation rather than desire, vulnerability stripped of any softening context. It is necessary. The bleeding Christ apparition that follows is not symbolic redemption but the visible cost of suffering absorbed without resolution, and it lands the way it does precisely because the film has already refused to protect the viewer from what the body looks like when a person has stopped caring for it. Fra Angelico's serenity — a calm that already contains the wound — becomes the visual counterpoint. Together they define the game's aesthetic position on redemption: not absolution, not catharsis, but the experience of being witnessed in full.</p>
+          </div>
+        </div>
+
+        <div class="v-entry">
+          <div class="v-entry-hd" onclick="toggleSection('f-solaris')">
+            <div>
+              <span class="v-entry-title">Solaris (1972, Andrei Tarkovsky)</span>
+              <span class="v-entry-meta">Sci-Fi / Drama · USSR &nbsp;<span class="v-entry-script">[<a href="https://en.wikipedia.org/wiki/Solaris_(1972_film)" target="_blank" rel="noopener">info</a>]</span></span>
+            </div>
+            <span class="v-toggle" id="f-solaris-toggle">▼</span>
+          </div>
+          <div class="v-entry-body" id="f-solaris">
+            <p class="v-entry-body-text">The model for psychological claustrophobia. Not confinement by walls but by the mind's inability to escape what it has already experienced. The station becomes a closed loop where grief takes physical form and forces confrontation with memories that cannot be corrected. The feeling of being trapped with one's own consciousness — with no external enemy to defeat — shapes the emotional architecture of the game's enclosed spaces.</p>
+          </div>
+        </div>
+
+        <div class="v-entry">
+          <div class="v-entry-hd" onclick="toggleSection('f-possession')">
+            <div>
+              <span class="v-entry-title">Possession (1981, Andrzej Żuławski)</span>
+              <span class="v-entry-meta">Horror / Drama · France–West Germany &nbsp;<span class="v-entry-script">[<a href="https://en.wikipedia.org/wiki/Possession_(1981_film)" target="_blank" rel="noopener">info</a>]</span></span>
+            </div>
+            <span class="v-toggle" id="f-possession-toggle">▼</span>
+          </div>
+          <div class="v-entry-body" id="f-possession">
+            <p class="v-entry-body-text">What draws this film into the project is not the horror per se — it is the specific quality of the behavior and the dissonance it generates. The wife's unraveling is total: erratic, violent, driven by something the film declines to diagnose. The husband, by contrast, remains unsettlingly composed — not stoic in any earned sense, but placid in a register that reads as its own form of wrongness, a calibration that simply does not match the situation he is standing inside. That asymmetry is one of the film's most quietly disturbing achievements. The reveal of what the wife has been concealing — a figure, charred and decomposed, something that should not have a protector — lands not as a horror set piece but as an extension of the film's central question: why does anyone cover for what should be uncoverable? The husband and the lover eventually arrive at a shared arrangement around this, and the film treats this development with the same straight-faced neutrality it applies to everything else. There are scenes in which intimacy between characters unfolds in the immediate presence of the husband's elderly mother — not explicit, simply deeply wrong, in a way the film neither comments on nor frames as remarkable. That quality — the scene that settles into wrongness and simply continues — is the register this project is working toward in its most difficult sequences.</p>
+          </div>
+        </div>
+
+        <div class="v-entry">
+          <div class="v-entry-hd" onclick="toggleSection('f-bluevelvet')">
+            <div>
+              <span class="v-entry-title">Blue Velvet (1986, David Lynch)</span>
+              <span class="v-entry-meta">Mystery / Thriller · USA &nbsp;<span class="v-entry-script">[<a href="https://www.imsdb.com/scripts/Blue-Velvet.html" target="_blank" rel="noopener">screenplay</a>]</span></span>
+            </div>
+            <span class="v-toggle" id="f-bluevelvet-toggle">▼</span>
+          </div>
+          <div class="v-entry-body" id="f-bluevelvet">
+            <p class="v-entry-body-text">Obsession as gravitational force. Beneath an apparently ordinary world exists a darker layer that exerts a magnetic pull on those who glimpse it. Curiosity becomes fixation, and fixation becomes entanglement. The game adopts this same logic: once a character begins to investigate what lies beneath the surface of events, the act of looking becomes the thing that traps them.</p>
+          </div>
+        </div>
+
+        <div class="v-entry">
+          <div class="v-entry-hd" onclick="toggleSection('f-buffalo66')">
+            <div>
+              <span class="v-entry-title">Buffalo 66 (1998, Vincent Gallo)</span>
+              <span class="v-entry-meta">Drama · USA &nbsp;<span class="v-entry-script">[<a href="https://www.imsdb.com/scripts/Buffalo-66.html" target="_blank" rel="noopener">screenplay</a>]</span></span>
+            </div>
+            <span class="v-toggle" id="f-buffalo66-toggle">▼</span>
+          </div>
+          <div class="v-entry-body" id="f-buffalo66">
+            <p class="v-entry-body-text">The pitiful villain as emotional structure — a character who is cruel, manipulative, and often pathetic, yet still capable of eliciting sympathy from the person they harm. The dynamic resembles a form of emotional captivity: empathy misdirected toward someone who has done little to deserve it. The dream sequences — over-exposed, warm, the visual grammar of a memory that never happened quite the way it's being remembered — provide the aesthetic model for the game's flashback structure. The game explores the same tension between cruelty, loneliness, and the fragile hope that a person might still be redeemable.</p>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="v-entry">
+          <div class="v-entry-hd" onclick="toggleSection('f-manic')">
+            <div>
+              <span class="v-entry-title">Manic (2001, Jordan Melamed)</span>
+              <span class="v-entry-meta">Drama · USA &nbsp;<span class="v-entry-script">[<a href="https://en.wikipedia.org/wiki/Manic_(film)" target="_blank" rel="noopener">info</a>]</span></span>
+            </div>
+            <span class="v-toggle" id="f-manic-toggle">▼</span>
+          </div>
+          <div class="v-entry-body" id="f-manic">
+            <p class="v-entry-body-text">One of the few films that portrays mental illness without sentimentality or romantic framing. Hatred and love as the same intensity wearing different faces — not opposites but the same charge directed differently. The scene that matters most is Don Cheadle's: a quiet, direct explanation that rage solves nothing, that the cycle Lyle is in is not a wound that violence can close. Lyle hears it. The film is honest enough to show that hearing something true does not mean being capable of using it. Some people suffer and refuse the help that might change their circumstances — not from stupidity but from something more structural.</p>
+          </div>
+        </div>
+
+        <div class="v-entry">
+          <div class="v-entry-hd" onclick="toggleSection('f-commedia')">
+            <div>
+              <span class="v-entry-title">Commedia dell'Arte — Pierrot &amp; Harlequin</span>
+              <span class="v-entry-meta">Theatrical Tradition · Italy, 16th–18th c.</span>
+            </div>
+            <span class="v-toggle" id="f-commedia-toggle">▼</span>
+          </div>
+          <div class="v-entry-body" id="f-commedia">
+            <p class="v-entry-body-text"><span class="highlight">Pierrot</span> and <span class="highlight">Harlequin</span> are not symbols of naivety here but of the commedia dell'arte tradition at its most honest: grief performed as spectacle for an audience that came to laugh. The tragic clown does not wear the mask to hide — the mask is the only form the emotion can take without destroying the performer. The ego fracture the game is interested in is exactly this: the face that performs what it cannot otherwise survive feeling. This tradition is a named visual and theatrical influence on the character design and movement language of the project — not filtered through later animations that softened it, but at its original pitch, where the comedy and the suffering were the same thing.</p>
+          </div>
+        </div>
+
+        <div class="v-entry">
+          <div class="v-entry-hd" onclick="toggleSection('f-eyeswideshut')">
+            <div>
+              <span class="v-entry-title">Eyes Wide Shut (1999, Stanley Kubrick)</span>
+              <span class="v-entry-meta">Drama / Mystery · USA–UK &nbsp;<span class="v-entry-script">[<a href="https://www.imsdb.com/scripts/Eyes-Wide-Shut.html" target="_blank" rel="noopener">screenplay</a>]</span></span>
+            </div>
+            <span class="v-toggle" id="f-eyeswideshut-toggle">▼</span>
+          </div>
+          <div class="v-entry-body" id="f-eyeswideshut">
+            <p class="v-entry-body-text">The primary interest here is Kubrick's camera placement — consistently voyeuristic, positioned as an uninvited presence watching things not meant to be seen. The camera does not announce itself. It does not editorialize. It simply occupies a position the viewer was never supposed to occupy, and holds it without apology. The orgy sequence is the clearest example: wide, cold, participant-as-observer, the camera moving through the ritual with the same composed distance it brings to everything else in the film. That quality — of watching power perform itself in private, in full confidence that no one is watching — is the visual logic this project borrows. Kubrick's camera disagrees, quietly, and so does this one.</p>
+          </div>
+        </div>
+
+        <div class="v-entry">
+          <div class="v-entry-hd" onclick="toggleSection('f-taxidriver')">
+            <div>
+              <span class="v-entry-title">Taxi Driver (1976, Martin Scorsese)</span>
+              <span class="v-entry-meta">Crime / Drama · USA &nbsp;<span class="v-entry-script">[<a href="https://www.imsdb.com/scripts/Taxi-Driver.html" target="_blank" rel="noopener">screenplay</a>]</span></span>
+            </div>
+            <span class="v-toggle" id="f-taxidriver-toggle">▼</span>
+          </div>
+          <div class="v-entry-body" id="f-taxidriver">
+            <p class="v-entry-body-text">The lonely vigilante as moral paradox. A deeply flawed individual attempts to correct what he perceives as corruption while remaining incapable of confronting the emptiness of his own life. The impulse to fix the world becomes a substitute for the far more difficult task of fixing oneself. This psychology informs the vigilante figure planned for the narrative — someone whose crusade is as much avoidance as conviction, but whose intentions are not therefore void. The sincerity of the impulse and the damage of the execution can coexist. They usually do.</p>
+          </div>
+        </div>
+
+        <div class="v-entry">
+          <div class="v-entry-hd" onclick="toggleSection('f-trainspotting')">
+            <div>
+              <span class="v-entry-title">Trainspotting (1996, Danny Boyle)</span>
+              <span class="v-entry-meta">Drama · UK &nbsp;<span class="v-entry-script">[<a href="https://www.imsdb.com/scripts/Trainspotting.html" target="_blank" rel="noopener">screenplay</a>]</span></span>
+            </div>
+            <span class="v-toggle" id="f-trainspotting-toggle">▼</span>
+          </div>
+          <div class="v-entry-body" id="f-trainspotting">
+            <p class="v-entry-body-text">The recognition that many people participate knowingly in what the film calls a losing game. The characters understand the consequences of their actions and continue anyway. The fatalism of the opening monologue — a dry accounting of how you arrived here, as if even the worst outcomes were available in the choices you told yourself were small — is the tonal register for the game's mid-section. Awareness does not guarantee change. Some characters understand the damage they are doing and proceed regardless. Trainspotting does not moralize about this. Neither does the game.</p>
+          </div>
+        </div>
+
+        <div class="v-entry">
+          <div class="v-entry-hd" onclick="toggleSection('f-comeandse')">
+            <div>
+              <span class="v-entry-title">Come and See (1985, Elem Klimov)</span>
+              <span class="v-entry-meta">War / Drama · USSR &nbsp;<span class="v-entry-script">[<a href="https://en.wikipedia.org/wiki/Come_and_See_(film)" target="_blank" rel="noopener">info</a>]</span></span>
+            </div>
+            <span class="v-toggle" id="f-comeandse-toggle">▼</span>
+          </div>
+          <div class="v-entry-body" id="f-comeandse">
+            <p class="v-entry-body-text">The refusal to let atrocity become aesthetic. The film does not present historical violence as spectacle or as information. It presents it as experience — the irreversible kind. Something so horrible happens that afterward the world simply continues. This is the game's critical structural beat: the turning point is not climactic. It is the moment when everything that follows has already been determined, and the only question is how long it takes the player to understand that.</p>
+          </div>
+        </div>
+
+        <div class="v-entry">
+          <div class="v-entry-hd" onclick="toggleSection('f-barefoot')">
+            <div>
+              <span class="v-entry-title">Barefoot Gen (1983, Mori Masaki)</span>
+              <span class="v-entry-meta">Animation / Drama · Japan &nbsp;<span class="v-entry-script">[<a href="https://en.wikipedia.org/wiki/Barefoot_Gen_(film)" target="_blank" rel="noopener">info</a>]</span></span>
+            </div>
+            <span class="v-toggle" id="f-barefoot-toggle">▼</span>
+          </div>
+          <div class="v-entry-body" id="f-barefoot">
+            <p class="v-entry-body-text">What the film does that almost nothing else manages: total devastation followed by the genuine, unironic decision to keep going. Gen survives something that should end the story, and then the story continues — not as trauma porn, not as a lesson, but as the actual experience of a person who has lost everything and is still, stubbornly, alive. The animation makes this land harder than live action could. These characters are drawn as people, rendered with enough humanity that when the worst happens, it registers in your chest rather than at a distance. That cringe — the physical discomfort of watching characters you've accepted as real go through something irreversible — is exactly what this project is aiming for. Not to devastate the player. To make them feel the weight of what they're watching so that the moments of hope afterward actually mean something.</p>
+          </div>
+        </div>
+
+        <div class="v-entry">
+          <div class="v-entry-hd" onclick="toggleSection('f-xiuxiu')">
+            <div>
+              <span class="v-entry-title">Xiu Xiu: The Sent-Down Girl (1998, Joan Chen)</span>
+              <span class="v-entry-meta">Drama · USA–China &nbsp;<span class="v-entry-script">[<a href="https://en.wikipedia.org/wiki/Xiu_Xiu:_The_Sent_Down_Girl" target="_blank" rel="noopener">info</a>]</span></span>
+            </div>
+            <span class="v-toggle" id="f-xiuxiu-toggle">▼</span>
+          </div>
+          <div class="v-entry-body" id="f-xiuxiu">
+            <p class="v-entry-body-text">A young woman sent to a remote region during the Cultural Revolution keeps making arrangements with men who promise to help her return home, knowing each arrangement brings her further from the person she was. The film is interested in the specific quality of hope that persists past the point where it is reasonable — the willingness to keep believing a situation can be salvaged even as the evidence accumulates otherwise. The landscape is visually stunning and completely indifferent to her. The soldier who lives alongside her understands what is happening to her and cannot stop it. That specific combination — witness who comprehends and cannot act, victim who acts and cannot comprehend the full cost — is one of the central dynamics this project is building toward.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════
+       WHAT WE CONSUME
+  ══════════════════════════════════════════ -->
+  <section class="v-section">
+    <p class="v-h">What We Consume</p>
+
+    <!-- Conglomerate table — moved here from pop culture -->
+    <p class="v-p">The algorithm feeds you. Before examining what that means, it is useful to know who owns the algorithm.</p>
+    <p class="v-note">Here is who owns the window you're looking through:</p>
+    <div class="v-conglomerate">
+<pre>
+Conglomerate          Platforms / Properties Controlled
+────────────────────────────────────────────────────────────────────────
+Meta                  Facebook · Instagram · WhatsApp · Threads
+Alphabet (Google)     YouTube · Google Search · Google News
+News Corp             Fox News · Wall Street Journal · NY Post · HarperCollins
+Comcast / NBCUniversal MSNBC · NBC · Universal Pictures · Peacock
+Disney                ABC · ESPN · Hulu · Marvel · Lucasfilm · National Geographic
+Warner Bros. Discovery CNN · HBO · Max · DC Studios · TNT · TBS
+Bertelsmann           RTL Group · Penguin Random House · BMG
+Apple                 Apple News · Apple TV+ · App Store (primary mobile gateway)
+Amazon                Twitch · IMDb · Amazon Prime Video · Audible · Goodreads
+Microsoft             LinkedIn · MSN · GitHub · OpenAI (investment)
+────────────────────────────────────────────────────────────────────────
+This is not a conspiracy. It is a market structure. The question
+the game asks — who controls what you see, and what do they gain
+from your particular version of reality — is not rhetorical.
+</pre>
+    </div>
+
+    <div class="v-grid">
+
+      <div>
+        <p class="v-sub">Iconophages</p>
+        <p class="v-p"><span class="highlight">Jérémie Koering</span>'s <em>Iconophages: A History of Ingesting Images</em> (Zone Books / Princeton, 2026) traces a practice that sounds anomalous until it doesn't: since antiquity, people have literally consumed images — swallowing eucharistic hosts stamped with icons, eating marzipan figures cast from religious molds, grinding relics into powder and drinking them. In worship, image and body were not separate categories. To take an image into yourself was to become something in relation to it. The question Koering asks — what does it mean to incorporate rather than contemplate? — has a contemporary form most people navigate without recognizing it.</p>
+        <p class="v-p">Whatever you eat, you become. This is not a hostile observation — it is the same structure as the eucharistic wafer, the same structure as the icon ground into bathwater and drunk for healing. The medieval worshipper chose what to ingest and understood the transformation they were inviting. The contemporary version moves faster and is largely invisible. But the option to choose has always existed.</p>
+        <div class="v-callout">
+          You can consume something different and become something different. The third spaces that make this possible — the ones that exist outside algorithmic recommendation, outside the feedback loop of a platform designed to keep you inside it — are worth protecting. Do not allow external forces to dictate what you take in, what you believe, or what you are capable of becoming. You are not what the feed has decided you are. What you choose to consume is the most consequential creative act available to you.
+        </div>
+      </div>
+
+      <div>
+        <p class="v-sub">Serial Experiments Lain</p>
+        <p class="v-p"><span class="highlight">Serial Experiments Lain</span> is one of the most important works in this project's lineage. The series asks what identity means when the self is distributed across a network — when your digital alter ego accumulates its own history, relationships, and perhaps consciousness independently of the body you return to. The <span class="highlight">Schumann resonance</span> appears as more than a detail: the electromagnetic frequency of the Earth's atmosphere, present in all human nervous systems, becomes a kind of substrate for collective consciousness. The boundary between individual and network is not a wall. It is a membrane, and it has always been permeable.</p>
+        <p class="v-p">The question <em>Lain</em> poses — which version of you is real when multiple versions exist simultaneously, when the network remembers things the body doesn't — connects directly to this project's ego fracture mechanic, the vision corruption arc, and the player's gradual uncertainty about whose consciousness they are occupying. It also connects to <em>Iconophages</em>: if you become what you consume, and the network feeds you a continuous image of yourself shaped by what it has decided you are, then identity is not something you maintain. It is something you either curate deliberately or surrender to be curated by something else.</p>
+        <p class="v-p">The game does not resolve this. It presents it as a condition.</p>
+
+        <div class="password-box" style="margin-top:1.5rem;padding:1rem;border:1px dashed var(--border);">
+          <p class="cipher-text">System encrypted. Enter passphrase to view technical logs, performance notes, and mood boards.</p>
+          <input type="password" placeholder="Passphrase">
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════
+       LITERARY LINEAGE
+  ══════════════════════════════════════════ -->
+  <section class="v-section">
+    <p class="v-h">Literary Lineage</p>
+    <div class="v-grid">
+
+      <div>
+        <p class="v-sub">Speculative &amp; Philosophical Fiction</p>
+
+        <div class="v-lit-entry">
+          <div class="v-lit-hd" onclick="toggleSection('b-huxley')">
+            <span class="v-lit-name">Aldous Huxley — <em>Brave New World</em></span>
+            <span class="v-toggle" id="b-huxley-toggle">▼</span>
+          </div>
+          <div class="v-lit-body" id="b-huxley">
+            <p class="v-p">The violence of comfort; a society optimized into the absence of anything worth wanting. The horror is not oppression but the engineered contentment that makes oppression unnecessary.</p>
+          </div>
+        </div>
+
+        <div class="v-lit-entry">
+          <div class="v-lit-hd" onclick="toggleSection('b-dick')">
+            <span class="v-lit-name">Philip K. Dick — <em>A Scanner Darkly</em></span>
+            <span class="v-toggle" id="b-dick-toggle">▼</span>
+          </div>
+          <div class="v-lit-body" id="b-dick">
+            <p class="v-p">Identity dissolution as the logical endpoint of surveillance. The informant who has forgotten which self is watching. The cost of the systems we build to protect ourselves.</p>
+          </div>
+        </div>
+
+        <div class="v-lit-entry">
+          <div class="v-lit-hd" onclick="toggleSection('b-ballard')">
+            <span class="v-lit-name">J.G. Ballard — <em>Crash</em> <span style="font-weight:400;font-size:0.72rem;color:var(--text-dim)">(novel, distinct from Cronenberg's adaptation)</span></span>
+            <span class="v-toggle" id="b-ballard-toggle">▼</span>
+          </div>
+          <div class="v-lit-body" id="b-ballard">
+            <p class="v-p">Desire reorganized around damage, the body as a site of collision. The term that fits most precisely is psychosexual: Ballard is tracing what happens when libidinal energy detaches from its usual objects and reattaches to a system — velocity, metal, the specific geometry of an impact. This is not metaphor. What makes it a formal model for this project is not the content but the method: Ballard's prose maintains the same clinical, observational temperature across every scene regardless of what the scene contains. The reader is never offered the relief of authorial distance — never signaled that the text finds this disturbing so you don't have to. The discomfort has to be located by the reader alone.</p>
+          </div>
+        </div>
+
+        <!-- VOLTAIRE — scrollable, not collapsible -->
+        <div class="v-lit-entry">
+          <span class="v-lit-name" style="display:block;padding:0.5rem 0;border-bottom:1px solid var(--border);font-size:0.78rem;font-weight:500;color:var(--text);">Voltaire (François-Marie Arouet, 1694–1778)</span>
+          <div class="v-scroll-block">
+            <p class="v-p">Voltaire belongs here on his own terms before any single work is named. He is one of the architects of the idea that received truth — religious, political, philosophical — deserves to be held up to the light and examined for what it actually does rather than what it claims to do. <em>Candide</em> is the most famous expression of this: a relentless, almost slapstick catalog of disasters visited on an optimist who cannot stop believing the world is fundamentally arranged for good, which Voltaire deploys not as nihilism but as a surgical instrument against complacency. <em>Zadig</em> explores how fate and free will interact when the forces shaping a life are invisible to the person living it — how providence and injustice can look identical from the inside. His broader corpus of essays, letters, and philosophical tales established a model for intellectual combativeness delivered with enough wit that it could reach audiences who would have rejected the argument if made soberly.</p>
+            <p class="v-p"><em>Micromegas</em> (1752) specifically — a being of astronomical scale travels to Earth and finds creatures of near-invisible smallness locked in wars over territory they cannot even perceive from the visitors' vantage point. What it does for this project is structural: it establishes the view from outside the frame. Every conflict in Chiaroscuro is intimate, personal, consuming to the people inside it — and simultaneously invisible at any meaningful distance. The stalker and the stalked are locked in something that feels like the entire world, and the world has not noticed and will not. That double register — the stakes are absolute to the characters and indifferent to the cosmos — is one of the game's core tonal problems, and <em>Micromegas</em> is where it was first encountered as a formal device rather than a feeling.</p>
+          </div>
+        </div>
+
+        <div class="v-lit-entry">
+          <div class="v-lit-hd" onclick="toggleSection('b-vonnegut')">
+            <span class="v-lit-name">Kurt Vonnegut — <em>Slaughterhouse-Five</em> and the shorter work</span>
+            <span class="v-toggle" id="b-vonnegut-toggle">▼</span>
+          </div>
+          <div class="v-lit-body" id="b-vonnegut">
+            <p class="v-p">The dry accounting of catastrophe, the refusal of consolation, atrocity treated as something the universe declines to organize a response around. The sensibility that runs through <em>Slaughterhouse-Five</em> and the shorter work alike: things happen, then other things happen, and the narrative does not pause to confirm that what occurred was as significant as it felt. That refusal — to supply the weight the event seems to demand — is more devastating than grief would be, and it is the tonal register for the game's worst moments.</p>
+          </div>
+        </div>
+
+        <div class="v-lit-entry">
+          <div class="v-lit-hd" onclick="toggleSection('b-bradbury')">
+            <span class="v-lit-name">Ray Bradbury — "There Will Come Soft Rains"</span>
+            <span class="v-toggle" id="b-bradbury-toggle">▼</span>
+          </div>
+          <div class="v-lit-body" id="b-bradbury">
+            <p class="v-p">Nature reclaims the world after humanity's wars, indifferent to whether anyone survived to notice. The story uses <span class="highlight">Sara Teasdale</span>'s poem of the same name as its hinge: the birds do not grieve, the frogs do not pause, the world continues without requiring acknowledgment of what was lost. The most devastating moment is not the catastrophe but the aftermath in which it stops mattering. Something so horrible happens that the enemies simply walk away and focus on something more important. The violence ends not in resolution but in irrelevance. The player is left with that.</p>
+          </div>
+        </div>
+
+        <div class="v-lit-entry">
+          <div class="v-lit-hd" onclick="toggleSection('b-orwell')">
+            <span class="v-lit-name">George Orwell — <em>Nineteen Eighty-Four</em></span>
+            <span class="v-toggle" id="b-orwell-toggle">▼</span>
+          </div>
+          <div class="v-lit-body" id="b-orwell">
+            <p class="v-p">Specifically the image of power as "a boot stamping on a human face — forever." Orwell's vision of domination is total and static: there is no recurrence, no return, only the endless repetition of the same cruelty with no implication that anything was ever worth returning to. Nietzsche's eternal recurrence is the philosophical counter-position — not domination without end but return without escape, which at least implies something worth the repetition. The game holds both: the boot is real, and so is the possibility that the face underneath it keeps thinking anyway.</p>
+          </div>
+        </div>
+
+      </div>
+
+      <div>
+        <p class="v-sub">Speculative Futures</p>
+
+        <div class="v-lit-entry">
+          <div class="v-lit-hd" onclick="toggleSection('b-dixon')">
+            <span class="v-lit-name">Dougal Dixon — <em>Man After Man: An Anthropology of the Future</em></span>
+            <span class="v-toggle" id="b-dixon-toggle">▼</span>
+          </div>
+          <div class="v-lit-body" id="b-dixon">
+            <p class="v-p">The most emotionally specific reference in this entire lineage. After humanity is fractured by genetic modification, a branch of the lineage — the aquatic humans, engineered for the sea — persists long after the civilization that created them has departed the planet. In one of the book's final passages, one of these creatures surfaces, looks up at the sky, and faces death. It forms a thought. That moment — the unbridgeable gap between what a mind can hold and what existence has done to the body that carries it, the fact that consciousness persists past the point where the world has any use for it — is the emotional register the game is working toward. The race important enough to leave Earth forgot about the ones left behind. And the ones left behind kept thinking anyway.</p>
+          </div>
+        </div>
+
+        <p class="v-sub" style="margin-top:1.4rem;">Systems, Patterns, Strange Loops</p>
+
+        <div class="v-lit-entry">
+          <div class="v-lit-hd" onclick="toggleSection('b-hofstadter')">
+            <span class="v-lit-name">Douglas Hofstadter — <em>Gödel, Escher, Bach: An Eternal Golden Braid</em></span>
+            <span class="v-toggle" id="b-hofstadter-toggle">▼</span>
+          </div>
+          <div class="v-lit-body" id="b-hofstadter">
+            <p class="v-p">Self-reference as a structural property of sufficiently complex systems; the strange loop that occurs when a system becomes capable of representing itself; consciousness as an emergent property of recursive patterns. The game's unreliable narrator structure and ego fracture mechanic are strange loops in this sense: the system observing itself changes what the system is. Also the bridge to Fibonacci: the golden ratio emerges from recursive addition the same way the strange loop emerges from recursive self-description.</p>
+          </div>
+        </div>
+
+        <p class="v-sub" style="margin-top:1.4rem;">Deep Cuts</p>
+
+        <div class="v-lit-entry">
+          <div class="v-lit-hd" onclick="toggleSection('b-roach')">
+            <span class="v-lit-name">
+              <em>The Henry Roach-Dairier Chronicles</em>
+              <span class="v-lit-deepcut">deep cut</span>
+            </span>
+            <span class="v-toggle" id="b-roach-toggle">▼</span>
+          </div>
+          <div class="v-lit-body" id="b-roach">
+            <p class="v-p">An encounter before the project existed: meeting the author unexpectedly in a grocery store and hearing a description of the premise — post-apocalyptic ethnic conflict between insects, written for children — that sounded impossible and turned out to be entirely real. The work which finds you at unexpected moments sometimes matters more than what you sought out. Listed here not as a peer to the works above it, but as a reminder that bizarre premises in service of sincere moral questions are a long tradition, and that sincerity is the only criterion that matters.</p>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════
+       ON SOURCE AND ADAPTATION / WE ARE ALL PART OF HISTORY
+  ══════════════════════════════════════════ -->
+  <section class="v-section">
+    <div class="v-grid">
+      <div>
+        <p class="v-h v-h--white">On Source and Adaptation</p>
+        <p class="v-p">Where a work exists in multiple forms, the influences are separated. Ballard's <em>Crash</em> as novel is a different object than Cronenberg's <em>Crash</em> as film. Dick's <em>A Scanner Darkly</em> and Linklater's rotoscoped adaptation do different things with the same material. The point is to be precise about what is being taken and from where — the medium shapes what a work can do.</p>
+      </div>
+      <div>
+        <p class="v-h v-h--white">We Are All Part of History</p>
+        <p class="v-p">The goal throughout is to honor the works that came before by knowing what they came from — to follow roots rather than branches, to be a peer to the tradition rather than a consumer of it. The works on this page are the record of what shaped a sensibility over many years, across many encounters, some sought and some accidental.</p>
+        <p class="v-p">Many years in the making. Now, finally, the means to make it.</p>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════
+       POP CULTURE & CASUAL MEDIA
+  ══════════════════════════════════════════ -->
+  <section class="v-section v-pedestrian">
+    <p class="v-h">Pop Culture &amp; Casual Media</p>
+    <p class="v-note" style="max-width:680px;margin-bottom:1.2rem;">"If you don't read, you will have only one life. Literature gives you millions of lives." — attributed variously, but the argument stands regardless of source. These works are listed as context, not apology. They are genuine influences. They are the entry point for readers who need one. The rest of this page is for everyone else.</p>
+    <div class="v-grid">
+      <div>
+        <p class="v-p"><span class="highlight">Hayao Miyazaki</span> — the breath and the pause. Environment as presence, not backdrop. Named here because it is the most widely accessible model for what immersive scene construction actually looks like in practice.</p>
+        <p class="v-p"><span class="highlight">Kentaro Miura</span> / <span class="highlight">Berserk</span> — the most visible heir to the Baroque grotesque tradition in contemporary manga. The gateway, for many, back to Caravaggio, Giger, and the classical sources this project follows directly.</p>
+        <p class="v-p"><span class="highlight">Courage the Cowardly Dog</span> — horror in service of tenderness. Bravery as action taken despite fear, not in its absence. A children's show that understood something about love and sacrifice that most adult media avoids.</p>
+      </div>
+      <div>
+        <p class="v-p"><span class="highlight">Neil Gaiman</span> / <span class="highlight">The Sandman</span> (comic series, 1989–1996) — a world that expands in proportion to the willingness to be absorbed into someone else's. The comic, not the adaptation.</p>
+        <p class="v-p"><span class="highlight">Crashbox</span> (HBO, 1999–2002) — puzzle segments and lateral logic in a register that trusted children to sit with the uncomfortable. An early tolerance for narrative that doesn't explain itself.</p>
+      </div>
+    </div>
   </section>
 
 </main>
@@ -135,6 +1191,19 @@ Companionship imprisons as surely as revenge—whose sentence prevails?
     </nav>
   </div>
 </footer>
+
+<script>
+function toggleDrawer() {
+  document.getElementById('drawer').classList.toggle('open');
+}
+function toggleSection(id) {
+  const body = document.getElementById(id);
+  const toggle = document.getElementById(id + '-toggle');
+  if (!body) return;
+  body.classList.toggle('open');
+  if (toggle) toggle.classList.toggle('open');
+}
+</script>
 
 </body>
 </html>
